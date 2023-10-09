@@ -3,6 +3,8 @@ export default {
 }
 </script>
 
-<template>Controls</template>
+<template>
+  Controls
+</template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

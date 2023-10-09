@@ -4,6 +4,8 @@ export default {
 }
 </script>
 
-<template>View</template>
+<template>
+  View
+</template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
