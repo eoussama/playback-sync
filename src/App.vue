@@ -6,7 +6,7 @@ import Controls from './components/Controls.vue';
 <template>
   <div class="root">
     <div class="body">
-      <div class="videos">
+      <div class="view">
         <View />
       </div>
 
@@ -17,9 +17,21 @@ import Controls from './components/Controls.vue';
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .root {
-  display: flex;
-  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+
+  .body {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+
+    .view {
+      flex: 100%;
+    }
+  }
+
 }
 </style>
