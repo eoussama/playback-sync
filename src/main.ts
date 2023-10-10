@@ -4,13 +4,13 @@ import App from './App.vue'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
+import { loadIcons } from './utils/helpers/fontawesome.helper'
 
 const pinia = createPinia();
 const app = createApp(App);
-library.add(faPlay, faPause);
+
+loadIcons();
 
 app.use(pinia);
 
