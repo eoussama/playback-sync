@@ -1,12 +1,13 @@
-<script>
+<script lang="ts">
 import { mapState } from 'pinia'
-import { useSourcesStore } from './../stores/sources.store.ts'
+import { defineComponent } from 'vue'
+import { useSourcesStore } from '@/stores/sources.store'
 
-export default {
+export default defineComponent({
   computed: {
     ...mapState(useSourcesStore, ['sources'])
   }
-}
+})
 </script>
 
 <template>
