@@ -1,28 +1,101 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
-import { useSourcesStore } from '@/stores/sources.store'
+import { SourceHelper } from '@/utils/helpers/source.helper'
+import { useSourcesStore } from '@/state/stores/sources.store'
 
 export default defineComponent({
   data: () => ({
     url: '',
     title: ''
   }),
+
   methods: {
-    ...mapActions(useSourcesStore, ['add']),
-    onVideoAdd() {
-      if (this.url.length > 0 && this.title.length > 0) {
-        const source = { url: this.url, title: this.title };
+    ...mapActions(useSourcesStore, ['addSource', 'setPlaying', 'setVolume', 'setSpeed', 'seek']),
 
-        this.url = '';
-        this.title = '';
+    /**
+     * @description
+     * Checks if source is filled
+     */
+    isSourceFilled(): boolean {
+      return this.url.length > 0 && this.title.length > 0;
+    },
 
-        this.add(source);
+    /**
+     * @description
+     * Resets the source entry form
+     */
+    reset(): void {
+      this.url = '';
+      this.title = '';
+    },
+
+    /**
+     * @description
+     * Adds a new source
+     */
+    onSourceAdd(): void {
+      if (this.isSourceFilled()) {
+        const source = SourceHelper.create(this.url, this.title);
+
+        this.reset();
+        this.addSource(source);
       }
+    },
+
+    /**
+     * @description
+     * Toggles the playing state of the sources
+     */
+    onToggle(): void {
+      this.setPlaying(!this.playing);
+    },
+
+    /**
+     * @description
+     * Seek timeline backward
+     */
+    onBackward(): void {
+      this.seek(-10);
+    },
+
+    /**
+     * @description
+     * Seek timeline forward
+     */
+    onForward(): void {
+      this.seek(10);
+    },
+
+    /**
+     * @description
+     * Changes the volume
+     *
+     * @param e The input event
+     */
+    onVolume(e: Event): void {
+      const target = e.target as HTMLInputElement;
+      const value = parseFloat(target.value);
+
+      this.setVolume(value);
+    },
+
+    /**
+     * @description
+     * Changes the speed
+     *
+     * @param e The input event
+     */
+    onSpeed(e: Event): void {
+      const target = e.target as HTMLInputElement;
+      const value = parseFloat(target.value);
+
+      this.setSpeed(value);
     }
   },
+
   computed: {
-    ...mapState(useSourcesStore, ['sources'])
+    ...mapState(useSourcesStore, ['sources', 'volume', 'speed', 'playing'])
   }
 })
 </script>
@@ -42,7 +115,35 @@ export default defineComponent({
     v-model="url"
   >
 
-  <button @click="onVideoAdd">Add Video</button>
+  <button @click="onSourceAdd">Add Video</button>
+
+  <hr>
+
+  <button @click="onBackward">Backward</button>
+  <button @click="onToggle">{{ playing ? 'Pause' : 'Play' }}</button>
+  <button @click="onForward">Forward</button>
+
+  <hr>
+
+  <input
+    min="0"
+    max="1"
+    step="0.1"
+    type="range"
+    :value="volume"
+    @input="onVolume"
+  > {{ volume * 100 }}%
+
+  <hr>
+
+  <input
+    min="0.25"
+    max="2"
+    step="0.25"
+    type="range"
+    :value="speed"
+    @input="onSpeed"
+  > x{{ speed }}
 </template>
 
 <style scoped lang="scss"></style>
