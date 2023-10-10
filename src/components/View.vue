@@ -19,7 +19,7 @@ export default defineComponent({
       this.removeSource(id);
     }
   }
-})
+});
 </script>
 
 <template>

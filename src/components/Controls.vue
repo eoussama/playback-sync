@@ -1,6 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
+
+import PlayPause from '@/components/PlayPause.vue'
+
 import { SourceHelper } from '@/utils/helpers/source.helper'
 import { useSourcesStore } from '@/state/stores/sources.store'
 
@@ -96,8 +99,12 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSourcesStore, ['sources', 'volume', 'speed', 'playing'])
+  },
+
+  components: {
+    PlayPause
   }
-})
+});
 </script>
 
 <template>
@@ -120,7 +127,10 @@ export default defineComponent({
   <hr>
 
   <button @click="onBackward">Backward</button>
-  <button @click="onToggle">{{ playing ? 'Pause' : 'Play' }}</button>
+  <PlayPause
+    :value="playing"
+    @valueUpdated="onToggle"
+  />
   <button @click="onForward">Forward</button>
 
   <hr>
