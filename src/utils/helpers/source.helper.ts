@@ -66,6 +66,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Sets the volume of the sources
+   *
+   * @param id The ID of the source
+   * @param volume The volume to set
+   */
+  static setVolume(id: string, volume: number): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.volume = volume;
+    }
+  }
+
+  /**
+   * @description
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element

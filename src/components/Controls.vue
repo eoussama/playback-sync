@@ -7,7 +7,8 @@ import { SourceHelper } from '@/utils/helpers/source.helper'
 export default defineComponent({
   data: () => ({
     url: '',
-    title: ''
+    title: '',
+    volume: 1
   }),
 
   methods: {
@@ -42,7 +43,7 @@ export default defineComponent({
         this.addSource(source);
       }
     },
-    
+
 
     /**
      * @description
@@ -82,6 +83,16 @@ export default defineComponent({
       for (const source of this.sources) {
         SourceHelper.seek(source.id, 10);
       }
+    },
+
+    /**
+     * @description
+     * Changes the volume
+     */
+    onVolume() {
+      for (const source of this.sources) {
+        SourceHelper.setVolume(source.id, this.volume);
+      }
     }
   },
 
@@ -114,6 +125,17 @@ export default defineComponent({
   <button @click="onPlay">Play</button>
   <button @click="onPause">Pause</button>
   <button @click="onForward">Forward</button>
+
+  <hr>
+
+  <input
+    min="0"
+    max="1"
+    step="0.1"
+    type="range"
+    @input="onVolume"
+    v-model="volume"
+  >
 </template>
 
 <style scoped lang="scss"></style>
