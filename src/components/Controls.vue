@@ -141,7 +141,7 @@ export default defineComponent({
     max="2"
     step="0.25"
     type="range"
-    v-model="speed"
+    :value="speed"
     @input="onSpeed"
   > x{{ speed }}
 </template>

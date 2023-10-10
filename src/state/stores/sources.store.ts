@@ -70,6 +70,15 @@ export const useSourcesStore = defineStore('sources', {
      */
     addSource(source: TSource) {
       this.sources.push(source);
+    },
+
+    /**
+     * @description
+     * Removes an existing source
+     */
+    removeSource(id: string) {
+      const index = this.sources.findIndex(s => s.id === id);
+      this.sources.splice(index, 1);
     }
   }
 });
