@@ -18,7 +18,7 @@ export const useSourcesStore = defineStore('sources', {
     ],
   }),
   actions: {
-    add(source: TSource) {
+    addSource(source: TSource) {
       this.sources.push(source);
     }
   }
