@@ -1,7 +1,7 @@
 <script lang="ts">
 import { mapState } from 'pinia'
 import { defineComponent } from 'vue'
-import { useSourcesStore } from '@/stores/sources.store'
+import { useSourcesStore } from '@/state/stores/sources.store'
 
 export default defineComponent({
   computed: {
