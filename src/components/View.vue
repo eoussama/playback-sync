@@ -27,6 +27,7 @@ export default defineComponent({
       <div class="source__body">
         <video
           controls
+          :id="source.id"
           class="source__player"
         >
           <source

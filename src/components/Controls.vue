@@ -41,6 +41,12 @@ export default defineComponent({
         this.reset();
         this.addSource(source);
       }
+    },
+
+    onPlay() {
+      for (const source of this.sources) {
+        SourceHelper.play(source.id);
+      }
     }
   },
 
@@ -66,6 +72,10 @@ export default defineComponent({
   >
 
   <button @click="onSourceAdd">Add Video</button>
+
+  <hr>
+
+  <button @click="onPlay">Play</button>
 </template>
 
 <style scoped lang="scss"></style>

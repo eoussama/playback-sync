@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 
@@ -16,6 +17,31 @@ export class SourceHelper {
    * @param title The title of the source
    */
   static create(url: string, title: string): TSource {
-    return { url, title };
+    const id = v4();
+    return { id, url, title };
+  }
+
+  /**
+   * @description
+   * Plays the source
+   *
+   * @param id The ID of the player
+   */
+  static play(id: string): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.play();
+    }
+  }
+
+  /**
+   * @description
+   * Gets the player element on the DOM
+   *
+   * @param id The ID of the DOM element
+   */
+  private static getPlayer(id: string): HTMLVideoElement {
+    return document.getElementById(id) as HTMLVideoElement;
   }
 }
