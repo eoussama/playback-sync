@@ -8,6 +8,7 @@ export default defineComponent({
   data: () => ({
     url: '',
     title: '',
+    speed: 1,
     volume: 1
   }),
 
@@ -93,6 +94,16 @@ export default defineComponent({
       for (const source of this.sources) {
         SourceHelper.setVolume(source.id, this.volume);
       }
+    },
+
+    /**
+     * @description
+     * Changes the speed
+     */
+    onSpeed() {
+      for (const source of this.sources) {
+        SourceHelper.setSpeed(source.id, this.speed);
+      }
     }
   },
 
@@ -133,8 +144,19 @@ export default defineComponent({
     max="1"
     step="0.1"
     type="range"
-    @input="onVolume"
     v-model="volume"
+    @input="onVolume"
+  >
+
+  <hr>
+
+  <input
+    min="0.25"
+    max="2"
+    step="0.25"
+    type="range"
+    v-model="speed"
+    @input="onSpeed"
   >
 </template>
 

@@ -81,6 +81,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Sets the speed of the sources
+   *
+   * @param id The ID of the source
+   * @param speed The speed to set
+   */
+  static setSpeed(id: string, speed: number): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.playbackRate = speed;
+    }
+  }
+
+  /**
+   * @description
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element
