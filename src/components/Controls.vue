@@ -130,12 +130,14 @@ export default defineComponent({
     <font-awesome-icon icon="backward" />
   </button>
 
-
   <PlayPause
     :value="playing"
     @valueUpdated="onToggle"
   />
-  <button @click="onForward">Forward</button>
+
+  <button @click="onForward">
+    <font-awesome-icon icon="forward" />
+  </button>
 
   <hr>
 
