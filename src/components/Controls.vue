@@ -62,6 +62,26 @@ export default defineComponent({
       for (const source of this.sources) {
         SourceHelper.pause(source.id);
       }
+    },
+
+    /**
+     * @description
+     * Seek timeline backward
+     */
+    onBackward() {
+      for (const source of this.sources) {
+        SourceHelper.seek(source.id, -10);
+      }
+    },
+
+    /**
+     * @description
+     * Seek timeline forward
+     */
+    onForward() {
+      for (const source of this.sources) {
+        SourceHelper.seek(source.id, 10);
+      }
     }
   },
 
@@ -90,8 +110,10 @@ export default defineComponent({
 
   <hr>
 
+  <button @click="onBackward">Backward</button>
   <button @click="onPlay">Play</button>
   <button @click="onPause">Pause</button>
+  <button @click="onForward">Forward</button>
 </template>
 
 <style scoped lang="scss"></style>

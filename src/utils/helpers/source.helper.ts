@@ -51,6 +51,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Seeks a specific time on the timeline
+   *
+   * @param id The ID of the source
+   * @param time The number of seconds to seek to
+   */
+  static seek(id: string, time: number): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.currentTime += time;
+    }
+  }
+
+  /**
+   * @description
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element
