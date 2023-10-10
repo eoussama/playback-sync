@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import View from './components/View.vue'
 import { hookEffects } from './state/effects'
+
+
+import View from './components/View.vue'
 import Controls from './components/Controls.vue'
 
 hookEffects();
