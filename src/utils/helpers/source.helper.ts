@@ -25,13 +25,27 @@ export class SourceHelper {
    * @description
    * Plays the source
    *
-   * @param id The ID of the player
+   * @param id The ID of the source
    */
   static play(id: string): void {
     const player = this.getPlayer(id);
 
     if (player) {
       player.play();
+    }
+  }
+
+  /**
+   * @description
+   * Pauses the source
+   *
+   * @param id The ID of the source
+   */
+  static pause(id: string): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.pause();
     }
   }
 

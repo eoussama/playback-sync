@@ -42,10 +42,25 @@ export default defineComponent({
         this.addSource(source);
       }
     },
+    
 
+    /**
+     * @description
+     * Plays the sources
+     */
     onPlay() {
       for (const source of this.sources) {
         SourceHelper.play(source.id);
+      }
+    },
+
+    /**
+     * @description
+     * Pauses the sources
+     */
+    onPause() {
+      for (const source of this.sources) {
+        SourceHelper.pause(source.id);
       }
     }
   },
@@ -76,6 +91,7 @@ export default defineComponent({
   <hr>
 
   <button @click="onPlay">Play</button>
+  <button @click="onPause">Pause</button>
 </template>
 
 <style scoped lang="scss"></style>
