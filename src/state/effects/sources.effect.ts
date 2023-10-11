@@ -68,6 +68,18 @@ export function hookSourcesEffect() {
 
           break;
         }
+
+        case 'updateSourceMetadata': {
+          const [id, metadata] = args;
+
+          if ('playing' in metadata) {
+            if (store.sources.every(e => e.metadata.playing === metadata.playing)) {
+              store.playing = metadata.playing ?? store.playing;
+            }
+          }
+
+          break;
+        }
       }
     });
   });

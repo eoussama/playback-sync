@@ -14,6 +14,20 @@ export const useSourcesStore = defineStore('sources', {
     sources: [],
   }),
 
+  getters: {
+
+    /**
+     * @description
+     * Returns the longest source
+     *
+     * @param state The current state
+     */
+    longestSource: state => {
+      const sortedByLength = state.sources.slice(0).sort((a, b) => b.metadata.duration - a.metadata.duration);
+      return sortedByLength[0] ?? 0;
+    }
+  },
+
   actions: {
 
     /**

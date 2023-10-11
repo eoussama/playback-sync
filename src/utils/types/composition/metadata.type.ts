@@ -15,4 +15,10 @@ export type TMetadata = {
    * The time where the source is at now
    */
   currentTime: number;
+
+  /**
+   * @description
+   * If the source is playing
+   */
+  playing: boolean;
 }
