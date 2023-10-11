@@ -47,8 +47,8 @@ export default defineComponent({
           :id="`player-${source.id}`"
         >
           <source
-            :src="source.url"
             type="video/mp4"
+            :src="`${source.url}#t=${source.metadata.start},${source.metadata.end}`"
           >
         </video>
       </div>

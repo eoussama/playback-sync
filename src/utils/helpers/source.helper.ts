@@ -18,13 +18,21 @@ export class SourceHelper {
    * @param url The URL of the source
    * @param title The title of the source
    */
-  static async create(title: string, url: string): Promise<TSource> {
+  static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
-    const metadata = await this.loadSourceMetadata(url);
+    const sourceMetadata = await this.loadSourceMetadata(url);
 
     this.hookPlayer(id);
 
-    return { id, url, title, metadata };
+    return {
+      id,
+      url,
+      title,
+      metadata: {
+        ...sourceMetadata,
+        ...metadata
+      }
+    };
   }
 
   /**
@@ -153,8 +161,10 @@ export class SourceHelper {
 
       video.onloadedmetadata = () => {
         resolve({
+          start: 0,
           muted: video.muted,
           playing: !video.paused,
+          end: video.duration ?? 0,
           duration: video.duration,
           currentTime: video.currentTime
         });
