@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faPlay, faPause, faBackward, faForward,
+  faPlay, faPause, faRepeat, faBackward, faForward,
   faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,7 +12,7 @@ import {
  */
 export function loadIcons(): void {
   library.add(
-    faPlay, faPause, faBackward, faForward,
+    faPlay, faPause, faRepeat, faBackward, faForward,
     faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark
   );
 }

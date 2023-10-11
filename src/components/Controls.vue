@@ -145,6 +145,14 @@ export default defineComponent({
      */
     timelineValue() {
       return this.longestSource?.metadata?.currentTime ?? 0;
+    },
+
+    /**
+     * @description
+     * Whether or not the sources are finished playing
+     */
+    ended() {
+      return this.timelineValue === this.duration
     }
   },
 
@@ -191,6 +199,7 @@ export default defineComponent({
   </button>
 
   <PlayPause
+    :repeat="ended"
     :value="playing"
     @toggled="onToggle"
   />
