@@ -4,6 +4,7 @@ import { mapState, mapActions } from 'pinia';
 
 import Speed from '@/components/Speed.vue';
 import Volume from '@/components/Volume.vue';
+import Timeline from '@/components/Timeline.vue';
 import PlayPause from '@/components/PlayPause.vue';
 
 import { SourceHelper } from '@/utils/helpers/source.helper';
@@ -120,6 +121,7 @@ export default defineComponent({
 
   components: {
     PlayPause,
+    Timeline,
     Volume,
     Speed
   }
@@ -173,6 +175,10 @@ export default defineComponent({
     :value="speed"
     @speedChanged="onSpeed"
   />
+
+  <hr>
+
+  <Timeline />
 </template>
 
 <style scoped lang="scss"></style>
