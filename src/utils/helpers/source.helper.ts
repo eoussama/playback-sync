@@ -1,4 +1,5 @@
 import { v4 } from 'uuid';
+import type { TMetadata } from '../types/composition/metadata.type';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 
@@ -16,9 +17,11 @@ export class SourceHelper {
    * @param url The URL of the source
    * @param title The title of the source
    */
-  static create(url: string, title: string): TSource {
+  static async create(title: string, url: string): Promise<TSource> {
     const id = v4();
-    return { id, url, title };
+    const metadata = await this.loadSourceMetadata(url);
+
+    return { id, url, title, metadata };
   }
 
   /**
@@ -51,6 +54,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Toggles the source's muted state
+   *
+   * @param id The ID of the source
+   * @param state The muted state of the source
+   */
+  static mute(id: string, state: boolean): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.muted = state;
+    }
+  }
+
+  /**
+   * @description
    * Seeks a specific time on the timeline
    *
    * @param id The ID of the source
@@ -61,6 +79,21 @@ export class SourceHelper {
 
     if (player) {
       player.currentTime += time;
+    }
+  }
+
+  /**
+   * @description
+   * Seeks to a specific time on the timeline
+   *
+   * @param id The ID of the source
+   * @param time The time to seek to
+   */
+  static setTime(id: string, time: number): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.currentTime = time;
     }
   }
 
@@ -100,7 +133,28 @@ export class SourceHelper {
    *
    * @param id The ID of the DOM element
    */
-  private static getPlayer(id: string): HTMLVideoElement {
+  static getPlayer(id: string): HTMLVideoElement {
     return document.getElementById(id) as HTMLVideoElement;
+  }
+
+  /**
+   * @description
+   * Loads metadata for video
+   *
+   * @param url The URL to load
+   */
+  private static loadSourceMetadata(url: string): Promise<TMetadata> {
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.src = url;
+
+      video.onloadedmetadata = e => {
+        resolve({
+          duration: video.duration
+        });
+
+        video.remove();
+      }
+    });
   }
 }

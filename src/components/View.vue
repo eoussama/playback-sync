@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'pinia'
-import { useSourcesStore } from '@/state/stores/sources.store'
+import { defineComponent } from 'vue';
+import { mapState, mapActions } from 'pinia';
+import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
   computed: {
@@ -19,7 +19,7 @@ export default defineComponent({
       this.removeSource(id);
     }
   }
-})
+});
 </script>
 
 <template>

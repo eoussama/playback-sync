@@ -22,6 +22,12 @@ export type TSourcesStore = {
 
   /**
    * @description
+   * If the sources are muted
+   */
+  muted: boolean;
+
+  /**
+   * @description
    * If the sources are playing
    */
   playing: boolean;

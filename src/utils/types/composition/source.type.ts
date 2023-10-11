@@ -1,3 +1,7 @@
+import type { TMetadata } from './metadata.type';
+
+
+
 /**
  * @description
  * A source to stream
@@ -21,4 +25,10 @@ export type TSource = {
    * Source title
    */
   title: string;
+
+  /**
+   * @description
+   * Source metadata
+   */
+  metadata: TMetadata;
 }

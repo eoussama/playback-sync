@@ -25,8 +25,20 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'setVolume': {
+        case 'setMuted': {
           for (const source of store.sources) {
+            SourceHelper.setVolume(source.id, store.volume);
+            SourceHelper.mute(source.id, store.muted);
+          }
+          
+          break;
+        }
+        
+        case 'setVolume': {
+          store.muted = false;
+          
+          for (const source of store.sources) {
+            SourceHelper.mute(source.id, false);
             SourceHelper.setVolume(source.id, store.volume);
           }
 
@@ -44,6 +56,14 @@ export function hookSourcesEffect() {
         case 'seek': {
           for (const source of store.sources) {
             SourceHelper.seek(source.id, ...args);
+          }
+
+          break;
+        }
+
+        case 'setTimeline': {
+          for (const source of store.sources) {
+            SourceHelper.setTime(source.id, ...args);
           }
 
           break;
