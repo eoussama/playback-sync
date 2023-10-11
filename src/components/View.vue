@@ -43,8 +43,8 @@ export default defineComponent({
       <div class="source__body">
         <video
           controls
-          :id="source.id"
           class="source__player"
+          :id="`player-${source.id}`"
         >
           <source
             :src="source.url"
