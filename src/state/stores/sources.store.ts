@@ -60,9 +60,17 @@ export const useSourcesStore = defineStore('sources', {
      * Notify the sources that the timeline needs to be seeked
      * to a specific point relative to its current position.
      *
-     * @param time The speed to set
+     * @param time The time to seek
      */
     seek(time: number) { },
+
+    /**
+     * @description
+     * Updates sources timeline's current time
+     *
+     * @param time The time to seek to
+     */
+    setTimeline(time: number) { },
 
     /**
      * @description

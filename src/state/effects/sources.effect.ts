@@ -60,6 +60,14 @@ export function hookSourcesEffect() {
 
           break;
         }
+
+        case 'setTimeline': {
+          for (const source of store.sources) {
+            SourceHelper.setTime(source.id, ...args);
+          }
+
+          break;
+        }
       }
     });
   });

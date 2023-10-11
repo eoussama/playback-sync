@@ -3,9 +3,27 @@ import { defineComponent } from 'vue';
 
 
 export default defineComponent({
+  emits: ['timelineUpdated'],
+
   props: {
     value: Number,
     duration: Number
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Emits timeline change
+     *
+     * @param e The change event
+     */
+    onChanged(e: Event) {
+      const target = e.target as HTMLInputElement;
+      const value = parseFloat(target.value) ?? 0;
+
+      this.$emit('timelineUpdated', value);
+    }
   }
 });
 </script>
@@ -17,10 +35,11 @@ export default defineComponent({
     </div>
     <div class="timeline__track">
       <input
-        :min="0"
+        min="0"
+        type="range"
         :value="value"
         :max="duration"
-        type="range"
+        @input="onChanged"
       >
     </div>
   </div>

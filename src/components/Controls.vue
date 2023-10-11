@@ -24,6 +24,7 @@ export default defineComponent({
       'setMuted',
       'setVolume',
       'setSpeed',
+      'setTimeline',
       'seek'
     ]),
 
@@ -107,6 +108,14 @@ export default defineComponent({
      */
     onSpeed(speed: number): void {
       this.setSpeed(speed);
+    },
+
+    /**
+     * @description
+     * Updates the sources timelines
+     */
+    onTimelineChanged(time: number) {
+      this.setTimeline(time);
     }
   },
 
@@ -126,6 +135,23 @@ export default defineComponent({
      */
     duration() {
       return Math.max(...this.sources.map(e => e.metadata.duration));
+    },
+
+    /**
+     * @description
+     * Returns the current time of the longest loaded source
+     * to use a a reference for universal time
+     */
+    timelineValue() {
+      if (this.sources.length > 0) {
+        const sources = this.sources.map(e => ({ id: e.id, duration: e.metadata.duration }));
+        const longestSource = sources.sort((a, b) => b.duration - a.duration)[0];
+        const player = SourceHelper.getPlayer(longestSource.id);
+
+        return player?.currentTime ?? 0;
+      }
+
+      return 0;
     }
   },
 
@@ -199,8 +225,9 @@ export default defineComponent({
   <hr>
 
   <Timeline
-    :value="10"
     :duration="duration"
+    :value="timelineValue"
+    @timeline-updated="onTimelineChanged"
   />
 </template>
 

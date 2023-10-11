@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
-import type { TSource } from '@/utils/types/composition/source.type';
 import type { TMetadata } from '../types/composition/metadata.type';
+import type { TSource } from '@/utils/types/composition/source.type';
 
 
 
@@ -84,6 +84,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Seeks to a specific time on the timeline
+   *
+   * @param id The ID of the source
+   * @param time The time to seek to
+   */
+  static setTime(id: string, time: number): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.currentTime = time;
+    }
+  }
+
+  /**
+   * @description
    * Sets the volume of the sources
    *
    * @param id The ID of the source
@@ -118,7 +133,7 @@ export class SourceHelper {
    *
    * @param id The ID of the DOM element
    */
-  private static getPlayer(id: string): HTMLVideoElement {
+  static getPlayer(id: string): HTMLVideoElement {
     return document.getElementById(id) as HTMLVideoElement;
   }
 
