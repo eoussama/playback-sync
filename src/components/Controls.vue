@@ -1,11 +1,12 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'pinia'
+import { defineComponent } from 'vue';
+import { mapState, mapActions } from 'pinia';
 
-import PlayPause from '@/components/PlayPause.vue'
+import Volume from '@/components/Volume.vue';
+import PlayPause from '@/components/PlayPause.vue';
 
-import { SourceHelper } from '@/utils/helpers/source.helper'
-import { useSourcesStore } from '@/state/stores/sources.store'
+import { SourceHelper } from '@/utils/helpers/source.helper';
+import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
   data: () => ({
@@ -74,13 +75,10 @@ export default defineComponent({
      * @description
      * Changes the volume
      *
-     * @param e The input event
+     * @param e The volume value
      */
-    onVolume(e: Event): void {
-      const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value);
-
-      this.setVolume(value);
+    onVolume(volume: number): void {
+      this.setVolume(volume);
     },
 
     /**
@@ -102,7 +100,8 @@ export default defineComponent({
   },
 
   components: {
-    PlayPause
+    PlayPause,
+    Volume
   }
 });
 </script>
@@ -132,7 +131,7 @@ export default defineComponent({
 
   <PlayPause
     :value="playing"
-    @valueUpdated="onToggle"
+    @updated="onToggle"
   />
 
   <button @click="onForward">
@@ -141,14 +140,10 @@ export default defineComponent({
 
   <hr>
 
-  <input
-    min="0"
-    max="1"
-    step="0.1"
-    type="range"
+  <Volume
     :value="volume"
-    @input="onVolume"
-  > {{ volume * 100 }}%
+    @updated="onVolume"
+  />
 
   <hr>
 

@@ -1,8 +1,9 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 
 export default defineComponent({
+  emits: ['updated'],
 
   props: {
     value: Boolean
@@ -15,7 +16,7 @@ export default defineComponent({
      * Toggle clicked
      */
     onClick(): void {
-      this.$emit('valueUpdated');
+      this.$emit('updated');
     }
   }
 });
