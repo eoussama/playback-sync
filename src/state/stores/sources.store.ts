@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TSource } from '@/utils/types/composition/source.type'
+import type { TMetadata } from '@/utils/types/composition/metadata.type';
 import type { TSourcesStore } from '@/utils/types/store/sourceStore.type'
 
 
@@ -8,10 +9,24 @@ export const useSourcesStore = defineStore('sources', {
   state: (): TSourcesStore => ({
     speed: 1,
     volume: 1,
-    playing: false,
     muted: false,
+    playing: false,
     sources: [],
   }),
+
+  getters: {
+
+    /**
+     * @description
+     * Returns the longest source
+     *
+     * @param state The current state
+     */
+    longestSource: state => {
+      const sortedByLength = state.sources.slice(0).sort((a, b) => b.metadata.duration - a.metadata.duration);
+      return sortedByLength[0] ?? 0;
+    }
+  },
 
   actions: {
 
@@ -86,6 +101,27 @@ export const useSourcesStore = defineStore('sources', {
      */
     addSource(source: TSource) {
       this.sources.push(source);
+    },
+
+    /**
+     * @description
+     * Updates a singular source
+     *
+     * @param id The ID of the source to update
+     * @param metadata The metadata updates
+     */
+    updateSourceMetadata(id: string, metadata: Partial<TMetadata>) {
+      const index = this.sources.findIndex(e => e.id === id);
+
+      if (index >= 0) {
+        this.sources[index] = {
+          ...this.sources[index],
+          metadata: {
+            ...this.sources[index].metadata,
+            ...metadata
+          }
+        }
+      };
     },
 
     /**

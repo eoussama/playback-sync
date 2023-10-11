@@ -125,7 +125,8 @@ export default defineComponent({
       'volume',
       'speed',
       'playing',
-      'muted'
+      'muted',
+      'longestSource'
     ]),
 
     /**
@@ -143,15 +144,15 @@ export default defineComponent({
      * to use a a reference for universal time
      */
     timelineValue() {
-      if (this.sources.length > 0) {
-        const sources = this.sources.map(e => ({ id: e.id, duration: e.metadata.duration }));
-        const longestSource = sources.sort((a, b) => b.duration - a.duration)[0];
-        const player = SourceHelper.getPlayer(longestSource.id);
+      return this.longestSource?.metadata?.currentTime ?? 0;
+    },
 
-        return player?.currentTime ?? 0;
-      }
-
-      return 0;
+    /**
+     * @description
+     * Whether or not the sources are finished playing
+     */
+    ended() {
+      return this.timelineValue === this.duration
     }
   },
 
@@ -198,6 +199,7 @@ export default defineComponent({
   </button>
 
   <PlayPause
+    :repeat="ended"
     :value="playing"
     @toggled="onToggle"
   />

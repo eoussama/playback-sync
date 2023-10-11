@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import type { TMetadata } from '../types/composition/metadata.type';
 import type { TSource } from '@/utils/types/composition/source.type';
+import { useSourcesStore } from '@/state/stores/sources.store';
 
 
 
@@ -20,6 +21,8 @@ export class SourceHelper {
   static async create(title: string, url: string): Promise<TSource> {
     const id = v4();
     const metadata = await this.loadSourceMetadata(url);
+
+    this.hookPlayer(id);
 
     return { id, url, title, metadata };
   }
@@ -134,7 +137,7 @@ export class SourceHelper {
    * @param id The ID of the DOM element
    */
   static getPlayer(id: string): HTMLVideoElement {
-    return document.getElementById(id) as HTMLVideoElement;
+    return document.getElementById(`player-${id}`) as HTMLVideoElement;
   }
 
   /**
@@ -148,13 +151,61 @@ export class SourceHelper {
       const video = document.createElement('video');
       video.src = url;
 
-      video.onloadedmetadata = e => {
+      video.onloadedmetadata = () => {
         resolve({
-          duration: video.duration
+          muted: video.muted,
+          playing: !video.paused,
+          duration: video.duration,
+          currentTime: video.currentTime
         });
 
         video.remove();
       }
     });
+  }
+
+  /**
+   * @description
+   * Hooks in to a player element
+   *
+   * @param id The ID of the player
+   */
+  private static hookPlayer(id: string): void {
+    const target = document.getElementById('app') as HTMLDivElement;
+    const options = { childList: true, subtree: true };
+    const elementId = `#player-${id}`;
+
+    const observer = new MutationObserver((mutationList, observer) => {
+      const mutations = mutationList.flatMap(e => e.addedNodes);
+      const nodes = mutations.flatMap(e => e.item(0)) as Array<HTMLDivElement>;
+      const sources = nodes.filter(e => e?.classList?.contains('source'));
+      const players = sources.map(e => e.querySelector(elementId)) as Array<HTMLVideoElement>;
+
+      for (const player of players) {
+        if (elementId.endsWith(player?.id ?? '')) {
+          const store = useSourcesStore();
+
+          player.ontimeupdate = () => {
+            store.updateSourceMetadata(id, { currentTime: player.currentTime });
+          }
+
+          player.onpause = () => {
+            store.updateSourceMetadata(id, { playing: false });
+          }
+
+          player.onplay = () => {
+            store.updateSourceMetadata(id, { playing: true });
+          }
+
+          player.onvolumechange = () => {
+            store.updateSourceMetadata(id, { muted: player.muted });
+          }
+
+          observer.disconnect();
+        }
+      }
+    });
+
+    observer.observe(target, options);
   }
 }

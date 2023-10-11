@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { TimeHelper } from '@/utils/helpers/time.helper';
 
 
 export default defineComponent({
@@ -24,6 +25,25 @@ export default defineComponent({
 
       this.$emit('timelineUpdated', value);
     }
+  },
+
+  computed: {
+
+    /**
+     * @description
+     * Returns readable duration value
+     */
+    displayDuration() {
+      return TimeHelper.secondsToTime(this.duration);
+    },
+
+    /**
+     * @description
+     * Returns readable time value
+     */
+    displayTime() {
+      return TimeHelper.secondsToTime(this.value);
+    }
   }
 });
 </script>
@@ -31,7 +51,7 @@ export default defineComponent({
 <template>
   <div class="timeline">
     <div class="timeline__label">
-      {{ value }} / {{ duration }}
+      {{ displayTime }} / {{ displayDuration }}
     </div>
     <div class="timeline__track">
       <input

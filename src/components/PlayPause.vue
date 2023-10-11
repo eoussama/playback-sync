@@ -6,7 +6,8 @@ export default defineComponent({
   emits: ['toggled'],
 
   props: {
-    value: Boolean
+    value: Boolean,
+    repeat: Boolean
   },
 
   methods: {
@@ -25,7 +26,12 @@ export default defineComponent({
 <template>
   <button @click="onClick">
     <font-awesome-icon
-      v-if="value"
+      v-if="repeat"
+      icon="repeat"
+    />
+
+    <font-awesome-icon
+      v-else-if="value"
       icon="pause"
     />
 
