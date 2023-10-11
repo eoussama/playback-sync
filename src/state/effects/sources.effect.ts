@@ -78,6 +78,16 @@ export function hookSourcesEffect() {
             }
           }
 
+          if ('muted' in metadata) {
+            if (metadata.muted && store.sources.every(e => e.metadata.muted === metadata.muted)) {
+              store.muted = true;
+            }
+
+            else if (!metadata.muted && store.sources.some(e => e.metadata.muted === metadata.muted)) {
+              store.muted = false;
+            }
+          }
+
           break;
         }
       }

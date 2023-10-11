@@ -9,8 +9,8 @@ export const useSourcesStore = defineStore('sources', {
   state: (): TSourcesStore => ({
     speed: 1,
     volume: 1,
-    playing: false,
     muted: false,
+    playing: false,
     sources: [],
   }),
 

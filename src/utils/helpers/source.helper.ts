@@ -153,6 +153,7 @@ export class SourceHelper {
 
       video.onloadedmetadata = () => {
         resolve({
+          muted: video.muted,
           playing: !video.paused,
           duration: video.duration,
           currentTime: video.currentTime
@@ -187,13 +188,17 @@ export class SourceHelper {
           player.ontimeupdate = () => {
             store.updateSourceMetadata(id, { currentTime: player.currentTime });
           }
-          
+
           player.onpause = () => {
             store.updateSourceMetadata(id, { playing: false });
           }
-          
+
           player.onplay = () => {
             store.updateSourceMetadata(id, { playing: true });
+          }
+
+          player.onvolumechange = () => {
+            store.updateSourceMetadata(id, { muted: player.muted });
           }
 
           observer.disconnect();

@@ -13,8 +13,14 @@ export type TMetadata = {
   /**
    * @description
    * The time where the source is at now
-   */
+  */
   currentTime: number;
+
+  /**
+   * @description
+   * If the source is muted
+   */
+  muted: boolean;
 
   /**
    * @description
