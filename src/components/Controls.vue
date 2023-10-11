@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
+import Speed from '@/components/Speed.vue';
 import Volume from '@/components/Volume.vue';
 import PlayPause from '@/components/PlayPause.vue';
 
@@ -100,13 +101,10 @@ export default defineComponent({
      * @description
      * Changes the speed
      *
-     * @param e The input event
+     * @param speed The speed of the sources
      */
-    onSpeed(e: Event): void {
-      const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value);
-
-      this.setSpeed(value);
+    onSpeed(speed: number): void {
+      this.setSpeed(speed);
     }
   },
 
@@ -122,7 +120,8 @@ export default defineComponent({
 
   components: {
     PlayPause,
-    Volume
+    Volume,
+    Speed
   }
 });
 </script>
@@ -170,14 +169,10 @@ export default defineComponent({
 
   <hr>
 
-  <input
-    min="0.25"
-    max="2"
-    step="0.25"
-    type="range"
+  <Speed
     :value="speed"
-    @input="onSpeed"
-  > x{{ speed }}
+    @speedChanged="onSpeed"
+  />
 </template>
 
 <style scoped lang="scss"></style>
