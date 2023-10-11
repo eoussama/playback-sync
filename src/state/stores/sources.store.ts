@@ -10,18 +10,7 @@ export const useSourcesStore = defineStore('sources', {
     volume: 1,
     playing: false,
     muted: false,
-    sources: [
-      {
-        title: 'Futari no Yakusoku',
-        id: 'fd848919-a91b-491b-a682-e1e2e7a27d46',
-        url: 'https://v.animethemes.moe/Basquash-ED3.webm'
-      },
-      {
-        title: 'Brave',
-        id: 'dceb1b73-4029-4f29-8dce-f5ff693c4262',
-        url: 'https://v.animethemes.moe/Kindaichi-OP4.webm'
-      }
-    ],
+    sources: [],
   }),
 
   actions: {
@@ -74,6 +63,14 @@ export const useSourcesStore = defineStore('sources', {
      * @param time The speed to set
      */
     seek(time: number) { },
+
+    /**
+     * @description
+     * Resets all sources
+     */
+    resetSources() {
+      this.sources = [];
+    },
 
     /**
      * @description

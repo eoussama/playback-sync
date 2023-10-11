@@ -1,5 +1,6 @@
 import { v4 } from 'uuid';
 import type { TSource } from '@/utils/types/composition/source.type';
+import type { TMetadata } from '../types/composition/metadata.type';
 
 
 
@@ -16,9 +17,11 @@ export class SourceHelper {
    * @param url The URL of the source
    * @param title The title of the source
    */
-  static create(url: string, title: string): TSource {
+  static async create(title: string, url: string): Promise<TSource> {
     const id = v4();
-    return { id, url, title };
+    const metadata = await this.loadSourceMetadata(url);
+
+    return { id, url, title, metadata };
   }
 
   /**
@@ -117,5 +120,26 @@ export class SourceHelper {
    */
   private static getPlayer(id: string): HTMLVideoElement {
     return document.getElementById(id) as HTMLVideoElement;
+  }
+
+  /**
+   * @description
+   * Loads metadata for video
+   *
+   * @param url The URL to load
+   */
+  private static loadSourceMetadata(url: string): Promise<TMetadata> {
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.src = url;
+
+      video.onloadedmetadata = e => {
+        resolve({
+          duration: video.duration
+        });
+
+        video.remove();
+      }
+    });
   }
 }

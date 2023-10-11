@@ -19,6 +19,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSourcesStore, [
       'addSource',
+      'resetSources',
       'setPlaying',
       'setMuted',
       'setVolume',
@@ -47,9 +48,9 @@ export default defineComponent({
      * @description
      * Adds a new source
      */
-    onSourceAdd(): void {
+    async onSourceAdd(): Promise<void> {
       if (this.isSourceFilled()) {
-        const source = SourceHelper.create(this.url, this.title);
+        const source = await SourceHelper.create(this.title, this.url);
 
         this.reset();
         this.addSource(source);
@@ -124,6 +125,16 @@ export default defineComponent({
     Timeline,
     Volume,
     Speed
+  },
+
+  created() {
+    this.resetSources();
+
+    [{ title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+    { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }].forEach(async e => {
+      const source = await SourceHelper.create(e.title, e.url);
+      this.addSource(source);
+    });
   }
 });
 </script>

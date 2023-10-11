@@ -1,3 +1,8 @@
+import type { TMetadata } from './metadata.type';
+import type { Nullable } from '../generic/nullable.type';
+
+
+
 /**
  * @description
  * A source to stream
@@ -21,4 +26,10 @@ export type TSource = {
    * Source title
    */
   title: string;
+
+  /**
+   * @description
+   * Source metadata
+   */
+  metadata: Nullable<TMetadata>;
 }
