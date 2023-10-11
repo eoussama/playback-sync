@@ -3,17 +3,23 @@ import { defineComponent } from 'vue';
 
 
 export default defineComponent({
-
+  props: {
+    value: Number,
+    duration: Number
+  }
 });
 </script>
 
 <template>
   <div class="timeline">
+    <div class="timeline__label">
+      {{ value }} / {{ duration }}
+    </div>
     <div class="timeline__track">
       <input
-        min="0"
-        max="100"
-        value="80"
+        :min="0"
+        :value="value"
+        :max="duration"
         type="range"
       >
     </div>

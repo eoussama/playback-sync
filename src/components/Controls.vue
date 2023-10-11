@@ -117,7 +117,16 @@ export default defineComponent({
       'speed',
       'playing',
       'muted'
-    ])
+    ]),
+
+    /**
+     * @description
+     * The universal duration,
+     * generally the duration of the longest source
+     */
+    duration() {
+      return Math.max(...this.sources.map(e => e.metadata.duration));
+    }
   },
 
   components: {
@@ -189,7 +198,10 @@ export default defineComponent({
 
   <hr>
 
-  <Timeline />
+  <Timeline
+    :value="10"
+    :duration="duration"
+  />
 </template>
 
 <style scoped lang="scss"></style>

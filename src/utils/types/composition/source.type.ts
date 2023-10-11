@@ -1,5 +1,4 @@
 import type { TMetadata } from './metadata.type';
-import type { Nullable } from '../generic/nullable.type';
 
 
 
@@ -31,5 +30,5 @@ export type TSource = {
    * @description
    * Source metadata
    */
-  metadata: Nullable<TMetadata>;
+  metadata: TMetadata;
 }
