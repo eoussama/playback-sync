@@ -15,7 +15,14 @@ export default defineComponent({
   }),
 
   methods: {
-    ...mapActions(useSourcesStore, ['addSource', 'setPlaying', 'setVolume', 'setSpeed', 'seek']),
+    ...mapActions(useSourcesStore, [
+      'addSource',
+      'setPlaying',
+      'setMuted',
+      'setVolume',
+      'setSpeed',
+      'seek'
+    ]),
 
     /**
      * @description
@@ -83,6 +90,14 @@ export default defineComponent({
 
     /**
      * @description
+     * Toggles the muted state of the sources
+     */
+    onMuteToggled(): void {
+      this.setMuted(!this.muted);
+    },
+
+    /**
+     * @description
      * Changes the speed
      *
      * @param e The input event
@@ -96,7 +111,13 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSourcesStore, ['sources', 'volume', 'speed', 'playing'])
+    ...mapState(useSourcesStore, [
+      'sources',
+      'volume',
+      'speed',
+      'playing',
+      'muted'
+    ])
   },
 
   components: {
@@ -131,7 +152,7 @@ export default defineComponent({
 
   <PlayPause
     :value="playing"
-    @updated="onToggle"
+    @toggled="onToggle"
   />
 
   <button @click="onForward">
@@ -141,8 +162,10 @@ export default defineComponent({
   <hr>
 
   <Volume
+    :muted="muted"
     :value="volume"
-    @updated="onVolume"
+    @volumeUpdated="onVolume"
+    @muteToggled="onMuteToggled"
   />
 
   <hr>

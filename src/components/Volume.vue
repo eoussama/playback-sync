@@ -2,10 +2,11 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  emits: ['updated'],
+  emits: ['volumeUpdated', 'muteToggled'],
 
   props: {
-    value: Number
+    value: Number,
+    muted: Boolean
   },
 
   methods: {
@@ -20,8 +21,16 @@ export default defineComponent({
       const target = e.target as HTMLInputElement;
       const value = parseFloat(target.value ?? 0);
 
-      this.$emit('updated', value);
+      this.$emit('volumeUpdated', value);
     },
+
+    /**
+     * @description
+     * Toggles the muted state
+     */
+    onMuteToggled(): void {
+      this.$emit('muteToggled');
+    }
   },
 
   computed: {
@@ -41,9 +50,14 @@ export default defineComponent({
 <template>
   <div class="volume">
     <div class="volume__status">
-      <button>
+      <button @click="onMuteToggled">
         <font-awesome-icon
-          v-if="volume < 30"
+          v-if="muted"
+          icon="volume-xmark"
+        />
+
+        <font-awesome-icon
+          v-else-if="volume < 30"
           icon="volume-off"
         />
 

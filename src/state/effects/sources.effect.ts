@@ -25,7 +25,18 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'setMuted': {
+          for (const source of store.sources) {
+            SourceHelper.setVolume(source.id, store.volume);
+            SourceHelper.mute(source.id, store.muted);
+          }
+
+          break;
+        }
+
         case 'setVolume': {
+          store.muted = false;
+
           for (const source of store.sources) {
             SourceHelper.setVolume(source.id, store.volume);
           }

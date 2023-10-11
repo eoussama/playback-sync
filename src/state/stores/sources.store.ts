@@ -9,6 +9,7 @@ export const useSourcesStore = defineStore('sources', {
     speed: 1,
     volume: 1,
     playing: false,
+    muted: false,
     sources: [
       {
         title: 'Futari no Yakusoku',
@@ -33,6 +34,16 @@ export const useSourcesStore = defineStore('sources', {
      */
     setPlaying(playing: boolean) {
       this.playing = playing;
+    },
+
+    /**
+     * @description
+     * Updates the muted state
+     *
+     * @param muted The muted state to set
+     */
+    setMuted(muted: boolean) {
+      this.muted = muted;
     },
 
     /**

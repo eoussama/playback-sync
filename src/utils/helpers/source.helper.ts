@@ -51,6 +51,21 @@ export class SourceHelper {
 
   /**
    * @description
+   * Toggles the source's muted state
+   *
+   * @param id The ID of the source
+   * @param state The muted state of the source
+   */
+  static mute(id: string, state: boolean): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.muted = state;
+    }
+  }
+
+  /**
+   * @description
    * Seeks a specific time on the timeline
    *
    * @param id The ID of the source
