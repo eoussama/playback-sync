@@ -32,21 +32,58 @@ export default defineComponent({
      */
     volume(): number {
       const volume = this.value ?? 0;
-      return volume * 100;
+      return Math.floor(volume * 100);
     },
   }
 });
 </script>
 
 <template>
-  <input
-    min="0"
-    max="1"
-    step="0.1"
-    type="range"
-    :value="value"
-    @input="onVolume"
-  > {{ volume }}%
+  <div class="volume">
+    <div class="volume__status">
+      <button>
+        <font-awesome-icon
+          v-if="volume < 30"
+          icon="volume-off"
+        />
+
+        <font-awesome-icon
+          v-else-if="volume < 60"
+          icon="volume-low"
+        />
+
+        <font-awesome-icon
+          v-else
+          icon="volume-high"
+        />
+      </button>
+    </div>
+
+    <div class="volume__input">
+      <input
+        min="0"
+        max="1"
+        step="0.01"
+        type="range"
+        :value="value"
+        @input="onVolume"
+      >
+    </div>
+
+    <div class="volume__label">{{ volume }}%</div>
+  </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.volume {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &__status,
+  &__input,
+  &__label {
+    display: flex;
+  }
+}
+</style>
