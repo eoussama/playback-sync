@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { hookEffects } from './state/effects';
 
+import { hookEffects } from './state/effects';
+import { useModalStore } from './state/stores/modal.store';
 
 import View from './components/View.vue';
 import Controls from './components/Controls.vue';
 
 hookEffects();
+
+const store = useModalStore();
+store.addModal({ id: 'dddd', title: 'testu' });
 </script>
 
 <template>
@@ -21,7 +25,7 @@ hookEffects();
     </div>
 
     <div class="modals">
-      <Modal>Modal 2</Modal>
+      <Modal v-for="modal in store.modals">Modal {{ modal.title }}</Modal>
     </div>
   </div>
 </template>
