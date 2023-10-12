@@ -25,6 +25,7 @@ const store = useModalStore();
     <div class="modals">
       <Modal
         :modal="modal"
+        :key="modal.id"
         v-for="modal in store.modals"
       />
     </div>

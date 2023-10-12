@@ -35,7 +35,11 @@ export default defineComponent({
      * Opens source addition modal
      */
     onAdd(): void {
-      ModalHelper.open('Add Source', SourceDetail);
+      ModalHelper
+        .open('Add Source', SourceDetail)
+        .then(modal => {
+          console.log({ modal });
+        });
     },
 
     /**
