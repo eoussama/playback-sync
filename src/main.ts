@@ -4,6 +4,7 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
+import Modal from './components/Modal.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { loadIcons } from './utils/helpers/fontawesome.helper';
 
@@ -14,6 +15,7 @@ loadIcons();
 
 app.use(pinia);
 
+app.component('Modal', Modal);
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.mount('#app');

@@ -46,4 +46,5 @@ export default defineComponent({
 .sources {
   display: grid;
   grid-template-columns: 1fr 1fr;
-}</style>
+}
+</style>
