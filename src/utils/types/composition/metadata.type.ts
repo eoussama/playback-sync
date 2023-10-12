@@ -30,6 +30,12 @@ export type TMetadata = {
 
   /**
    * @description
+   * The speed of the source
+  */
+  speed: number;
+
+  /**
+   * @description
    * If the source is muted
    */
   muted: boolean;

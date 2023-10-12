@@ -166,6 +166,7 @@ export class SourceHelper {
           playing: !video.paused,
           end: video.duration ?? 0,
           duration: video.duration,
+          speed: video.playbackRate,
           currentTime: video.currentTime
         });
 
@@ -209,6 +210,10 @@ export class SourceHelper {
 
           player.onvolumechange = () => {
             store.updateSourceMetadata(id, { muted: player.muted });
+          }
+
+          player.onratechange = () => {
+            store.updateSourceMetadata(id, { speed: player.playbackRate });
           }
 
           observer.disconnect();
