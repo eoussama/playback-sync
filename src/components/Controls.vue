@@ -8,6 +8,7 @@ import Timeline from '@/components/Timeline.vue';
 import PlayPause from '@/components/PlayPause.vue';
 import SourceDetail from '@/components/SourceDetail.vue';
 
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
@@ -34,7 +35,7 @@ export default defineComponent({
      * Opens source addition modal
      */
     onAdd(): void {
-      alert('add');
+      ModalHelper.open('Add Source', SourceDetail);
     },
 
     /**

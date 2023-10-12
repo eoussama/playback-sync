@@ -1,15 +1,50 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
+
+import type { TModal } from '@/utils/types/composition/modal.type';
+import type { TComponent } from '@/utils/types/composition/component.type';
 
 export default defineComponent({
 
+  props: {
+    modal: Object as PropType<TModal<TComponent>>
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Closes the modal
+     */
+    onClose() {
+      if (this.modal) {
+        ModalHelper.close(this.modal.id);
+      }
+    }
+  }
 });
 </script>
 
 <template>
-  <div class="modal">
+  <div
+    v-if="modal"
+    class="modal"
+    :id="`modal-${modal.id}`"
+  >
     <div class="modal__element">
-      <slot></slot>
+      <div class="modal__head">
+        <div class="modal__title">{{ modal.title }}</div>
+
+        <div class="modal__close">
+          <button @click="onClose">
+            <font-awesome-icon icon="xmark" />
+          </button>
+        </div>
+      </div>
+      <div class="modal__body">
+        <component :is="modal.component" />
+      </div>
     </div>
   </div>
 </template>
