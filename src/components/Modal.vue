@@ -19,7 +19,7 @@ export default defineComponent({
      */
     onClose() {
       if (this.modal) {
-        ModalHelper.close(this.modal.id);
+        ModalHelper.close(this.modal.id, { id: this.modal.id });
       }
     }
   }
@@ -43,7 +43,7 @@ export default defineComponent({
         </div>
       </div>
       <div class="modal__body">
-        <component :is="modal.component" />
+        <component :is="{...modal.component}" />
       </div>
     </div>
   </div>
