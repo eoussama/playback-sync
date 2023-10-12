@@ -19,11 +19,17 @@ hookEffects();
         <Controls />
       </div>
     </div>
+
+    <div class="modals">
+      <Modal>Modal 2</Modal>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .root {
+  position: relative;
+
   width: 100vw;
   height: 100vh;
 
@@ -37,6 +43,5 @@ hookEffects();
       flex: 100%;
     }
   }
-
 }
 </style>
