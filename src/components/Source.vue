@@ -41,7 +41,6 @@ export default defineComponent({
 
     <div class="source__body">
       <video
-        controls
         class="source__player"
         :id="`player-${source.id}`"
       >
