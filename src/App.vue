@@ -7,9 +7,7 @@ import View from './components/View.vue';
 import Controls from './components/Controls.vue';
 
 hookEffects();
-
 const store = useModalStore();
-store.addModal({ id: 'dddd', title: 'testu' });
 </script>
 
 <template>
@@ -25,7 +23,10 @@ store.addModal({ id: 'dddd', title: 'testu' });
     </div>
 
     <div class="modals">
-      <Modal v-for="modal in store.modals">Modal {{ modal.title }}</Modal>
+      <Modal
+        :modal="modal"
+        v-for="modal in store.modals"
+      />
     </div>
   </div>
 </template>

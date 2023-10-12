@@ -6,6 +6,8 @@ export default defineComponent({
 });
 </script>
 
-<template></template>
+<template>
+  Source Detail
+</template>
 
 <style scoped lang="scss"></style>

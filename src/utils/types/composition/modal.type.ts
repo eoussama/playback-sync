@@ -1,8 +1,12 @@
+import type { TComponent } from './component.type';
+
+
+
 /**
  * @description
  * A source to stream
  */
-export type TModal = {
+export type TModal<T extends TComponent> = {
 
   /**
    * @description
@@ -15,4 +19,10 @@ export type TModal = {
    * The title of the modal
    */
   title: string;
+
+  /**
+   * @description
+   * The content displayed in the body
+   */
+  component: InstanceType<T>;
 }
