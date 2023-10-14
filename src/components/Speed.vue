@@ -28,18 +28,11 @@ export default defineComponent({
 
 <template>
   <div class="speed">
-    <select
-      class="speed_input"
+    <Select
       :value="value"
+      :options="playbackRates"
       @change="onPlaybackRateChanged"
-    >
-      <option
-        v-for="speed in playbackRates"
-        :value="speed"
-      >
-        x{{ speed }}
-      </option>
-    </select>
+    />
   </div>
 </template>
 
