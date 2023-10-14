@@ -1,9 +1,11 @@
 <script lang="ts">
+import { v4 } from 'uuid';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
 
   data: () => ({
+    id: '',
     hovered: false
   }),
 
@@ -15,10 +17,41 @@ export default defineComponent({
 
     /**
      * @description
+     * Positions the tooptip relative to the element
+     */
+    positionTooltip(): void {
+      const tooltip = document.getElementById(this.id);
+
+      if (tooltip) {
+        const tooltipText = tooltip.childNodes[0] as HTMLDivElement;
+        const tooltipElement = tooltip.childNodes[1] as HTMLDivElement;
+
+        const elementRect = tooltipElement.getClientRects().item(0);
+        const elementX = elementRect?.left ?? 0;
+        const elementY = elementRect?.top ?? 0;
+        const elementWidth = elementRect?.width ?? 0;
+
+        const textRect = tooltipText.getClientRects().item(0);
+        const textWidth = textRect?.width ?? 0;
+        const textHeight = textRect?.height ?? 0;
+
+        const textXOffset = elementX + (elementWidth / 2) - (textWidth / 2);
+        const textX = Math.max(textXOffset, 0);
+        const textY = elementY - textHeight;
+        console.log(textHeight);
+
+        tooltipText.style.left = `${textX}px`;
+        tooltipText.style.top = `${textY}px`;
+      }
+    },
+
+    /**
+     * @description
      * Handles mouse entrance
      */
     onMouseEnter(): void {
       this.hovered = true;
+      setTimeout(this.positionTooltip);
     },
 
     /**
@@ -28,12 +61,17 @@ export default defineComponent({
     onMouseLeave(): void {
       this.hovered = false;
     }
+  },
+
+  mounted(): void {
+    this.id = `tooltip-${v4()}`;
   }
 });
 </script>
 
 <template>
   <div
+    :id="id"
     class="tooltip"
     :class="{ 'tooltip--hovered': hovered }"
     @mouseenter="onMouseEnter"
@@ -58,12 +96,18 @@ export default defineComponent({
   position: relative;
 
   &__text {
-    position: absolute;
-    top: -25px;
-    left: 0;
-
     display: none;
-    width: 100%;
+    pointer-events: none;
+    box-sizing: border-box;
+
+    position: fixed;
+    width: max-content;
+    border: 1px solid blue;
+  }
+
+  &__element {
+    box-sizing: border-box;
+    border: 1px solid red;
   }
 
   &--hovered {
