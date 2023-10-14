@@ -156,15 +156,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <button @click="onAdd">
-    <font-awesome-icon icon="plus" />
-  </button>
+  <Button
+    icon="plus"
+    @click="onAdd"
+  />
 
   <hr>
 
-  <button @click="onBackward">
-    <font-awesome-icon icon="backward" />
-  </button>
+  <Button
+    icon="backward"
+    @click="onBackward"
+  />
 
   <PlayPause
     :repeat="ended"
@@ -172,9 +174,10 @@ export default defineComponent({
     @toggled="onToggle"
   />
 
-  <button @click="onForward">
-    <font-awesome-icon icon="forward" />
-  </button>
+  <Button
+    icon="forward"
+    @click="onForward"
+  />
 
   <hr>
 

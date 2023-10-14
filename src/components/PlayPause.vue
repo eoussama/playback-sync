@@ -19,27 +19,32 @@ export default defineComponent({
     onClick(): void {
       this.$emit('toggled');
     }
+  },
+
+  computed: {
+
+    /**
+     * @description
+     * The icon to show on the button
+     */
+    icon(): string {
+      if (this.repeat) {
+        return 'repeat';
+      } else if (this.value) {
+        return 'pause';
+      } else {
+        return 'play'
+      }
+    }
   }
 });
 </script>
 
 <template>
-  <button @click="onClick">
-    <font-awesome-icon
-      v-if="repeat"
-      icon="repeat"
-    />
-
-    <font-awesome-icon
-      v-else-if="value"
-      icon="pause"
-    />
-
-    <font-awesome-icon
-      v-else
-      icon="play"
-    />
-  </button>
+  <Button
+    :icon="icon"
+    @click="onClick"
+  />
 </template>
 
 <style scoped lang="scss"></style>

@@ -66,7 +66,6 @@ export default defineComponent({
     v-if="source"
     class="source"
   >
-    {{ previewUrl }}
     <div class="source__form">
       <div class="input">
         <label class="input__wrapper">
@@ -111,13 +110,16 @@ export default defineComponent({
     </div>
 
     <div class="source__control">
-      <button class="button">
-        Reset
-      </button>
+      <Button
+        outline
+        label="Reset"
+      />
 
-      <button class="button">
-        Add
-      </button>
+      <Button
+        primary
+        label="Add"
+        icon="check"
+      />
     </div>
   </div>
 </template>

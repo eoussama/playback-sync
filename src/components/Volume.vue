@@ -43,6 +43,22 @@ export default defineComponent({
       const volume = this.value ?? 0;
       return Math.floor(volume * 100);
     },
+
+    /**
+     * @description
+     * The icon to show on the button
+     */
+    icon(): string {
+      if (this.muted || this.volume === 0) {
+        return 'volume-xmark';
+      } else if (this.volume < 30) {
+        return 'volume-off';
+      } else if (this.volume < 60) {
+        return 'volume-low';
+      } else {
+        return 'volume-high';
+      }
+    }
   }
 });
 </script>
@@ -50,27 +66,10 @@ export default defineComponent({
 <template>
   <div class="volume">
     <div class="volume__status">
-      <button @click="onMuteToggled">
-        <font-awesome-icon
-          v-if="muted"
-          icon="volume-xmark"
-        />
-
-        <font-awesome-icon
-          v-else-if="volume < 30"
-          icon="volume-off"
-        />
-
-        <font-awesome-icon
-          v-else-if="volume < 60"
-          icon="volume-low"
-        />
-
-        <font-awesome-icon
-          v-else
-          icon="volume-high"
-        />
-      </button>
+      <Button
+        :icon="icon"
+        @click="onMuteToggled"
+      />
     </div>
 
     <div class="volume__input">

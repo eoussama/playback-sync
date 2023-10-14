@@ -34,7 +34,10 @@ export default defineComponent({
           target="_blank"
           :href="source.url"
         >{{ source.title }}</a>
-        <button @click="onRemove">x</button>
+        <Button
+          icon="xmark"
+          @click="onRemove"
+        />
       </div>
 
     </div>
@@ -60,5 +63,4 @@ export default defineComponent({
   &__player {
     width: 100%;
   }
-}
-</style>
+}</style>
