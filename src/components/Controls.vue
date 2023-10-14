@@ -156,10 +156,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <Button
-    icon="plus"
-    @click="onAdd"
-  />
+  <Tooltip text="Add a new source">
+    <Button
+      icon="plus"
+      @click="onAdd"
+    />
+  </Tooltip>
 
   <hr>
 
