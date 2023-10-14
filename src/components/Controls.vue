@@ -13,11 +13,6 @@ import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
-  data: () => ({
-    url: '',
-    title: ''
-  }),
-
   methods: {
     ...mapActions(useSourcesStore, [
       'addSource',

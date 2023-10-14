@@ -13,16 +13,28 @@ export class SourceHelper {
 
   /**
    * @description
+   * Initializes a new source
+   */
+  static async init(): Promise<TSource> {
+    const metadata = { duration: 0, currentTime: 0, speed: 1, end: 0, start: 0, muted: false, playing: false };
+    return this.create('', '', metadata, false);
+  }
+
+  /**
+   * @description
    * Creates a new source
    *
    * @param url The URL of the source
    * @param title The title of the source
+   * @param hook Whether to hook the video player with the state
    */
-  static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
+  static async create(title: string, url: string, metadata?: Partial<TMetadata>, hook: boolean = true): Promise<TSource> {
     const id = v4();
     const sourceMetadata = await this.loadSourceMetadata(url);
 
-    this.hookPlayer(id);
+    if (hook) {
+      this.hookPlayer(id);
+    }
 
     return {
       id,
@@ -159,7 +171,7 @@ export class SourceHelper {
       const video = document.createElement('video');
       video.src = url;
 
-      video.onloadedmetadata = () => {
+      video.onerror = video.onloadedmetadata = () => {
         resolve({
           start: 0,
           muted: video.muted,
