@@ -102,12 +102,10 @@ export default defineComponent({
 
     position: fixed;
     width: max-content;
-    border: 1px solid blue;
   }
 
   &__element {
     box-sizing: border-box;
-    border: 1px solid red;
   }
 
   &--hovered {
