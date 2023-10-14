@@ -111,14 +111,14 @@ export default defineComponent({
 
     <div class="source__control">
       <Button
-        outline
         label="Reset"
+        type="outline"
       />
 
       <Button
-        primary
         label="Add"
         icon="check"
+        type="primary"
       />
     </div>
   </div>

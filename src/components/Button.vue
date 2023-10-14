@@ -1,13 +1,25 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { TButtonType } from '@/utils/types/composition/buttonType.type';
 
 export default defineComponent({
 
   props: {
     icon: String,
     label: String,
-    outline: Boolean,
-    primary: Boolean
+    type: Object as () => TButtonType
+  },
+
+  computed: {
+
+    /**
+     * @description
+     * The class type of the button
+     */
+    typeClass(): string {
+      const type = this.type ?? 'plain';
+      return `button--${type}`;
+    }
   }
 });
 </script>
@@ -15,7 +27,7 @@ export default defineComponent({
 <template>
   <button
     class="button"
-    :class="{ 'button--primary': primary, 'button--outline': outline }"
+    :class="[typeClass]"
   >
     <div
       v-if="icon"
