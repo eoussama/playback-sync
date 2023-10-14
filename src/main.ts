@@ -4,8 +4,9 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
-import Input from './components/Input.vue';
 import Modal from './components/Modal.vue';
+import Range from './components/Range.vue';
+import Input from './components/Input.vue';
 import Button from './components/Button.vue';
 import Select from './components/Select.vue';
 import Tooltip from './components/Tooltip.vue';
@@ -21,6 +22,7 @@ loadIcons();
 app.use(pinia);
 
 app.component('Modal', Modal);
+app.component('Range', Range);
 app.component('Input', Input);
 app.component('Button', Button);
 app.component('Select', Select);
