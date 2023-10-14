@@ -7,6 +7,7 @@ import { createPinia } from 'pinia';
 import Input from './components/Input.vue';
 import Modal from './components/Modal.vue';
 import Button from './components/Button.vue';
+import Select from './components/Select.vue';
 import Tooltip from './components/Tooltip.vue';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -22,6 +23,7 @@ app.use(pinia);
 app.component('Modal', Modal);
 app.component('Input', Input);
 app.component('Button', Button);
+app.component('Select', Select);
 app.component('Tooltip', Tooltip);
 app.component('font-awesome-icon', FontAwesomeIcon);
 
