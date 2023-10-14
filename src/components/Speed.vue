@@ -41,14 +41,6 @@ export default defineComponent({
       </option>
     </select>
   </div>
-  <!-- <input
-    min="0.25"
-    max="2"
-    step="0.25"
-    type="range"
-    :value="speed"
-    @input="onSpeed"
-  > x{{ speed }} -->
 </template>
 
 <style scoped lang="scss"></style>

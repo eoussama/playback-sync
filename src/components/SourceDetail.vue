@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { SourceHelper } from '@/utils/helpers/source.helper';
-import { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
+import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
 
 export default defineComponent({
 
@@ -66,32 +66,22 @@ export default defineComponent({
     v-if="source"
     class="source"
   >
+    {{ source }}
     <div class="source__form">
-      <div class="input">
-        <label class="input__wrapper">
-          <div class="input__label">Source Title</div>
-          <div class="input__input">
-            <input
-              type="text"
-              v-model="source.title"
-              placeholder="Enter a title for the source"
-            >
-          </div>
-        </label>
-      </div>
+      <Input
+        type="text"
+        label="Source Title"
+        v-model="source.title"
+        placeholder="Enter a title for the source"
+      />
 
-      <div class="input">
-        <label class="input__wrapper">
-          <div class="input__label">Source URL</div>
-          <div class="input__input">
-            <input
-              type="url"
-              v-model="source.url"
-              placeholder="Enter the URL of the source"
-            >
-          </div>
-        </label>
-      </div>
+      <Input
+        type="text"
+        label="Source URL"
+        v-model="source.url"
+        placeholder="Enter the URL of the source"
+      />
+
       <div
         v-show="previewLoaded"
         class="source__preview"
