@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import type { TButtonType } from '@/utils/types/composition/buttonType.type';
 
 export default defineComponent({
@@ -7,7 +7,7 @@ export default defineComponent({
   props: {
     icon: String,
     label: String,
-    type: Object as () => TButtonType
+    type: String as PropType<TButtonType>
   },
 
   computed: {
