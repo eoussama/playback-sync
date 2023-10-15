@@ -8,6 +8,7 @@ import Timeline from '@/components/Timeline.vue';
 import PlayPause from '@/components/PlayPause.vue';
 import SourceDetail from '@/components/SourceDetail.vue';
 
+import { PageType } from '@/utils/enums/pageType.enum';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
@@ -31,9 +32,11 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', SourceDetail)
+        .open('Add Source', SourceDetail, { type: PageType.Creation })
         .then(modal => {
-          this.addSource(modal.payload);
+          if (modal.payload) {
+            this.addSource(modal.payload);
+          }
         });
     },
 
