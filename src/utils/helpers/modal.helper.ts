@@ -18,9 +18,9 @@ export class ModalHelper {
    * @param title The title of the modal
    * @param component The component to show in the body of the modal
    */
-  private static create<T extends TComponent>(title: string, component: InstanceType<T>): TModal<T> {
+  private static create<T extends TComponent, U = any>(title: string, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    return { id, title, component: component };
+    return { id, title, component, props };
   }
 
   /**
@@ -29,11 +29,12 @@ export class ModalHelper {
    *
    * @param title The title to show on top of the modal
    * @param component The component to show in the body of the modal
+   * @param props Optional props to pass to the component
    */
-  static open<T extends TComponent, U = { payload: any }>(title: string, component: InstanceType<T>): Promise<U> {
+  static open<T extends TComponent, U = { id: string, payload: any }, V = any>(title: string, component: InstanceType<T>, props?: V): Promise<U> {
     return new Promise(resolve => {
       const store = useModalStore();
-      const modal = this.create(title, component);
+      const modal = this.create(title, component, props);
 
       store.addModal(modal);
 
@@ -61,6 +62,6 @@ export class ModalHelper {
    */
   static close<T = { payload: any }>(id: string, payload?: T): void {
     const store = useModalStore();
-    store.removeModal(id, { payload });
+    store.removeModal(id, { id, payload });
   }
 }

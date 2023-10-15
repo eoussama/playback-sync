@@ -17,9 +17,9 @@ export default defineComponent({
      * @description
      * Closes the modal
      */
-    onClose() {
+    onClose(): void {
       if (this.modal) {
-        ModalHelper.close(this.modal.id, { id: this.modal.id });
+        ModalHelper.close(this.modal.id);
       }
     }
   }
@@ -46,6 +46,7 @@ export default defineComponent({
       <div class="modal__body">
         <component
           :modalId="modal.id"
+          :params="modal.props"
           :is="{...modal.component}"
         />
       </div>
