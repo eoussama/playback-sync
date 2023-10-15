@@ -44,7 +44,10 @@ export default defineComponent({
         </div>
       </div>
       <div class="modal__body">
-        <component :is="{...modal.component}" />
+        <component
+          :modalId="modal.id"
+          :is="{...modal.component}"
+        />
       </div>
     </div>
   </div>
@@ -69,4 +72,5 @@ export default defineComponent({
   &__element {
     background-color: white;
   }
-}</style>
+}
+</style>

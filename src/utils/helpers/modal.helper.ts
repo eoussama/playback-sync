@@ -30,14 +30,14 @@ export class ModalHelper {
    * @param title The title to show on top of the modal
    * @param component The component to show in the body of the modal
    */
-  static open<T extends TComponent, U = any>(title: string, component: InstanceType<T>): Promise<U> {
+  static open<T extends TComponent, U = { payload: any }>(title: string, component: InstanceType<T>): Promise<U> {
     return new Promise(resolve => {
       const store = useModalStore();
       const modal = this.create(title, component);
 
       store.addModal(modal);
 
-      const unsubscribe = store.$onAction(({ name, store, args, after }) => {
+      const unsubscribe = store.$onAction(({ name, args, after }) => {
         after(() => {
           if (name === 'removeModal') {
             const [id, payload] = args;
@@ -59,8 +59,8 @@ export class ModalHelper {
    * @param id The ID of the modal to close
    * @param payload Optional data to return from the modal
    */
-  static close<T = any>(id: string, payload?: T): void {
+  static close<T = { payload: any }>(id: string, payload?: T): void {
     const store = useModalStore();
-    store.removeModal(id, payload);
+    store.removeModal(id, { payload });
   }
 }
