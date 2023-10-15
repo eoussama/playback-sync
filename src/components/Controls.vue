@@ -14,6 +14,7 @@ import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
+
   methods: {
     ...mapActions(useSourcesStore, [
       'addSource',
@@ -135,6 +136,15 @@ export default defineComponent({
      */
     ended() {
       return this.timelineValue === this.duration
+    },
+
+    /**
+     * @description
+     * If the controls are disabled, mainly due
+     * to the absense of any loaded sources.
+     */
+    disabled() {
+      return this.sources.length === 0;
     }
   },
 
@@ -169,17 +179,20 @@ export default defineComponent({
   <hr>
 
   <Button
+    v-if="!disabled"
     icon="backward"
     @click="onBackward"
   />
 
   <PlayPause
+    v-if="!disabled"
     :repeat="ended"
     :value="playing"
     @toggled="onToggle"
   />
 
   <Button
+    v-if="!disabled"
     icon="forward"
     @click="onForward"
   />
@@ -187,6 +200,7 @@ export default defineComponent({
   <hr>
 
   <Volume
+    v-if="!disabled"
     :muted="muted"
     :value="volume"
     @volumeUpdated="onVolume"
@@ -196,6 +210,7 @@ export default defineComponent({
   <hr>
 
   <Speed
+    v-if="!disabled"
     :value="speed"
     @speedChanged="onSpeed"
   />
@@ -203,6 +218,7 @@ export default defineComponent({
   <hr>
 
   <Timeline
+    v-if="!disabled"
     :duration="duration"
     :value="timelineValue"
     @timeline-updated="onTimelineChanged"
