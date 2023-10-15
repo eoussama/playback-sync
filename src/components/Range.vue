@@ -10,9 +10,15 @@ export default defineComponent({
   }),
 
   props: {
-    end: Number,
-    start: Number,
     disabled: Boolean,
+    end: {
+      default: 0,
+      type: Number
+    },
+    start: {
+      default: 0,
+      type: Number
+    },
     step: {
       default: 1,
       type: Number
@@ -29,15 +35,19 @@ export default defineComponent({
 
   watch: {
     startValue(): void {
-      this.resizeThumb();
+      setTimeout(this.resizeThumb);
     },
 
     endValue(): void {
-      this.resizeThumb();
+      setTimeout(this.resizeThumb);
     },
 
-    disabled(): void {
-      this.resizeThumb();
+    start(): void {
+      this.startValue = this.start;
+    },
+
+    end(): void {
+      this.endValue = this.end;
     }
   },
 
@@ -81,6 +91,7 @@ export default defineComponent({
       const value = parseFloat(target.value ?? 0)
 
       this.startValue = Math.min(value, this.endValue - this.step);
+      target.value = this.startValue.toString();
     },
 
     /**
@@ -94,6 +105,7 @@ export default defineComponent({
       const value = parseFloat(target.value ?? 0)
 
       this.endValue = Math.max(value, this.startValue + this.step);
+      target.value = this.endValue.toString();
     },
 
     /**
@@ -111,11 +123,6 @@ export default defineComponent({
     onEndChanged(): void {
       this.$emit('endChanged', this.endValue);
     }
-  },
-
-  mounted(): void {
-    this.endValue = this.max ?? 100;
-    this.startValue = this.min ?? 0;
   },
 
   setup() {
