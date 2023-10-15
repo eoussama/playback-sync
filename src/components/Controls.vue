@@ -156,15 +156,19 @@ export default defineComponent({
 </script>
 
 <template>
-  <button @click="onAdd">
-    <font-awesome-icon icon="plus" />
-  </button>
+  <Tooltip text="Add a new source">
+    <Button
+      icon="plus"
+      @click="onAdd"
+    />
+  </Tooltip>
 
   <hr>
 
-  <button @click="onBackward">
-    <font-awesome-icon icon="backward" />
-  </button>
+  <Button
+    icon="backward"
+    @click="onBackward"
+  />
 
   <PlayPause
     :repeat="ended"
@@ -172,9 +176,10 @@ export default defineComponent({
     @toggled="onToggle"
   />
 
-  <button @click="onForward">
-    <font-awesome-icon icon="forward" />
-  </button>
+  <Button
+    icon="forward"
+    @click="onForward"
+  />
 
   <hr>
 

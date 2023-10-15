@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { SourceHelper } from '@/utils/helpers/source.helper';
-import { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
+import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
+import { TimeHelper } from '@/utils/helpers/time.helper';
 
 export default defineComponent({
 
@@ -18,15 +19,63 @@ export default defineComponent({
      */
     async initForm(): Promise<void> {
       this.source = this.source ?? await SourceHelper.init();
+    },
+
+    /**
+     * @description
+     * Formats value as time stamp
+     *
+     * @param value The value to format
+     */
+    valueFormater(value: number): string {
+      return TimeHelper.secondsToTime(value);
+    },
+
+    /**
+     * @description
+     * Handles start update
+     *
+     * @param start The start value
+     */
+    onStartChanged(start: number): void {
+      if (this.source) {
+        this.source.metadata.start = start;
+      }
+    },
+
+    /**
+     * @description
+     * Handles end update
+     *
+     * @param end The end value
+     */
+    onEndChanged(end: number): void {
+      if (this.source) {
+        this.source.metadata.end = end;
+      }
     }
   },
 
   watch: {
-    previewUrl() {
+    previewUrl(): void {
+      const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
+
+      if (player) {
+        player.load();
+      }
+    },
+
+    'source.url'(): void {
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
       if (player) {
         player.onloadedmetadata = () => {
+          if (this.source && !this.previewLoaded) {
+            this.source.metadata.start = player.currentTime;
+            this.source.metadata.end = player.duration;
+            this.source.metadata.duration = player.duration;
+          }
+
           this.previewLoaded = player.readyState > 0;
         }
 
@@ -68,34 +117,23 @@ export default defineComponent({
   >
     {{ previewUrl }}
     <div class="source__form">
-      <div class="input">
-        <label class="input__wrapper">
-          <div class="input__label">Source Title</div>
-          <div class="input__input">
-            <input
-              type="text"
-              v-model="source.title"
-              placeholder="Enter a title for the source"
-            >
-          </div>
-        </label>
-      </div>
+      <Input
+        type="text"
+        label="Source Title"
+        v-model="source.title"
+        placeholder="Enter a title for the source"
+      />
 
-      <div class="input">
-        <label class="input__wrapper">
-          <div class="input__label">Source URL</div>
-          <div class="input__input">
-            <input
-              type="url"
-              v-model="source.url"
-              placeholder="Enter the URL of the source"
-            >
-          </div>
-        </label>
-      </div>
+      <Input
+        type="text"
+        label="Source URL"
+        v-model="source.url"
+        placeholder="Enter the URL of the source"
+      />
+
       <div
-        v-show="previewLoaded"
         class="source__preview"
+        :class="{ 'source__preview--show': previewLoaded }"
       >
         <video
           controls
@@ -107,19 +145,59 @@ export default defineComponent({
             :src="previewUrl"
           >
         </video>
+
       </div>
+
+      <Range
+        :min="0"
+        :start="source.metadata.start"
+        :end="source.metadata.end"
+        :max="source.metadata.duration"
+        :disabled="!previewLoaded"
+        :valueFormater="valueFormater"
+        @endChanged="onEndChanged"
+        @startChanged="onStartChanged"
+      />
+
     </div>
 
-    <div class="source__control">
-      <button class="button">
-        Reset
-      </button>
+    <div class="source__controls">
+      <Button
+        label="Reset"
+        type="outline"
+      />
 
-      <button class="button">
-        Add
-      </button>
+      <Button
+        label="Add"
+        icon="check"
+        type="primary"
+      />
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.source {
+  padding: 50px;
+
+  &__preview {
+    height: 450px;
+    width: 600px;
+
+    visibility: hidden;
+
+    &--show {
+      visibility: visible;
+    }
+  }
+
+  &__player {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  &__controls {}
+}
+</style>

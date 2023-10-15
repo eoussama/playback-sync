@@ -37,9 +37,10 @@ export default defineComponent({
         <div class="modal__title">{{ modal.title }}</div>
 
         <div class="modal__close">
-          <button @click="onClose">
-            <font-awesome-icon icon="xmark" />
-          </button>
+          <Button
+            icon="xmark"
+            @click="onClose"
+          />
         </div>
       </div>
       <div class="modal__body">
@@ -68,5 +69,4 @@ export default defineComponent({
   &__element {
     background-color: white;
   }
-}
-</style>
+}</style>
