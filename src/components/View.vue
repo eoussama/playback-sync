@@ -15,7 +15,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource', 'editSource', 'getSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'getSource']),
 
     /**
      * @description
@@ -40,7 +40,7 @@ export default defineComponent({
         .open('Edit Source', SourceDetail, { type: PageType.Edition, source: { ...source } })
         .then(modal => {
           if (modal.payload) {
-            this.editSource(modal.payload);
+            this.updateSource(modal.payload);
           }
         });
     }

@@ -21,8 +21,9 @@ export default defineComponent({
       ConfirmHelper
         .open({
           title: 'Deletion',
+          resolveLabel: 'Delete',
           icon: 'triangle-exclamation',
-          message: 'Do you really want to delete this source?',
+          message: 'Do you really want to delete this source?'
         })
         .then(confirm => {
           if (confirm) {

@@ -69,6 +69,13 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'updateSource': {
+          const [source] = args;
+          SourceHelper.refresh(source.id);
+
+          break;
+        }
+
         case 'updateSourceMetadata': {
           const [id, metadata] = args;
 
