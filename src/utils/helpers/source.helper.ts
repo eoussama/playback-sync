@@ -1,7 +1,9 @@
 import { v4 } from 'uuid';
+import { ReadyState } from '../enums/readyState.enum';
+import { useSourcesStore } from '@/state/stores/sources.store';
+
 import type { TMetadata } from '../types/composition/metadata.type';
 import type { TSource } from '@/utils/types/composition/source.type';
-import { useSourcesStore } from '@/state/stores/sources.store';
 
 
 
@@ -16,7 +18,12 @@ export class SourceHelper {
    * Initializes a new source
    */
   static async init(): Promise<TSource> {
-    const metadata = { duration: 0, currentTime: 0, speed: 1, end: 0, start: 0, muted: false, playing: false };
+    const metadata: TMetadata = {
+      duration: 0, currentTime: 0,
+      speed: 1, end: 0, start: 0,
+      muted: false, playing: false, buffering: false
+    };
+
     return this.create('', '', metadata, false);
   }
 
@@ -204,7 +211,8 @@ export class SourceHelper {
           end: video.duration ?? 0,
           duration: video.duration,
           speed: video.playbackRate,
-          currentTime: video.currentTime
+          currentTime: video.currentTime,
+          buffering: video.readyState < ReadyState.HaveEnoughData
         });
 
         video.remove();
@@ -238,11 +246,15 @@ export class SourceHelper {
           }
 
           player.onpause = () => {
-            store.updateSourceMetadata(id, { playing: false });
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: false });
+            }
           }
 
           player.onplay = () => {
-            store.updateSourceMetadata(id, { playing: true });
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: true });
+            }
           }
 
           player.onvolumechange = () => {
@@ -251,6 +263,14 @@ export class SourceHelper {
 
           player.onratechange = () => {
             store.updateSourceMetadata(id, { speed: player.playbackRate });
+          }
+
+          player.onwaiting = () => {
+            store.updateSourceMetadata(id, { buffering: true });
+          }
+
+          player.oncanplay = () => {
+            store.updateSourceMetadata(id, { buffering: false });
           }
 
           observer.disconnect();

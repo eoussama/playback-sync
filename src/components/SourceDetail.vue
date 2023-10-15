@@ -2,6 +2,8 @@
 import { defineComponent, type PropType } from 'vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
+import { ReadyState } from '@/utils/enums/readyState.enum';
+
 import { TimeHelper } from '@/utils/helpers/time.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
@@ -120,7 +122,7 @@ export default defineComponent({
             this.source.metadata.duration = player.duration;
           }
 
-          this.previewLoaded = player.readyState > 0;
+          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
         }
 
         this.previewLoaded = false;
