@@ -22,6 +22,17 @@ export class SourceHelper {
 
   /**
    * @description
+   * Resets an existing source
+   *
+   * @param id The ID of the source to reset
+   */
+  static async reset(id: string): Promise<TSource> {
+    const source = await this.init();
+    return { ...source, id };
+  }
+
+  /**
+   * @description
    * Creates a new source
    *
    * @param url The URL of the source

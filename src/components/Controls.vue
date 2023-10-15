@@ -33,7 +33,7 @@ export default defineComponent({
       ModalHelper
         .open('Add Source', SourceDetail)
         .then(modal => {
-          console.log({ modal });
+          this.addSource(modal.payload);
         });
     },
 

@@ -1,8 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { TimeHelper } from '@/utils/helpers/time.helper';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
-import { TimeHelper } from '@/utils/helpers/time.helper';
 
 export default defineComponent({
 
@@ -10,6 +11,10 @@ export default defineComponent({
     source: null,
     previewLoaded: false
   }),
+
+  props: {
+    modalId: String
+  },
 
   methods: {
 
@@ -29,6 +34,34 @@ export default defineComponent({
      */
     valueFormater(value: number): string {
       return TimeHelper.secondsToTime(value);
+    },
+
+    /**
+     * @description
+     * Checks if the form is valid
+     */
+    isFormValid(): boolean {
+      return (this.source?.title?.length ?? 0) > 0 && (this.source?.url?.length ?? 0) > 0;
+    },
+
+    /**
+     * @description
+     * Resets the form
+     */
+    async onReset(): Promise<void> {
+      this.source = await SourceHelper.reset(this.source?.id ?? '');
+    },
+
+    /**
+     * @description
+     * Returns the source to add
+     */
+    async onAdd(): Promise<void> {
+      if (this.isFormValid()) {
+        if (this.modalId) {
+          ModalHelper.close(this.modalId, this.source);
+        }
+      }
     },
 
     /**
@@ -115,7 +148,6 @@ export default defineComponent({
     v-if="source"
     class="source"
   >
-    {{ previewUrl }}
     <div class="source__form">
       <Input
         type="text"
@@ -150,9 +182,9 @@ export default defineComponent({
 
       <Range
         :min="0"
-        :start="source.metadata.start"
-        :end="source.metadata.end"
-        :max="source.metadata.duration"
+        :start="source.metadata?.start"
+        :end="source.metadata?.end"
+        :max="source.metadata?.duration"
         :disabled="!previewLoaded"
         :valueFormater="valueFormater"
         @endChanged="onEndChanged"
@@ -165,12 +197,14 @@ export default defineComponent({
       <Button
         label="Reset"
         type="outline"
+        @click="onReset"
       />
 
       <Button
         label="Add"
         icon="check"
         type="primary"
+        @click="onAdd"
       />
     </div>
   </div>
@@ -178,8 +212,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .source {
-  padding: 50px;
-
   &__preview {
     height: 450px;
     width: 600px;
