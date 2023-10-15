@@ -28,6 +28,10 @@ export default defineComponent({
       if (player) {
         player.onloadedmetadata = () => {
           this.previewLoaded = player.readyState > 0;
+
+          if (this.source) {
+            this.source.metadata.end = player.duration;
+          }
         }
 
         this.previewLoaded = false;
@@ -97,6 +101,12 @@ export default defineComponent({
           >
         </video>
       </div>
+
+      <Range
+        v-if="previewLoaded"
+        :max="source.metadata.end"
+        :min="source.metadata.start"
+      />
     </div>
 
     <div class="source__control">
@@ -114,4 +124,10 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.source {
+  &__player {
+    display: block;
+  }
+}
+</style>
