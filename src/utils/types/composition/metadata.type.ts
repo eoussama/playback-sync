@@ -6,6 +6,12 @@ export type TMetadata = {
 
   /**
    * @description
+   * If the source is buffering
+   */
+  buffering: boolean;
+
+  /**
+   * @description
    * The start time
    */
   start: number;

@@ -73,6 +73,7 @@ export default defineComponent({
 
     <div class="source__body">
       <video
+        preload="auto"
         class="source__player"
         :id="`player-${source.id}`"
       >
