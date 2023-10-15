@@ -1,18 +1,22 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
+  emits: ['startChanged', 'endChanged'],
 
   data: () => ({
-    end: 0,
-    step: 1,
-    start: 0
+    endValue: 0,
+    startValue: 0
   }),
 
   props: {
     end: Number,
-    step: Number,
     start: Number,
+    disabled: Boolean,
+    step: {
+      default: 1,
+      type: Number
+    },
     min: {
       default: 0,
       type: Number
@@ -23,22 +27,17 @@ export default defineComponent({
     }
   },
 
-  computed: {
-
-    /**
-     * @description
-     * The start value
-     */
-    startValue(): number {
-      return this.start ?? this.min;
+  watch: {
+    startValue(): void {
+      this.resizeThumb();
     },
 
-    /**
-     * @description
-     * The end value
-     */
-    endValue(): number {
-      return this.end ?? this.max;
+    endValue(): void {
+      this.resizeThumb();
+    },
+
+    disabled(): void {
+      this.resizeThumb();
     }
   },
 
@@ -46,64 +45,118 @@ export default defineComponent({
 
     /**
      * @description
-     * handles updates when the start value changes
-     *
-     * @param e The event object
+     * Resizes the thumb element to fit between the start and end handles
      */
-    onStartChanged(e: Event): void {
-      const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value ?? 0)
+    resizeThumb(): void {
+      const elementRef = this.$refs.elementRef as HTMLDivElement;
+      const elementTrack = elementRef.querySelector('.range__track') as HTMLDivElement;
+      const elementThumb = elementRef.querySelector('.range__thumb') as HTMLDivElement;
+      const elementStart = elementRef.querySelector('.range__start') as HTMLInputElement;
+      const elementEnd = elementRef.querySelector('.range__end') as HTMLInputElement;
 
-      this.start = Math.min(value, this.end - this.step);
-      target.value = this.start.toString();
+      const trackRect = elementTrack.getClientRects().item(0);
+      const trackWidth = trackRect?.width ?? 0;
+
+      const start = parseFloat(elementStart.value ?? 0);
+      const end = parseFloat(elementEnd.value ?? 0);
+
+      const thumbStart = trackWidth * (start / this.max);
+      const thumbEnd = (trackWidth * (end / this.max)) - thumbStart;
+
+      elementThumb.style.left = `${thumbStart}px`;
+      elementThumb.style.width = `${thumbEnd}px`;
+
+      elementStart.value = this.startValue.toString();
+      elementEnd.value = this.endValue.toString();
     },
 
     /**
      * @description
-     * handles updates when the start value changes
+     * Handles start change
      *
      * @param e The event object
      */
-    onEndChanged(e: Event): void {
+    onStartInput(e: Event): void {
       const target = e.target as HTMLInputElement;
       const value = parseFloat(target.value ?? 0)
 
-      this.end = Math.max(value, this.start + this.step);
-      target.value = this.end.toString();
+      this.startValue = Math.min(value, this.endValue - this.step);
+    },
+
+    /**
+     * @description
+     * Handles end change
+     *
+     * @param e The event object
+     */
+    onEndInput(e: Event): void {
+      const target = e.target as HTMLInputElement;
+      const value = parseFloat(target.value ?? 0)
+
+      this.endValue = Math.max(value, this.startValue + this.step);
+    },
+
+    /**
+     * @description
+     * Emits start value on change
+     */
+    onStartChanged(): void {
+      this.$emit('startChanged', this.startValue);
+    },
+
+    /**
+     * @description
+     * Emits end value on change
+     */
+    onEndChanged(): void {
+      this.$emit('endChanged', this.endValue);
     }
   },
 
   mounted(): void {
-    this.end = this.max ?? 100;
-    this.start = this.min ?? 0;
+    this.endValue = this.max ?? 100;
+    this.startValue = this.min ?? 0;
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
   }
 });
 </script>
 
 <template>
-  {{ start }} - {{ end }}
-  <div class="range">
+  <div
+    class="range"
+    ref="elementRef"
+    :class="{ 'range--disabled': disabled }"
+  >
     <input
       :min="min"
       :max="max"
       :step="step"
       type="range"
-      :value="start"
+      :value="startValue"
       class="range__start"
-      @input="onStartChanged"
+      :disabled="disabled"
+      @input="onStartInput"
+      @change="onStartChanged"
     >
 
-    <div class="range__track"></div>
+    <div class="range__track">
+      <div class="range__thumb"></div>
+    </div>
 
-    <!-- :min="start" -->
     <input
       :min="min"
       :max="max"
       :step="step"
       type="range"
-      :value="end"
+      :value="endValue"
       class="range__end"
-      @input="onEndChanged"
+      :disabled="disabled"
+      @input="onEndInput"
+      @change="onEndChanged"
     >
   </div>
 </template>
@@ -118,6 +171,8 @@ export default defineComponent({
   position: relative;
 
   &__track {
+    position: relative;
+
     width: 100%;
     height: 5px;
     border-radius: 5px;
@@ -125,9 +180,21 @@ export default defineComponent({
     background-color: rgb(194, 194, 194);
   }
 
+  &__thumb {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    background-color: gray;
+  }
+
   &__end,
   &__start {
     cursor: grab;
+    z-index: 1;
 
     top: 0;
     left: 0;
@@ -141,6 +208,16 @@ export default defineComponent({
 
     &::-webkit-slider-runnable-track {
       height: 0;
+    }
+  }
+
+  &--disabled {
+    .range__track {
+      background-color: rgb(235, 235, 235);
+    }
+
+    .range__thumb {
+      background-color: rgb(204, 204, 204);
     }
   }
 }
