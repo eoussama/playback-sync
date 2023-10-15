@@ -60,6 +60,20 @@ export class SourceHelper {
 
   /**
    * @description
+   * refreshes the source's player
+   *
+   * @param id The ID of the source to refresh
+   */
+  static refresh(id: string): void {
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.load();
+    }
+  }
+
+  /**
+   * @description
    * Plays the source
    *
    * @param id The ID of the source

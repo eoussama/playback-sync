@@ -122,7 +122,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param source The source to edit
      */
-    editSource(source: TSource): void {
+    updateSource(source: TSource): void {
       const index = this.sources.findIndex(e => e.id === source.id);
       this.sources[index] = { ...source };
     },
