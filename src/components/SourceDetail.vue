@@ -181,7 +181,9 @@ export default defineComponent({
 
   &__player {
     display: block;
+
     width: 100%;
+    height: 100%;
   }
 
   &__controls {}

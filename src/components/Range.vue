@@ -138,33 +138,46 @@ export default defineComponent({
     ref="elementRef"
     :class="{ 'range--disabled': disabled }"
   >
-    <input
-      :min="min"
-      :max="max"
-      :step="step"
-      type="range"
-      :value="startValue"
-      class="range__start"
-      :disabled="disabled"
-      @input="onStartInput"
-      @change="onStartChanged"
-    >
-
-    <div class="range__track">
-      <div class="range__thumb"></div>
+    <div class="range__label range__label--start">
+      {{ min }}
     </div>
 
-    <input
-      :min="min"
-      :max="max"
-      :step="step"
-      type="range"
-      :value="endValue"
-      class="range__end"
-      :disabled="disabled"
-      @input="onEndInput"
-      @change="onEndChanged"
-    >
+    <div class="range__wrapper">
+      <input
+        :min="min"
+        :max="max"
+        :step="step"
+        type="range"
+        :value="startValue"
+        class="range__start"
+        :disabled="disabled"
+        @input="onStartInput"
+        @change="onStartChanged"
+      >
+
+      <div class="range__track">
+        <div class="range__thumb">
+          <div class="range__value range__value--start">{{ startValue }}</div>
+          <div class="range__value range__value--end">{{ endValue }}</div>
+        </div>
+      </div>
+
+      <input
+        :min="min"
+        :max="max"
+        :step="step"
+        type="range"
+        :value="endValue"
+        class="range__end"
+        :disabled="disabled"
+        @input="onEndInput"
+        @change="onEndChanged"
+      >
+    </div>
+
+    <div class="range__label range__label--end">
+      {{ max }}
+    </div>
   </div>
 </template>
 
@@ -195,7 +208,36 @@ export default defineComponent({
     left: 0;
     top: 0;
 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     background-color: gray;
+
+    .range__value {
+      position: absolute;
+      top: 12px;
+
+      &--start {
+        left: -6px;
+      }
+
+      &--end {
+        right: -6px;
+      }
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
   }
 
   &__end,
