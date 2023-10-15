@@ -38,7 +38,6 @@ export default defineComponent({
         const textXOffset = elementX + (elementWidth / 2) - (textWidth / 2);
         const textX = Math.max(textXOffset, 0);
         const textY = elementY - textHeight;
-        console.log(textHeight);
 
         tooltipText.style.left = `${textX}px`;
         tooltipText.style.top = `${textY}px`;
