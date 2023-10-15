@@ -11,6 +11,10 @@ export default defineComponent({
 
   props: {
     disabled: Boolean,
+    valueFormater: {
+      type: Function,
+      default: (value: number) => value.toString()
+    },
     end: {
       default: 0,
       type: Number
@@ -139,7 +143,7 @@ export default defineComponent({
     :class="{ 'range--disabled': disabled }"
   >
     <div class="range__label range__label--start">
-      {{ min }}
+      {{ valueFormater(min) }}
     </div>
 
     <div class="range__wrapper">
@@ -157,8 +161,8 @@ export default defineComponent({
 
       <div class="range__track">
         <div class="range__thumb">
-          <div class="range__value range__value--start">{{ startValue }}</div>
-          <div class="range__value range__value--end">{{ endValue }}</div>
+          <div class="range__value range__value--start">{{ valueFormater(startValue) }}</div>
+          <div class="range__value range__value--end">{{ valueFormater(endValue) }}</div>
         </div>
       </div>
 
@@ -176,7 +180,7 @@ export default defineComponent({
     </div>
 
     <div class="range__label range__label--end">
-      {{ max }}
+      {{ valueFormater(max) }}
     </div>
   </div>
 </template>

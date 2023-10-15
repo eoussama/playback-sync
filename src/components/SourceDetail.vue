@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
+import { TimeHelper } from '@/utils/helpers/time.helper';
 
 export default defineComponent({
 
@@ -18,6 +19,16 @@ export default defineComponent({
      */
     async initForm(): Promise<void> {
       this.source = this.source ?? await SourceHelper.init();
+    },
+
+    /**
+     * @description
+     * Formats value as time stamp
+     *
+     * @param value The value to format
+     */
+    valueFormater(value: number): string {
+      return TimeHelper.secondsToTime(value);
     },
 
     /**
@@ -143,6 +154,7 @@ export default defineComponent({
         :end="source.metadata.end"
         :max="source.metadata.duration"
         :disabled="!previewLoaded"
+        :valueFormater="valueFormater"
         @endChanged="onEndChanged"
         @startChanged="onStartChanged"
       />
