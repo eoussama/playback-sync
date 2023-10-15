@@ -1,5 +1,7 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
+
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
@@ -16,7 +18,17 @@ export default defineComponent({
      * Emits remove event
      */
     onRemove() {
-      this.$emit('remove', this.source?.id);
+      ConfirmHelper
+        .open({
+          title: 'Deletion',
+          icon: 'triangle-exclamation',
+          message: 'Do you really want to delete this source?',
+        })
+        .then(confirm => {
+          if (confirm) {
+            this.$emit('remove', this.source?.id);
+          }
+        });
     },
 
     /**

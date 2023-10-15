@@ -1,8 +1,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faPlus, faXmark, faCheck, faPen,
   faPlay, faPause, faRepeat, faBackward, faForward,
-  faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark
+  faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
+  faPlus, faXmark, faCheck, faPen, faTriangleExclamation
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -13,8 +13,8 @@ import {
  */
 export function loadIcons(): void {
   library.add(
-    faPlus, faXmark, faCheck, faPen,
     faPlay, faPause, faRepeat, faBackward, faForward,
-    faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark
+    faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
+    faPlus, faXmark, faCheck, faPen, faTriangleExclamation
   );
 }
