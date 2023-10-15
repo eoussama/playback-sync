@@ -9,6 +9,7 @@ import Range from './components/Range.vue';
 import Input from './components/Input.vue';
 import Button from './components/Button.vue';
 import Select from './components/Select.vue';
+import Confirm from './components/Confirm.vue';
 import Tooltip from './components/Tooltip.vue';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -26,6 +27,7 @@ app.component('Range', Range);
 app.component('Input', Input);
 app.component('Button', Button);
 app.component('Select', Select);
+app.component('Confirm', Confirm);
 app.component('Tooltip', Tooltip);
 app.component('font-awesome-icon', FontAwesomeIcon);
 

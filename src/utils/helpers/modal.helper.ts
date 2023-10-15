@@ -60,7 +60,7 @@ export class ModalHelper {
    * @param id The ID of the modal to close
    * @param payload Optional data to return from the modal
    */
-  static close<T = { payload: any }>(id: string, payload?: T): void {
+  static close<T = any>(id: string, payload?: T): void {
     const store = useModalStore();
     store.removeModal(id, { id, payload });
   }
