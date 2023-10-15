@@ -36,7 +36,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param playing The playing state to set
      */
-    setPlaying(playing: boolean) {
+    setPlaying(playing: boolean): void {
       this.playing = playing;
     },
 
@@ -46,7 +46,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param muted The muted state to set
      */
-    setMuted(muted: boolean) {
+    setMuted(muted: boolean): void {
       this.muted = muted;
     },
 
@@ -56,7 +56,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param volume The volume to set
      */
-    setVolume(volume: number) {
+    setVolume(volume: number): void {
       this.volume = volume;
     },
 
@@ -66,7 +66,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param speed The speed to set
      */
-    setSpeed(speed: number) {
+    setSpeed(speed: number): void {
       this.speed = speed;
     },
 
@@ -77,7 +77,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param time The time to seek
      */
-    seek(time: number) { },
+    seek(time: number): void { },
 
     /**
      * @description
@@ -85,22 +85,46 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param time The time to seek to
      */
-    setTimeline(time: number) { },
+    setTimeline(time: number): void { },
 
     /**
      * @description
      * Resets all sources
      */
-    resetSources() {
+    resetSources(): void {
       this.sources = [];
     },
 
     /**
      * @description
-     * Adds a new source
+     * Returns a source object by ID
+     *
+     * @param id The ID of the source to get
      */
-    addSource(source: TSource) {
+    getSource(id: string): TSource {
+      const index = this.sources.findIndex(e => e.id === id);
+      return this.sources[index];
+    },
+
+    /**
+     * @description
+     * Adds a new source
+     *
+     * @param source The source to add
+     */
+    addSource(source: TSource): void {
       this.sources.push(source);
+    },
+
+    /**
+     * @description
+     * Edits an existing source
+     *
+     * @param source The source to edit
+     */
+    editSource(source: TSource): void {
+      const index = this.sources.findIndex(e => e.id === source.id);
+      this.sources[index] = { ...source };
     },
 
     /**
@@ -110,7 +134,7 @@ export const useSourcesStore = defineStore('sources', {
      * @param id The ID of the source to update
      * @param metadata The metadata updates
      */
-    updateSourceMetadata(id: string, metadata: Partial<TMetadata>) {
+    updateSourceMetadata(id: string, metadata: Partial<TMetadata>): void {
       const index = this.sources.findIndex(e => e.id === id);
 
       if (index >= 0) {
@@ -128,7 +152,7 @@ export const useSourcesStore = defineStore('sources', {
      * @description
      * Removes an existing source
      */
-    removeSource(id: string) {
+    removeSource(id: string): void {
       const index = this.sources.findIndex(s => s.id === id);
       this.sources.splice(index, 1);
     }

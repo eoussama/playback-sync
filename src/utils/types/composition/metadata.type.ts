@@ -6,6 +6,18 @@ export type TMetadata = {
 
   /**
    * @description
+   * The start time
+   */
+  start: number;
+
+  /**
+   * @description
+   * The end time
+   */
+  end: number;
+
+  /**
+   * @description
    * The duration of the source in seconds
    */
   duration: number;
@@ -15,6 +27,12 @@ export type TMetadata = {
    * The time where the source is at now
   */
   currentTime: number;
+
+  /**
+   * @description
+   * The speed of the source
+  */
+  speed: number;
 
   /**
    * @description

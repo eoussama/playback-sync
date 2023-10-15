@@ -1,4 +1,4 @@
-import type { TSource } from '../composition/source.type'
+import type { TSource } from '../composition/source.type';
 
 
 

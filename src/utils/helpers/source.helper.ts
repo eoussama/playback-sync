@@ -13,18 +13,49 @@ export class SourceHelper {
 
   /**
    * @description
+   * Initializes a new source
+   */
+  static async init(): Promise<TSource> {
+    const metadata = { duration: 0, currentTime: 0, speed: 1, end: 0, start: 0, muted: false, playing: false };
+    return this.create('', '', metadata, false);
+  }
+
+  /**
+   * @description
+   * Resets an existing source
+   *
+   * @param id The ID of the source to reset
+   */
+  static async reset(id: string): Promise<TSource> {
+    const source = await this.init();
+    return { ...source, id };
+  }
+
+  /**
+   * @description
    * Creates a new source
    *
    * @param url The URL of the source
    * @param title The title of the source
+   * @param hook Whether to hook the video player with the state
    */
-  static async create(title: string, url: string): Promise<TSource> {
+  static async create(title: string, url: string, metadata?: Partial<TMetadata>, hook: boolean = true): Promise<TSource> {
     const id = v4();
-    const metadata = await this.loadSourceMetadata(url);
+    const sourceMetadata = await this.loadSourceMetadata(url);
 
-    this.hookPlayer(id);
+    if (hook) {
+      this.hookPlayer(id);
+    }
 
-    return { id, url, title, metadata };
+    return {
+      id,
+      url,
+      title,
+      metadata: {
+        ...sourceMetadata,
+        ...metadata
+      }
+    };
   }
 
   /**
@@ -151,11 +182,14 @@ export class SourceHelper {
       const video = document.createElement('video');
       video.src = url;
 
-      video.onloadedmetadata = () => {
+      video.onerror = video.onloadedmetadata = () => {
         resolve({
+          start: 0,
           muted: video.muted,
           playing: !video.paused,
+          end: video.duration ?? 0,
           duration: video.duration,
+          speed: video.playbackRate,
           currentTime: video.currentTime
         });
 
@@ -199,6 +233,10 @@ export class SourceHelper {
 
           player.onvolumechange = () => {
             store.updateSourceMetadata(id, { muted: player.muted });
+          }
+
+          player.onratechange = () => {
+            store.updateSourceMetadata(id, { speed: player.playbackRate });
           }
 
           observer.disconnect();

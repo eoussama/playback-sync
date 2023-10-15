@@ -6,16 +6,14 @@ import Speed from '@/components/Speed.vue';
 import Volume from '@/components/Volume.vue';
 import Timeline from '@/components/Timeline.vue';
 import PlayPause from '@/components/PlayPause.vue';
+import SourceDetail from '@/components/SourceDetail.vue';
 
+import { PageType } from '@/utils/enums/pageType.enum';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
-  data: () => ({
-    url: '',
-    title: ''
-  }),
-
   methods: {
     ...mapActions(useSourcesStore, [
       'addSource',
@@ -30,32 +28,16 @@ export default defineComponent({
 
     /**
      * @description
-     * Checks if source is filled
+     * Opens source addition modal
      */
-    isSourceFilled(): boolean {
-      return this.url.length > 0 && this.title.length > 0;
-    },
-
-    /**
-     * @description
-     * Resets the source entry form
-     */
-    reset(): void {
-      this.url = '';
-      this.title = '';
-    },
-
-    /**
-     * @description
-     * Adds a new source
-     */
-    async onSourceAdd(): Promise<void> {
-      if (this.isSourceFilled()) {
-        const source = await SourceHelper.create(this.title, this.url);
-
-        this.reset();
-        this.addSource(source);
-      }
+    onAdd(): void {
+      ModalHelper
+        .open('Add Source', SourceDetail, { type: PageType.Creation })
+        .then(modal => {
+          if (modal.payload) {
+            this.addSource(modal.payload);
+          }
+        });
     },
 
     /**
@@ -157,6 +139,7 @@ export default defineComponent({
   },
 
   components: {
+    SourceDetail,
     PlayPause,
     Timeline,
     Volume,
@@ -176,27 +159,19 @@ export default defineComponent({
 </script>
 
 <template>
-  Controls
-
-  <input
-    type="text"
-    placeholder="Video Title..."
-    v-model="title"
-  >
-
-  <input
-    type="url"
-    placeholder="Video URL..."
-    v-model="url"
-  >
-
-  <button @click="onSourceAdd">Add Video</button>
+  <Tooltip text="Add a new source">
+    <Button
+      icon="plus"
+      @click="onAdd"
+    />
+  </Tooltip>
 
   <hr>
 
-  <button @click="onBackward">
-    <font-awesome-icon icon="backward" />
-  </button>
+  <Button
+    icon="backward"
+    @click="onBackward"
+  />
 
   <PlayPause
     :repeat="ended"
@@ -204,9 +179,10 @@ export default defineComponent({
     @toggled="onToggle"
   />
 
-  <button @click="onForward">
-    <font-awesome-icon icon="forward" />
-  </button>
+  <Button
+    icon="forward"
+    @click="onForward"
+  />
 
   <hr>
 

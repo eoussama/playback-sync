@@ -3,21 +3,51 @@ import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
+import Source from '@/components/Source.vue';
+import SourceDetail from '@/components/SourceDetail.vue';
+
+import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { PageType } from '@/utils/enums/pageType.enum';
+
 export default defineComponent({
   computed: {
     ...mapState(useSourcesStore, ['sources'])
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'editSource', 'getSource']),
 
     /**
      * @description
      * Removes a source
+     *
+     * @param id The ID of the source to remove
      */
     onRemove(id: string) {
       this.removeSource(id);
+    },
+
+    /**
+     * @description
+     * Edits a source
+     *
+     * @param id The ID of the source to edit
+     */
+    onEdit(id: string) {
+      const source = this.getSource(id);
+
+      ModalHelper
+        .open('Edit Source', SourceDetail, { type: PageType.Edition, source: { ...source } })
+        .then(modal => {
+          if (modal.payload) {
+            this.editSource(modal.payload);
+          }
+        });
     }
+  },
+
+  components: {
+    Source
   }
 });
 </script>
@@ -26,32 +56,13 @@ export default defineComponent({
   <div class="sources">
     <div
       class="source"
-      :key="source.id"
       v-for="source in sources"
     >
-      <div class="source__head">
-        <div class="source_title">
-          <a
-            target="_blank"
-            :href="source.url"
-          >{{ source.title }}</a>
-          <button @click="onRemove(source.id)">x</button>
-        </div>
-
-      </div>
-
-      <div class="source__body">
-        <video
-          controls
-          class="source__player"
-          :id="`player-${source.id}`"
-        >
-          <source
-            :src="source.url"
-            type="video/mp4"
-          >
-        </video>
-      </div>
+      <Source
+        :source="source"
+        @edit="onEdit"
+        @remove="onRemove"
+      />
     </div>
   </div>
 </template>
@@ -60,13 +71,5 @@ export default defineComponent({
 .sources {
   display: grid;
   grid-template-columns: 1fr 1fr;
-
-  .source {
-    max-width: 100%;
-
-    &__player {
-      width: 100%;
-    }
-  }
 }
 </style>
