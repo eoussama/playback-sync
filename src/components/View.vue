@@ -15,7 +15,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource', 'editSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'editSource', 'getSource']),
 
     /**
      * @description
@@ -34,11 +34,13 @@ export default defineComponent({
      * @param id The ID of the source to edit
      */
     onEdit(id: string) {
+      const source = this.getSource(id);
+
       ModalHelper
-        .open('Edit Source', SourceDetail, { type: PageType.Edition })
+        .open('Edit Source', SourceDetail, { type: PageType.Edition, source: { ...source } })
         .then(modal => {
           if (modal.payload) {
-            console.log({ modal });
+            this.editSource(modal.payload);
           }
         });
     }

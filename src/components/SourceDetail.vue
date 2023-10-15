@@ -1,9 +1,12 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+
 import { PageType } from '@/utils/enums/pageType.enum';
 import { TimeHelper } from '@/utils/helpers/time.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
+
+import type { TSource } from '@/utils/types/composition/source.type';
 import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
 
 export default defineComponent({
@@ -15,7 +18,7 @@ export default defineComponent({
 
   props: {
     modalId: String,
-    params: Object as PropType<{ type: PageType }>
+    params: Object as PropType<{ type: PageType, source: TSource }>
   },
 
   methods: {
@@ -25,7 +28,13 @@ export default defineComponent({
      * Initializes the source form
      */
     async initForm(): Promise<void> {
-      this.source = this.source ?? await SourceHelper.init();
+      if (this.params) {
+        if (this.params.type === PageType.Creation) {
+          this.source = await SourceHelper.init();
+        } else {
+          this.source = this.params.source;
+        }
+      }
     },
 
     /**
@@ -50,15 +59,15 @@ export default defineComponent({
      * @description
      * Resets the form
      */
-    async onReset(): Promise<void> {
+    async onClear(): Promise<void> {
       this.source = await SourceHelper.reset(this.source?.id ?? '');
     },
 
     /**
      * @description
-     * Returns the source to add
+     * Returns the source
      */
-    async onAdd(): Promise<void> {
+    async onValidate(): Promise<void> {
       if (this.isFormValid()) {
         if (this.modalId) {
           ModalHelper.close(this.modalId, this.source);
@@ -121,6 +130,14 @@ export default defineComponent({
   },
 
   computed: {
+
+    /**
+     * @description
+     * The label to display on the validation button
+     */
+    validateLabel(): string {
+      return this.params?.type === PageType.Creation ? 'Add' : 'Edit';
+    },
 
     /**
      * @description
@@ -197,16 +214,16 @@ export default defineComponent({
 
     <div class="source__controls">
       <Button
-        label="Reset"
+        label="Clear"
         type="outline"
-        @click="onReset"
+        @click="onClear"
       />
 
       <Button
-        label="Add"
         icon="check"
         type="primary"
-        @click="onAdd"
+        :label="validateLabel"
+        @click="onValidate"
       />
     </div>
   </div>
