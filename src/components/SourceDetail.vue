@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
+import { PageType } from '@/utils/enums/pageType.enum';
 import { TimeHelper } from '@/utils/helpers/time.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
@@ -13,7 +14,8 @@ export default defineComponent({
   }),
 
   props: {
-    modalId: String
+    modalId: String,
+    params: Object as PropType<{ type: PageType }>
   },
 
   methods: {

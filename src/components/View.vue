@@ -4,6 +4,10 @@ import { mapState, mapActions } from 'pinia';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 import Source from '@/components/Source.vue';
+import SourceDetail from '@/components/SourceDetail.vue';
+
+import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { PageType } from '@/utils/enums/pageType.enum';
 
 export default defineComponent({
   computed: {
@@ -11,14 +15,32 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'editSource']),
 
     /**
      * @description
      * Removes a source
+     *
+     * @param id The ID of the source to remove
      */
     onRemove(id: string) {
       this.removeSource(id);
+    },
+
+    /**
+     * @description
+     * Edits a source
+     *
+     * @param id The ID of the source to edit
+     */
+    onEdit(id: string) {
+      ModalHelper
+        .open('Edit Source', SourceDetail, { type: PageType.Edition })
+        .then(modal => {
+          if (modal.payload) {
+            console.log({ modal });
+          }
+        });
     }
   },
 
@@ -36,7 +58,8 @@ export default defineComponent({
     >
       <Source
         :source="source"
-        @removed="onRemove"
+        @edit="onEdit"
+        @remove="onRemove"
       />
     </div>
   </div>

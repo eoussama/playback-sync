@@ -98,9 +98,22 @@ export const useSourcesStore = defineStore('sources', {
     /**
      * @description
      * Adds a new source
+     *
+     * @param source The source to add
      */
     addSource(source: TSource) {
       this.sources.push(source);
+    },
+
+    /**
+     * @description
+     * Edits an existing source
+     *
+     * @param source The source to edit
+     */
+    editSource(source: TSource) {
+      const index = this.sources.findIndex(e => e.id === source.id);
+      this.sources[index] = { ...source };
     },
 
     /**

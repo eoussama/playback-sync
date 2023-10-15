@@ -3,7 +3,7 @@ import { defineComponent, type PropType } from 'vue';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
-  emits: ['removed'],
+  emits: ['remove', 'edit'],
 
   props: {
     source: Object as PropType<TSource>
@@ -16,7 +16,15 @@ export default defineComponent({
      * Emits remove event
      */
     onRemove() {
-      this.$emit('removed', this.source?.id);
+      this.$emit('remove', this.source?.id);
+    },
+
+    /**
+     * @description
+     * Emits edit event
+     */
+    onEdit() {
+      this.$emit('edit', this.source?.id);
     }
   }
 });
@@ -33,10 +41,18 @@ export default defineComponent({
         <a
           target="_blank"
           :href="source.url"
-        >{{ source.title }}</a>
+        >
+          {{ source.title }}
+        </a>
+
         <Button
           icon="xmark"
           @click="onRemove"
+        />
+
+        <Button
+          icon="pen"
+          @click="onEdit"
         />
       </div>
 
@@ -49,7 +65,7 @@ export default defineComponent({
       >
         <source
           type="video/mp4"
-          :src="`${source.url}#t=${source.metadata.start},${source.metadata.end}`"
+          :src="`${source.url}#t=${source.metadata?.start},${source.metadata?.end}`"
         >
       </video>
     </div>
@@ -63,4 +79,5 @@ export default defineComponent({
   &__player {
     width: 100%;
   }
-}</style>
+}
+</style>
