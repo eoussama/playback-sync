@@ -6,7 +6,7 @@ import { defineConfig } from 'vite';
 
 
 export default defineConfig({
-  base: 'playback-sync',
+  base: '/playback-sync',
   plugins: [
     vue(),
   ],
