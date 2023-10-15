@@ -244,13 +244,17 @@ export class SourceHelper {
           player.ontimeupdate = () => {
             store.updateSourceMetadata(id, { currentTime: player.currentTime });
           }
-          
+
           player.onpause = () => {
-            store.updateSourceMetadata(id, { playing: false });
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: false });
+            }
           }
-          
+
           player.onplay = () => {
-            store.updateSourceMetadata(id, { playing: true });
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: true });
+            }
           }
 
           player.onvolumechange = () => {
@@ -264,7 +268,7 @@ export class SourceHelper {
           player.onwaiting = () => {
             store.updateSourceMetadata(id, { buffering: true });
           }
-          
+
           player.oncanplay = () => {
             store.updateSourceMetadata(id, { buffering: false });
           }

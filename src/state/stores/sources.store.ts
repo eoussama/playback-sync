@@ -11,6 +11,7 @@ export const useSourcesStore = defineStore('sources', {
     volume: 1,
     muted: false,
     playing: false,
+    bufferPause: false,
     sources: [],
   }),
 
@@ -38,6 +39,16 @@ export const useSourcesStore = defineStore('sources', {
      */
     setPlaying(playing: boolean): void {
       this.playing = playing;
+    },
+
+    /**
+     * @description
+     * Updates the buffer pause state
+     *
+     * @param bufferPause The buffer pause state
+     */
+    setBufferPause(bufferPause: boolean): void {
+      this.bufferPause = bufferPause;
     },
 
     /**

@@ -34,6 +34,12 @@ export type TSourcesStore = {
 
   /**
    * @description
+   * If the sources are puased to load buffer
+   */
+  bufferPause: boolean;
+
+  /**
+   * @description
    * The list of sources
    */
   sources: Array<TSource>;

@@ -24,6 +24,18 @@ export function hookSourcesEffect() {
 
           break;
         }
+        
+        case 'setBufferPause': {
+          for (const source of store.sources) {
+            if (store.bufferPause) {
+              SourceHelper.pause(source.id);
+            } else {
+              SourceHelper.play(source.id);
+            }
+          }
+
+          break;
+        }
 
         case 'setMuted': {
           for (const source of store.sources) {
@@ -96,10 +108,8 @@ export function hookSourcesEffect() {
           }
 
           if ('buffering' in metadata) {
-            if (metadata.buffering) {
-              store.setPlaying(false);
-            } else if (store.playing && store.sources.every(e => !e.metadata.buffering)) {
-              store.setPlaying(true);
+            if (store.playing) {
+              store.setBufferPause(store.sources.some(e => e.metadata.buffering));
             }
           }
 
