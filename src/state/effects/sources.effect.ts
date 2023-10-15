@@ -95,6 +95,14 @@ export function hookSourcesEffect() {
             }
           }
 
+          if ('buffering' in metadata) {
+            if (metadata.buffering) {
+              store.setPlaying(false);
+            } else if (store.playing && store.sources.every(e => !e.metadata.buffering)) {
+              store.setPlaying(true);
+            }
+          }
+
           break;
         }
       }

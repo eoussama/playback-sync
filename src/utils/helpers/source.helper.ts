@@ -244,11 +244,11 @@ export class SourceHelper {
           player.ontimeupdate = () => {
             store.updateSourceMetadata(id, { currentTime: player.currentTime });
           }
-
+          
           player.onpause = () => {
             store.updateSourceMetadata(id, { playing: false });
           }
-
+          
           player.onplay = () => {
             store.updateSourceMetadata(id, { playing: true });
           }
@@ -265,7 +265,7 @@ export class SourceHelper {
             store.updateSourceMetadata(id, { buffering: true });
           }
           
-          player.onplaying = () => {
+          player.oncanplay = () => {
             store.updateSourceMetadata(id, { buffering: false });
           }
 
