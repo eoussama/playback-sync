@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import type { TSource } from '@/utils/types/composition/source.type'
+import { defineStore } from 'pinia';
+import type { TSource } from '@/utils/types/composition/source.type';
 import type { TMetadata } from '@/utils/types/composition/metadata.type';
-import type { TSourcesStore } from '@/utils/types/store/sourceStore.type'
+import type { TSourcesStore } from '@/utils/types/store/sourceStore.type';
 
 
 

@@ -1,4 +1,5 @@
-import { hookSourcesEffect } from './sources.effect'
+import { hookModalEffect } from './modal.effect';
+import { hookSourcesEffect } from './sources.effect';
 
 
 
@@ -7,5 +8,6 @@ import { hookSourcesEffect } from './sources.effect'
  * Hooks in all effects
  */
 export function hookEffects() {
+  hookModalEffect();
   hookSourcesEffect();
 }
