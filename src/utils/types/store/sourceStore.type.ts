@@ -1,4 +1,5 @@
 import type { TSource } from '../composition/source.type';
+import type { TillingValue } from '@/utils/enums/tillingValue.enum';
 
 
 
@@ -37,6 +38,12 @@ export type TSourcesStore = {
    * If the sources are puased to load buffer
    */
   bufferPause: boolean;
+
+  /**
+   * @description
+   * The tilling mode
+   */
+  tilling: TillingValue;
 
   /**
    * @description

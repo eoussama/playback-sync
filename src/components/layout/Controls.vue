@@ -2,11 +2,11 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
-import Speed from '@/components/Speed.vue';
-import Volume from '@/components/Volume.vue';
-import Timeline from '@/components/Timeline.vue';
-import PlayPause from '@/components/PlayPause.vue';
-import SourceDetail from '@/components/SourceDetail.vue';
+import Speed from '@/components/controls/Speed.vue';
+import Volume from '@/components/controls/Volume.vue';
+import Timeline from '@/components/controls/Timeline.vue';
+import PlayPause from '@/components/controls/PlayPause.vue';
+import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
@@ -148,14 +148,6 @@ export default defineComponent({
     }
   },
 
-  components: {
-    SourceDetail,
-    PlayPause,
-    Timeline,
-    Volume,
-    Speed
-  },
-
   created() {
     this.resetSources();
 
@@ -169,60 +161,64 @@ export default defineComponent({
 </script>
 
 <template>
-  <Tooltip text="Add a new source">
+  <div class="controls">
+    <Tooltip text="Add a new source">
+      <Button
+        icon="plus"
+        @click="onAdd"
+      />
+    </Tooltip>
+
+    <hr>
+
     <Button
-      icon="plus"
-      @click="onAdd"
+      v-if="!disabled"
+      icon="backward"
+      @click="onBackward"
     />
-  </Tooltip>
 
-  <hr>
+    <PlayPause
+      v-if="!disabled"
+      :repeat="ended"
+      :value="playing"
+      @toggled="onToggle"
+    />
 
-  <Button
-    v-if="!disabled"
-    icon="backward"
-    @click="onBackward"
-  />
+    <Button
+      v-if="!disabled"
+      icon="forward"
+      @click="onForward"
+    />
 
-  <PlayPause
-    v-if="!disabled"
-    :repeat="ended"
-    :value="playing"
-    @toggled="onToggle"
-  />
+    <hr>
 
-  <Button
-    v-if="!disabled"
-    icon="forward"
-    @click="onForward"
-  />
+    <Volume
+      v-if="!disabled"
+      :muted="muted"
+      :value="volume"
+      @volumeUpdated="onVolume"
+      @muteToggled="onMuteToggled"
+    />
 
-  <hr>
+    <hr>
 
-  <Volume
-    v-if="!disabled"
-    :muted="muted"
-    :value="volume"
-    @volumeUpdated="onVolume"
-    @muteToggled="onMuteToggled"
-  />
+    <Speed
+      v-if="!disabled"
+      :value="speed"
+      @speedChanged="onSpeed"
+    />
 
-  <hr>
+    <hr>
 
-  <Speed
-    v-if="!disabled"
-    :value="speed"
-    @speedChanged="onSpeed"
-  />
-
-  <hr>
-
-  <Timeline
-    v-if="!disabled"
-    :duration="duration"
-    :value="timelineValue"
-    @timeline-updated="onTimelineChanged"
-  />
+    <Timeline
+      v-if="!disabled"
+      :duration="duration"
+      :value="timelineValue"
+      @timeline-updated="onTimelineChanged"
+    />
+  </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.controls {}
+</style>

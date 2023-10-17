@@ -1,13 +1,14 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
+import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'changed'],
 
   props: {
     options: {
       default: [],
-      type: Object as () => Array<string>
+      type: Object as PropType<Array<TOption>>
     },
     modelValue: String,
     placeholder: String
@@ -25,6 +26,7 @@ export default defineComponent({
       const target = e.target as HTMLSelectElement;
       const value = target.value ?? '';
 
+      this.$emit('changed', value);
       this.$emit('update:modelValue', value);
     }
   }
@@ -32,7 +34,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <select class="select">
+  <select
+    class="select"
+    :value="modelValue"
+    @change="onChanged"
+  >
     <option
       value=""
       v-if="placeholder"
@@ -42,11 +48,11 @@ export default defineComponent({
     </option>
 
     <option
-      :value="option"
+      :value="option.value"
       class="select__option"
       v-for="option in options"
     >
-      x{{ option }}
+      {{ option.label }}
     </option>
   </select>
 </template>

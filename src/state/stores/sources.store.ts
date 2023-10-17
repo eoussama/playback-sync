@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import type { TSource } from '@/utils/types/composition/source.type';
 import type { TMetadata } from '@/utils/types/composition/metadata.type';
 import type { TSourcesStore } from '@/utils/types/store/sourceStore.type';
+import { TillingValue } from '@/utils/enums/tillingValue.enum';
 
 
 
@@ -12,6 +13,7 @@ export const useSourcesStore = defineStore('sources', {
     muted: false,
     playing: false,
     bufferPause: false,
+    tilling: TillingValue.Split,
     sources: [],
   }),
 
@@ -30,6 +32,16 @@ export const useSourcesStore = defineStore('sources', {
   },
 
   actions: {
+
+    /**
+     * @description
+     * Updates the tilling mode state
+     *
+     * @param tilling The new tilling mode
+     */
+    setTilling(tilling: TillingValue): void {
+      this.tilling = tilling;
+    },
 
     /**
      * @description
@@ -140,6 +152,31 @@ export const useSourcesStore = defineStore('sources', {
 
     /**
      * @description
+     * Removes an existing source
+     */
+    removeSource(id: string): void {
+      const index = this.sources.findIndex(s => s.id === id);
+      this.sources.splice(index, 1);
+    },
+
+    /**
+     * @description
+     * Switches the order of two sources by ID
+     *
+     * @param sourceId1 The first source ID
+     * @param sourceId2 The second source ID
+     */
+    switchSources(sourceId1: string, sourceId2: string): void {
+      const index1 = this.sources.findIndex(e => e.id === sourceId1);
+      const index2 = this.sources.findIndex(e => e.id === sourceId2);
+      const tmp = this.sources[index1];
+
+      this.sources[index1] = this.sources[index2];
+      this.sources[index2] = tmp;
+    },
+
+    /**
+     * @description
      * Updates a singular source
      *
      * @param id The ID of the source to update
@@ -157,15 +194,6 @@ export const useSourcesStore = defineStore('sources', {
           }
         }
       };
-    },
-
-    /**
-     * @description
-     * Removes an existing source
-     */
-    removeSource(id: string): void {
-      const index = this.sources.findIndex(s => s.id === id);
-      this.sources.splice(index, 1);
     }
   }
 });
