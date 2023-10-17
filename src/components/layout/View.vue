@@ -11,7 +11,15 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
   computed: {
-    ...mapState(useSourcesStore, ['sources', 'tilling'])
+    ...mapState(useSourcesStore, ['sources', 'tilling']),
+
+    /**
+     * @description
+     * The grid columns template
+     */
+    gridTemplateColumns(): string {
+      return `repeat(${this.tilling}, 1fr)`;
+    }
   },
 
   methods: {
@@ -49,11 +57,15 @@ export default defineComponent({
 </script>
 
 <template>
+  {{ gridTemplateColumns }}
   <div class="view">
-    <div class="sources">
+    <div
+      class="sources"
+      :style="{ gridTemplateColumns }"
+    >
       <div
         class="source"
-        v-for="source in sources"
+        v-for=" source  in  sources "
       >
         <Source
           :source="source"
@@ -72,7 +84,6 @@ export default defineComponent({
 
   .sources {
     display: grid;
-    grid-template-columns: 1fr 1fr;
   }
 }
 </style>

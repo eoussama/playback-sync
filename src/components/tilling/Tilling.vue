@@ -42,7 +42,7 @@ export default defineComponent({
       let changedValue = parseInt(e?.toString());
 
       if (changedValue == TillingValue.Custom) {
-        const customValue = await ModalHelper.open('Custom Tilling', TillingCustom, { tilling: this.tilling + 1 });
+        const customValue = await ModalHelper.open('Custom Tilling', TillingCustom, { tilling: this.tilling });
         changedValue = customValue.payload?.value ?? changedValue;
       }
 

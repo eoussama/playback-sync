@@ -1,5 +1,5 @@
 export enum TillingValue {
-  Fill = 0,
-  Split = 1,
+  Fill = 1,
+  Split = 2,
   Custom = 3
 }
