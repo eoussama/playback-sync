@@ -13,4 +13,6 @@ export default defineComponent({});
   </div>
 </template>
 
-<style scoped lang="scss">.foot {}</style>
+<style scoped lang="scss">
+.foot {}
+</style>

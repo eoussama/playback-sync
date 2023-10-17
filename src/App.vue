@@ -4,8 +4,10 @@ import { hookEffects } from './state/effects';
 import { useModalStore } from './state/stores/modal.store';
 
 import View from './components/View.vue';
-import Footer from './components/Footer.vue';
+
+import Foot from './components/layout/Foot.vue';
 import Head from './components/layout/Head.vue';
+
 import Controls from './components/Controls.vue';
 
 hookEffects();
@@ -30,7 +32,7 @@ const store = useModalStore();
     </div>
 
     <div class="foot">
-      <Footer />
+      <Foot />
     </div>
 
     <div class="modals">
