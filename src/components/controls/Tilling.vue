@@ -7,11 +7,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="head">
-    <Tilling />
+  <div class="tilling">
+    Tilling
   </div>
 </template>
 
 <style scoped lang="scss">
-.head {}
+.tilling {}
 </style>

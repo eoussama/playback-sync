@@ -20,6 +20,7 @@ import Speed from '@/components/controls/Speed.vue';
 import Select from '@/components/controls/Select.vue';
 import Button from '@/components/controls/Button.vue';
 import Volume from '@/components/controls/Volume.vue';
+import Tilling from '@/components/controls/Tilling.vue';
 import Timeline from '@/components/controls/Timeline.vue';
 import PlayPause from '@/components/controls/PlayPause.vue';
 
@@ -38,18 +39,22 @@ export function addComponent(app: App<Element>) {
   app.component('View', View);
   app.component('Controls', Controls);
 
-  app.component('SourceDetail', SourceDetail);
-  app.component('PlayPause', PlayPause);
-  app.component('Timeline', Timeline);
-  app.component('Volume', Volume);
-  app.component('Speed', Speed);
   app.component('Modal', Modal);
-  app.component('Source', Source);
+  app.component('Tooltip', Tooltip);
+  app.component('Confirm', Confirm);
+
+  app.component('Speed', Speed);
   app.component('Range', Range);
   app.component('Input', Input);
+  app.component('Volume', Volume);
   app.component('Button', Button);
   app.component('Select', Select);
-  app.component('Confirm', Confirm);
-  app.component('Tooltip', Tooltip);
+  app.component('Tilling', Tilling);
+  app.component('Timeline', Timeline);
+  app.component('PlayPause', PlayPause);
+
+  app.component('Source', Source);
+  app.component('SourceDetail', SourceDetail);
+
   app.component('font-awesome-icon', FontAwesomeIcon);
 }
