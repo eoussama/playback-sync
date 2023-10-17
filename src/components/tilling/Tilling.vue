@@ -1,5 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapActions, mapState } from 'pinia';
+import { useSourcesStore } from '@/state/stores/sources.store';
 
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { TillingValue } from '@/utils/enums/tillingValue.enum';
@@ -18,6 +20,7 @@ export default defineComponent({
   }),
 
   computed: {
+    ...mapState(useSourcesStore, ['tilling']),
 
     /**
      * @description
@@ -39,6 +42,7 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSourcesStore, ['setTilling']),
 
     /**
      * @description
@@ -49,6 +53,8 @@ export default defineComponent({
         const value = await ModalHelper.open('Custom Tilling', TillingCustom);
         this.customValue = value.payload?.value ?? this.customValue;
       }
+
+      this.setTilling(this.tillingMode);
     }
   }
 });
