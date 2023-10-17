@@ -9,25 +9,15 @@ export default defineComponent({});
 
 <template>
   <div class="body">
-    <div class="view__wrapper">
-      <View />
-    </div>
-
-    <div class="controls__wrapper">
-      <Controls />
-    </div>
+    <View />
+    <Controls />
   </div>
 </template>
 
 <style scoped lang="scss">
 .body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-
-  .view__wrapper {
-    flex: 100%;
-  }
 }
 </style>

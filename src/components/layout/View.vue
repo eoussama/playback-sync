@@ -49,23 +49,30 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="sources">
-    <div
-      class="source"
-      v-for="source in sources"
-    >
-      <Source
-        :source="source"
-        @edit="onEdit"
-        @remove="onRemove"
-      />
+  <div class="view">
+    <div class="sources">
+      <div
+        class="source"
+        v-for="source in sources"
+      >
+        <Source
+          :source="source"
+          @edit="onEdit"
+          @remove="onRemove"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.sources {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.view {
+  flex: 1;
+  height: 100%;
+
+  .sources {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>
