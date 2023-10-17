@@ -1,5 +1,5 @@
 import { ModalHelper } from './modal.helper';
-import Confirm from '@/components/Confirm.vue';
+import Confirm from '@/components/info/Confirm.vue';
 import type { TConfirm } from '../types/composition/confirm.type';
 
 

@@ -3,11 +3,11 @@ import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
-import Source from '@/components/Source.vue';
-import SourceDetail from '@/components/SourceDetail.vue';
+import Source from '@/components/source/Source.vue';
+import SourceDetail from '@/components/source/SourceDetail.vue';
 
-import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { PageType } from '@/utils/enums/pageType.enum';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
   computed: {
@@ -44,10 +44,6 @@ export default defineComponent({
           }
         });
     }
-  },
-
-  components: {
-    Source
   }
 });
 </script>
