@@ -47,7 +47,7 @@ export default defineComponent({
       class="select__option"
       v-for="option in options"
     >
-      x{{ option.label }}
+      {{ option.label }}
     </option>
   </select>
 </template>

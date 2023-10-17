@@ -18,7 +18,7 @@ export default defineComponent({
      * Playback rate options
      */
     playbackRateOptions(): Array<TOption> {
-      return this.playbackRates.map(e => ({ value: e, label: e.toString() }));
+      return this.playbackRates.map(rate => ({ value: rate, label: `x${rate}` }));
     }
   },
 
