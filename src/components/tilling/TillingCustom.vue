@@ -1,8 +1,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { TillingValue } from '@/utils/enums/tillingValue.enum';
 
 export default defineComponent({
+
+  data: () => ({
+    value: TillingValue.Custom
+  }),
 
   props: {
     modalId: String
@@ -16,7 +21,7 @@ export default defineComponent({
      */
     onValidate(): void {
       if (this.modalId) {
-        ModalHelper.close(this.modalId, { value: 100 });
+        ModalHelper.close(this.modalId, { value: this.value });
       }
     }
   }
@@ -27,6 +32,11 @@ export default defineComponent({
   <div class="tilling-custom">
     <div class="tilling-custom__body">
       Tilling Custom
+      <Input
+        min="1"
+        type="number"
+        v-model="value"
+      />
     </div>
 
     <div class="tilling-custom__controls">
