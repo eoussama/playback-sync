@@ -11,8 +11,21 @@ export function hookSourcesEffect() {
   const store = useSourcesStore();
 
   store.$onAction(({ name, store, args, after }) => {
+    let cachedCurrentTime = 0;
+
+    if (name === 'switchSources') {
+      cachedCurrentTime = store.longestSource.metadata?.currentTime;
+    }
+
     after(() => {
       switch (name) {
+        case 'addSource': {
+          const [{ id }] = args;
+          SourceHelper.hookPlayer(id);
+
+          break;
+        }
+
         case 'setPlaying': {
           for (const source of store.sources) {
             if (store.playing) {
@@ -24,7 +37,7 @@ export function hookSourcesEffect() {
 
           break;
         }
-        
+
         case 'setBufferPause': {
           for (const source of store.sources) {
             if (store.bufferPause) {
@@ -84,6 +97,19 @@ export function hookSourcesEffect() {
         case 'updateSource': {
           const [source] = args;
           SourceHelper.refresh(source.id);
+
+          break;
+        }
+
+        case 'switchSources': {
+          const [id1, id2] = args;
+
+          setTimeout(() => {
+            [id1, id2].forEach(id => {
+              SourceHelper.hookPlayer(id);
+              SourceHelper.setTime(id, cachedCurrentTime);
+            })
+          });
 
           break;
         }

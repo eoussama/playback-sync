@@ -24,7 +24,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'switchSources', 'getSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'switchSources', 'getSource', 'setPlaying']),
 
     /**
      * @description
@@ -80,6 +80,7 @@ export default defineComponent({
       }
 
       e.dataTransfer?.clearData();
+      this.setPlaying(false);
     }
   }
 });
