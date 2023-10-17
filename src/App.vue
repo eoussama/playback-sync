@@ -5,6 +5,7 @@ import { useModalStore } from './state/stores/modal.store';
 
 import View from './components/View.vue';
 import Footer from './components/Footer.vue';
+import Head from './components/layout/Head.vue';
 import Controls from './components/Controls.vue';
 
 hookEffects();
@@ -13,6 +14,11 @@ const store = useModalStore();
 
 <template>
   <div class="root">
+    <div class="head">
+
+      <Head />
+    </div>
+
     <div class="body">
       <div class="view">
         <View />
