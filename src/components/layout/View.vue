@@ -11,7 +11,7 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
   computed: {
-    ...mapState(useSourcesStore, ['sources'])
+    ...mapState(useSourcesStore, ['sources', 'tilling'])
   },
 
   methods: {

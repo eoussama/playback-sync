@@ -10,8 +10,6 @@ import TillingCustom from '@/components/tilling/TillingCustom.vue';
 export default defineComponent({
 
   data: () => ({
-    rawValue: TillingValue.Fill,
-    customValue: TillingValue.Custom,
     options: [
       { label: 'Fill', value: TillingValue.Fill },
       { label: 'Split', value: TillingValue.Split },
@@ -24,20 +22,10 @@ export default defineComponent({
 
     /**
      * @description
-     * Parsed value
+     * The value of the dropdown
      */
     value(): TillingValue {
-      return parseInt(this.rawValue?.toString());
-    },
-
-    /**
-     * @description
-     * The definitive selected tilling mode
-     */
-    tillingMode(): number {
-      return (this.value === TillingValue.Custom && this.customValue !== TillingValue.Custom)
-        ? this.customValue
-        : this.value;
+      return Math.min(this.tilling, TillingValue.Custom);
     }
   },
 
@@ -47,14 +35,18 @@ export default defineComponent({
     /**
      * @description
      * Handles value change
+     *
+     * @param e The changed value
      */
-    async onChanged(): Promise<void> {
-      if (this.rawValue == TillingValue.Custom) {
-        const value = await ModalHelper.open('Custom Tilling', TillingCustom);
-        this.customValue = value.payload?.value ?? this.customValue;
+    async onChanged(e: number): Promise<void> {
+      let changedValue = parseInt(e?.toString());
+
+      if (changedValue == TillingValue.Custom) {
+        const customValue = await ModalHelper.open('Custom Tilling', TillingCustom, { tilling: this.tilling + 1 });
+        changedValue = customValue.payload?.value ?? changedValue;
       }
 
-      this.setTilling(this.tillingMode);
+      this.setTilling(changedValue);
     }
   }
 });
@@ -63,9 +55,9 @@ export default defineComponent({
 <template>
   <div class="tilling">
     <Select
-      v-model="rawValue"
+      :value="value"
       :options="options"
-      @change="onChanged"
+      @changed="onChanged"
     />
   </div>
 </template>

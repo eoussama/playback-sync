@@ -1,16 +1,21 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { TillingValue } from '@/utils/enums/tillingValue.enum';
+import type { TillingCustomType } from '@/utils/types/components/tillingCustom.type';
 
 export default defineComponent({
 
-  data: () => ({
-    value: TillingValue.Custom
+  data: (): TillingCustomType => ({
+    tilling: TillingValue.Custom
   }),
 
   props: {
-    modalId: String
+    modalId: String,
+    params: {
+      default: { tilling: TillingValue.Custom },
+      type: Object as PropType<TillingCustomType>
+    }
   },
 
   methods: {
@@ -21,9 +26,13 @@ export default defineComponent({
      */
     onValidate(): void {
       if (this.modalId) {
-        ModalHelper.close(this.modalId, { value: this.value });
+        ModalHelper.close(this.modalId, { value: this.tilling });
       }
     }
+  },
+
+  mounted(): void {
+    this.tilling = this.params.tilling ?? TillingValue.Custom;
   }
 });
 </script>
@@ -35,7 +44,7 @@ export default defineComponent({
       <Input
         min="1"
         type="number"
-        v-model="value"
+        v-model="tilling"
       />
     </div>
 
