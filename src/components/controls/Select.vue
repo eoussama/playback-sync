@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
   emits: ['update:modelValue'],
@@ -7,7 +8,7 @@ export default defineComponent({
   props: {
     options: {
       default: [],
-      type: Object as () => Array<string>
+      type: Object as () => Array<TOption>
     },
     modelValue: String,
     placeholder: String
@@ -42,11 +43,11 @@ export default defineComponent({
     </option>
 
     <option
-      :value="option"
+      :value="option.value"
       class="select__option"
       v-for="option in options"
     >
-      x{{ option }}
+      x{{ option.label }}
     </option>
   </select>
 </template>
