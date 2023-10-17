@@ -3,7 +3,7 @@ import { defineComponent, type PropType } from 'vue';
 import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'changed'],
 
   props: {
     options: {
@@ -26,6 +26,7 @@ export default defineComponent({
       const target = e.target as HTMLSelectElement;
       const value = target.value ?? '';
 
+      this.$emit('changed', value);
       this.$emit('update:modelValue', value);
     }
   }
