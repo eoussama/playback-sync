@@ -14,13 +14,15 @@ import Confirm from '@/components/info/Confirm.vue';
 import Source from '@/components/source/Source.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
+import Tilling from '@/components/tilling/Tilling.vue';
+import TillingCustom from '@/components/tilling/TillingCustom.vue';
+
 import Range from '@/components/controls/Range.vue';
 import Input from '@/components/controls/Input.vue';
 import Speed from '@/components/controls/Speed.vue';
 import Select from '@/components/controls/Select.vue';
 import Button from '@/components/controls/Button.vue';
 import Volume from '@/components/controls/Volume.vue';
-import Tilling from '@/components/controls/Tilling.vue';
 import Timeline from '@/components/controls/Timeline.vue';
 import PlayPause from '@/components/controls/PlayPause.vue';
 
@@ -43,13 +45,15 @@ export function addComponent(app: App<Element>) {
   app.component('Tooltip', Tooltip);
   app.component('Confirm', Confirm);
 
+  app.component('Tilling', Tilling);
+  app.component('TillingCustom', TillingCustom);
+
   app.component('Speed', Speed);
   app.component('Range', Range);
   app.component('Input', Input);
   app.component('Volume', Volume);
   app.component('Button', Button);
   app.component('Select', Select);
-  app.component('Tilling', Tilling);
   app.component('Timeline', Timeline);
   app.component('PlayPause', PlayPause);
 

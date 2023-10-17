@@ -1,12 +1,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { TillingValue } from '@/utils/enums/tillingValue.enum';
+import TillingCustom from '@/components/tilling/TillingCustom.vue';
 
 export default defineComponent({
 
   data: () => ({
-    value: TillingValue.Fill,
-    customValue: TillingValue.Custom + 1,
+    rawValue: TillingValue.Fill,
+    customValue: TillingValue.Custom,
     options: [
       { label: 'Fill', value: TillingValue.Fill },
       { label: 'Split', value: TillingValue.Split },
@@ -18,10 +21,20 @@ export default defineComponent({
 
     /**
      * @description
+     * Parsed value
+     */
+    value(): TillingValue {
+      return parseInt(this.rawValue?.toString());
+    },
+
+    /**
+     * @description
      * The definitive selected tilling mode
      */
     tillingMode(): number {
-      return this.value === TillingValue.Custom ? this.customValue : this.value;
+      return (this.value === TillingValue.Custom && this.customValue !== TillingValue.Custom)
+        ? this.customValue
+        : this.value;
     }
   },
 
@@ -31,12 +44,11 @@ export default defineComponent({
      * @description
      * Handles value change
      */
-    onChanged(): void {
-      if (this.value == TillingValue.Custom) {
-        this.customValue = 4;
+    async onChanged(): Promise<void> {
+      if (this.rawValue == TillingValue.Custom) {
+        const value = await ModalHelper.open('Custom Tilling', TillingCustom);
+        this.customValue = value.payload?.value ?? this.customValue;
       }
-
-      alert(`tillingMode = ${this.tillingMode}`);
     }
   }
 });
@@ -45,7 +57,7 @@ export default defineComponent({
 <template>
   <div class="tilling">
     <Select
-      v-model="value"
+      v-model="rawValue"
       :options="options"
       @change="onChanged"
     />
