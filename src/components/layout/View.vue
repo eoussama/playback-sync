@@ -10,6 +10,7 @@ import { PageType } from '@/utils/enums/pageType.enum';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
+
   computed: {
     ...mapState(useSourcesStore, ['sources', 'tilling']),
 
@@ -23,7 +24,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'getSource']),
+    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'switchSources', 'getSource']),
 
     /**
      * @description
@@ -51,21 +52,52 @@ export default defineComponent({
             this.updateSource(modal.payload);
           }
         });
+    },
+
+    /**
+     * @description
+     * Handles dragging
+     *
+     * @param id The ID of the source to drag
+     * @param e The drag event object
+     */
+    onDrag(id: string, e: DragEvent): void {
+      e.dataTransfer?.setData('sourceId', id);
+    },
+
+    /**
+     * @description
+     * Handles dropping
+     *
+     * @param id The ID of the source to drop on
+     * @param e The Drop event object
+     */
+    onDrop(id: string, e: DragEvent): void {
+      const sourceId = e.dataTransfer?.getData('sourceId');
+
+      if (sourceId && id !== sourceId) {
+        this.switchSources(sourceId, id);
+      }
+
+      e.dataTransfer?.clearData();
     }
   }
 });
 </script>
 
 <template>
-  {{ gridTemplateColumns }}
   <div class="view">
     <div
       class="sources"
       :style="{ gridTemplateColumns }"
     >
       <div
+        v-for="source  in  sources"
         class="source"
-        v-for=" source  in  sources "
+        :draggable="true"
+        @drop="e => onDrop(source.id, e)"
+        @dragover="e => e.preventDefault()"
+        @dragstart="e => onDrag(source.id, e)"
       >
         <Source
           :source="source"

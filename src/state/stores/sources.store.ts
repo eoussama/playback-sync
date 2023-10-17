@@ -152,6 +152,31 @@ export const useSourcesStore = defineStore('sources', {
 
     /**
      * @description
+     * Removes an existing source
+     */
+    removeSource(id: string): void {
+      const index = this.sources.findIndex(s => s.id === id);
+      this.sources.splice(index, 1);
+    },
+
+    /**
+     * @description
+     * Switches the order of two sources by ID
+     *
+     * @param sourceId1 The first source ID
+     * @param sourceId2 The second source ID
+     */
+    switchSources(sourceId1: string, sourceId2: string): void {
+      const index1 = this.sources.findIndex(e => e.id === sourceId1);
+      const index2 = this.sources.findIndex(e => e.id === sourceId2);
+      const tmp = this.sources[index1];
+
+      this.sources[index1] = this.sources[index2];
+      this.sources[index2] = tmp;
+    },
+
+    /**
+     * @description
      * Updates a singular source
      *
      * @param id The ID of the source to update
@@ -169,15 +194,6 @@ export const useSourcesStore = defineStore('sources', {
           }
         }
       };
-    },
-
-    /**
-     * @description
-     * Removes an existing source
-     */
-    removeSource(id: string): void {
-      const index = this.sources.findIndex(s => s.id === id);
-      this.sources.splice(index, 1);
     }
   }
 });
