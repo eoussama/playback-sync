@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
@@ -8,7 +8,7 @@ export default defineComponent({
   props: {
     options: {
       default: [],
-      type: Object as () => Array<TOption>
+      type: Object as PropType<Array<TOption>>
     },
     modelValue: String,
     placeholder: String
@@ -33,7 +33,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <select class="select">
+  <select
+    class="select"
+    :value="modelValue"
+    @change="onChanged"
+  >
     <option
       value=""
       v-if="placeholder"
