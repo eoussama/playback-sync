@@ -1,6 +1,4 @@
 import { gsap } from 'gsap';
-
-import { Flip } from 'gsap/Flip';
 import { Draggable } from 'gsap/Draggable';
 
 
@@ -10,5 +8,5 @@ import { Draggable } from 'gsap/Draggable';
  * Initializes GSAP plugins
  */
 export function initGSAP(): void {
-  gsap.registerPlugin(Flip, Draggable);
+  gsap.registerPlugin(Draggable);
 }

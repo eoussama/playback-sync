@@ -191,7 +191,7 @@ export class SourceHelper {
     const container = document.querySelector('#app .view');
     const options = { bounds: container };
 
-    Draggable.create(elementId, options);
+    setTimeout(() => Draggable.create(elementId, options));
   }
 
   /**
@@ -205,8 +205,10 @@ export class SourceHelper {
     const draggable = Draggable.get(elementId);
     const element = document.querySelector(elementId) as HTMLDivElement;
 
-    draggable.kill();
-    element.style.transform = 'none';
+    setTimeout(() => {
+      draggable.kill();
+      element.style.transform = 'none';
+    });
   }
 
   /**

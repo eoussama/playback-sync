@@ -156,6 +156,8 @@ export default defineComponent({
   }
 
   &--pinned {
+    max-width: 400px;
+
     .source__head {
       display: none;
     }
@@ -164,4 +166,5 @@ export default defineComponent({
       display: block;
     }
   }
-}</style>
+}
+</style>

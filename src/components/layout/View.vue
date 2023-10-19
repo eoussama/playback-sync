@@ -8,6 +8,7 @@ import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
 
@@ -20,6 +21,22 @@ export default defineComponent({
      */
     gridTemplateColumns(): string {
       return `repeat(${this.tilling}, 1fr)`;
+    },
+
+    /**
+     * @description
+     * Pinned sources
+     */
+    pinnedSources(): Array<TSource> {
+      return this.sources.filter(source => source.pinned);
+    },
+
+    /**
+     * @description
+     * Unpinned sources
+     */
+    unpinnedSources(): Array<TSource> {
+      return this.sources.filter(source => !source.pinned);
     }
   },
 
@@ -131,11 +148,11 @@ export default defineComponent({
 <template>
   <div class="view">
     <div
-      class="sources"
+      class="sources sources--unpinned"
       :style="{ gridTemplateColumns }"
     >
       <div
-        v-for="source in sources"
+        v-for="source in unpinnedSources"
         class="source"
         :draggable="!source.pinned"
         @drop="e => onDrop(source.id, e)"
@@ -146,8 +163,19 @@ export default defineComponent({
           :source="source"
           @pin="onPin"
           @edit="onEdit"
-          @unpin="onUnpin"
           @remove="onRemove"
+        />
+      </div>
+    </div>
+
+    <div class="sources sources--pinned">
+      <div
+        v-for="source in pinnedSources"
+        class="source"
+      >
+        <Source
+          :source="source"
+          @unpin="onUnpin"
         />
       </div>
     </div>
@@ -159,7 +187,7 @@ export default defineComponent({
   flex: 1;
   height: 100%;
 
-  .sources {
+  .sources--unpinned {
     display: grid;
   }
 }
