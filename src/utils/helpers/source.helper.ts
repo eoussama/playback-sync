@@ -1,4 +1,6 @@
 import { v4 } from 'uuid';
+import { Draggable } from 'gsap/Draggable';
+
 import { ReadyState } from '../enums/readyState.enum';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
@@ -53,6 +55,7 @@ export class SourceHelper {
       id,
       url,
       title,
+      pinned: false,
       metadata: {
         ...sourceMetadata,
         ...metadata
@@ -175,6 +178,17 @@ export class SourceHelper {
     if (player) {
       player.playbackRate = speed;
     }
+  }
+
+  /**
+   * @description
+   * Pins a source
+   *
+   * @param id The ID of the source to pin
+   */
+  static pin(id: string): void {
+    const elementId = `#source-${id}`;
+    Draggable.create(elementId);
   }
 
   /**

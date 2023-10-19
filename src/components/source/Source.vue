@@ -15,6 +15,22 @@ export default defineComponent({
 
     /**
      * @description
+     * The ID of the source's element on the DOM
+     */
+    sourceId(): string {
+      return `source-${this.source?.id}`;
+    },
+
+    /**
+     * @description
+     * The ID of the source's player on the DOM
+     */
+    playerId(): string {
+      return `player-${this.source?.id}`;
+    },
+
+    /**
+     * @description
      * The cropped source URL
      */
     sourceUrl(): string {
@@ -66,7 +82,9 @@ export default defineComponent({
   <div
     v-if="source"
     class="source"
+    :id="sourceId"
     :key="source.id"
+    :class="{ 'source--pinned': source.pinned }"
   >
     <div class="source__head">
       <div class="source_title">
@@ -98,8 +116,8 @@ export default defineComponent({
     <div class="source__body">
       <video
         preload="auto"
+        :id="playerId"
         class="source__player"
-        :id="`player-${source.id}`"
       >
         <source
           type="video/mp4"
@@ -116,6 +134,12 @@ export default defineComponent({
 
   &__player {
     width: 100%;
+  }
+
+  &--pinned {
+    .source__head {
+      display: none;
+    }
   }
 }
 </style>

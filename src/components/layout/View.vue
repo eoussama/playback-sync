@@ -24,7 +24,14 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['removeSource', 'updateSource', 'switchSources', 'getSource', 'setPlaying']),
+    ...mapActions(useSourcesStore, [
+      'getSource',
+      'setPlaying',
+      'updateSource',
+      'removeSource',
+      'switchSources',
+      'toggleSourcePin'
+    ]),
 
     /**
      * @description
@@ -61,7 +68,7 @@ export default defineComponent({
      * @param id The ID of the sourec to pin
      */
     onPin(id: string): void {
-      console.log({ id });
+      this.toggleSourcePin(id, true);
     },
 
     /**
@@ -91,6 +98,21 @@ export default defineComponent({
 
       e.dataTransfer?.clearData();
       this.setPlaying(false);
+    },
+
+    /**
+     * @description
+     * Checks the drag permission
+     *
+     * @param id The ID of the source drag on
+     * @param e The drag event object
+     */
+    onDragOver(id: string, e: DragEvent): void {
+      const source = this.getSource(id);
+
+      if (!source.pinned) {
+        e.preventDefault();
+      }
     }
   }
 });
@@ -105,10 +127,10 @@ export default defineComponent({
       <div
         v-for="source in sources"
         class="source"
-        :draggable="true"
+        :draggable="!source.pinned"
         @drop="e => onDrop(source.id, e)"
-        @dragover="e => e.preventDefault()"
         @dragstart="e => onDrag(source.id, e)"
+        @dragover="e => onDragOver(source.id, e)"
       >
         <Source
           :source="source"
