@@ -201,7 +201,7 @@ export default defineComponent({
 
       </div>
 
-      <Range
+      <RangeComp
         :min="0"
         :start="source.metadata?.start"
         :end="source.metadata?.end"
