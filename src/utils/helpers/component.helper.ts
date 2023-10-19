@@ -21,7 +21,7 @@ import Range from '@/components/controls/Range.vue';
 import Input from '@/components/controls/Input.vue';
 import Speed from '@/components/controls/Speed.vue';
 import Select from '@/components/controls/Select.vue';
-import Button from '@/components/controls/Button.vue';
+import ButtonComp from '@/components/controls/ButtonComp.vue';
 import Volume from '@/components/controls/Volume.vue';
 import Timeline from '@/components/controls/Timeline.vue';
 import PlayPause from '@/components/controls/PlayPause.vue';
@@ -52,7 +52,7 @@ export function addComponent(app: App<Element>) {
   app.component('Range', Range);
   app.component('Input', Input);
   app.component('Volume', Volume);
-  app.component('Button', Button);
+  app.component('ButtonComp', ButtonComp);
   app.component('Select', Select);
   app.component('Timeline', Timeline);
   app.component('PlayPause', PlayPause);

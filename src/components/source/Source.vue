@@ -103,17 +103,17 @@ export default defineComponent({
           {{ source.title }}
         </a>
 
-        <Button
+        <ButtonComp
           icon="trash"
           @click="onRemove"
         />
 
-        <Button
+        <ButtonComp
           icon="pen"
           @click="onEdit"
         />
 
-        <Button
+        <ButtonComp
           icon="thumbtack"
           @click="onPin"
         />
@@ -123,7 +123,7 @@ export default defineComponent({
 
     <div class="source__body">
       <div class="source__controls">
-        <Button
+        <ButtonComp
           icon="xmark"
           @click="onUnpin"
         />

@@ -215,13 +215,13 @@ export default defineComponent({
     </div>
 
     <div class="source__controls">
-      <Button
+      <ButtonComp
         label="Clear"
         type="outline"
         @click="onClear"
       />
 
-      <Button
+      <ButtonComp
         icon="check"
         type="primary"
         :label="validateLabel"

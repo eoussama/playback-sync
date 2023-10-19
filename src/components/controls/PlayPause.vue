@@ -41,7 +41,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Button
+  <ButtonComp
     :icon="icon"
     type="radial"
     @click="onClick"

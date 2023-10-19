@@ -49,7 +49,7 @@ export default defineComponent({
     </div>
 
     <div class="tilling-custom__controls">
-      <Button
+      <ButtonComp
         label="Apply"
         @click="onValidate"
       />

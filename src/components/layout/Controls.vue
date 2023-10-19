@@ -163,7 +163,7 @@ export default defineComponent({
 <template>
   <div class="controls">
     <Tooltip text="Add a new source">
-      <Button
+      <ButtonComp
         icon="plus"
         @click="onAdd"
       />
@@ -171,7 +171,7 @@ export default defineComponent({
 
     <hr>
 
-    <Button
+    <ButtonComp
       v-if="!disabled"
       icon="backward"
       @click="onBackward"
@@ -184,7 +184,7 @@ export default defineComponent({
       @toggled="onToggle"
     />
 
-    <Button
+    <ButtonComp
       v-if="!disabled"
       icon="forward"
       @click="onForward"
