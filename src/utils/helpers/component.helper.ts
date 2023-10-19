@@ -14,7 +14,7 @@ import ConfirmComp from '@/components/info/ConfirmComp.vue';
 import SourceComp from '@/components/source/SourceComp.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
-import Tilling from '@/components/tilling/Tilling.vue';
+import TillingComp from '@/components/tilling/TillingComp.vue';
 import TillingCustom from '@/components/tilling/TillingCustom.vue';
 
 import RangeComp from '@/components/controls/RangeComp.vue';
@@ -45,7 +45,7 @@ export function addComponent(app: App<Element>) {
   app.component('TooltipComp', TooltipComp);
   app.component('ConfirmComp', ConfirmComp);
 
-  app.component('Tilling', Tilling);
+  app.component('TillingComp', TillingComp);
   app.component('TillingCustom', TillingCustom);
 
   app.component('SpeedComp', SpeedComp);

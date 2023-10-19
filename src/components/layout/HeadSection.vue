@@ -8,7 +8,7 @@ export default defineComponent({
 
 <template>
   <div class="head">
-    <Tilling />
+    <TillingComp />
   </div>
 </template>
 
