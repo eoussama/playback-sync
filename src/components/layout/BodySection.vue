@@ -1,9 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import View from './View.vue';
-import Controls from './Controls.vue';
-
 export default defineComponent({});
 </script>
 

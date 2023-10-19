@@ -2,10 +2,6 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
-import Speed from '@/components/controls/Speed.vue';
-import Volume from '@/components/controls/Volume.vue';
-import Timeline from '@/components/controls/Timeline.vue';
-import PlayPause from '@/components/controls/PlayPause.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';

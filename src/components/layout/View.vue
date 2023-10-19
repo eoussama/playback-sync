@@ -3,7 +3,6 @@ import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
-import Source from '@/components/source/Source.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';

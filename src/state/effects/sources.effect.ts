@@ -127,7 +127,7 @@ export function hookSourcesEffect() {
         }
 
         case 'updateSourceMetadata': {
-          const [id, metadata] = args;
+          const [_, metadata] = args; // eslint-disable-line
 
           if ('playing' in metadata) {
             if (store.sources.every(e => e.metadata.playing === metadata.playing)) {

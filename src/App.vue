@@ -3,9 +3,9 @@
 import { hookEffects } from './state/effects';
 import { useModalStore } from './state/stores/modal.store';
 
-import Head from './components/layout/HeadSection.vue';
-import Body from './components/layout/BodySection.vue';
-import Foot from './components/layout/FootSection.vue';
+import HeadSection from './components/layout/HeadSection.vue';
+import BodySection from './components/layout/BodySection.vue';
+import FootSection from './components/layout/FootSection.vue';
 
 
 

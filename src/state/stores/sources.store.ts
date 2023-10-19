@@ -101,7 +101,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param time The time to seek
      */
-    seek(time: number): void { },
+    seek(time: number): void { }, // eslint-disable-line
 
     /**
      * @description
@@ -109,7 +109,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param time The time to seek to
      */
-    setTimeline(time: number): void { },
+    setTimeline(time: number): void { }, // eslint-disable-line
 
     /**
      * @description
