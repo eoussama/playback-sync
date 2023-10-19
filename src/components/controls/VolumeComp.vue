@@ -66,7 +66,7 @@ export default defineComponent({
 <template>
   <div class="volume">
     <div class="volume__status">
-      <Button
+      <ButtonComp
         :icon="icon"
         @click="onMuteToggled"
       />

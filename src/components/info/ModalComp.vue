@@ -37,7 +37,7 @@ export default defineComponent({
         <div class="modal__title">{{ modal.title }}</div>
 
         <div class="modal__close">
-          <Button
+          <ButtonComp
             icon="xmark"
             @click="onClose"
           />

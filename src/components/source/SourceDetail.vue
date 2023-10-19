@@ -170,14 +170,14 @@ export default defineComponent({
     class="source"
   >
     <div class="source__form">
-      <Input
+      <InputComp
         type="text"
         label="Source Title"
         v-model="source.title"
         placeholder="Enter a title for the source"
       />
 
-      <Input
+      <InputComp
         type="text"
         label="Source URL"
         v-model="source.url"
@@ -201,7 +201,7 @@ export default defineComponent({
 
       </div>
 
-      <Range
+      <RangeComp
         :min="0"
         :start="source.metadata?.start"
         :end="source.metadata?.end"
@@ -215,13 +215,13 @@ export default defineComponent({
     </div>
 
     <div class="source__controls">
-      <Button
+      <ButtonComp
         label="Clear"
         type="outline"
         @click="onClear"
       />
 
-      <Button
+      <ButtonComp
         icon="check"
         type="primary"
         :label="validateLabel"

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
   data: () => ({
@@ -8,6 +9,17 @@ export default defineComponent({
 
   props: {
     value: Number
+  },
+
+  computed: {
+
+    /**
+     * @description
+     * Playback rate options
+     */
+    playbackRateOptions(): Array<TOption> {
+      return this.playbackRates.map(rate => ({ value: rate, label: `x${rate}` }));
+    }
   },
 
   methods: {
@@ -28,9 +40,9 @@ export default defineComponent({
 
 <template>
   <div class="speed">
-    <Select
+    <SelectComp
       :value="value"
-      :options="playbackRates"
+      :options="playbackRateOptions"
       @change="onPlaybackRateChanged"
     />
   </div>

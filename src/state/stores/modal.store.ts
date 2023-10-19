@@ -27,9 +27,10 @@ export const useModalStore = defineStore('modals', {
      * Removes a modal
      *
      * @param id The ID of the modal to remove
-     * @param data Optional payload emited when the modal is removed
+     * @param data Optional payload emited when the modal is removed,
+     * This param is used by the effect exclusively.
      */
-    removeModal<T = any>(id: string, data?: T): void {
+    removeModal<T = any>(id: string, data?: T): void { // eslint-disable-line
       const index = this.modals.findIndex(e => e.id === id);
 
       if (index >= 0) {

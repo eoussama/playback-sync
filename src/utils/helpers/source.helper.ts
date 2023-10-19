@@ -1,4 +1,6 @@
 import { v4 } from 'uuid';
+import { Draggable } from 'gsap/Draggable';
+
 import { ReadyState } from '../enums/readyState.enum';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
@@ -24,7 +26,7 @@ export class SourceHelper {
       muted: false, playing: false, buffering: false
     };
 
-    return this.create('', '', metadata, false);
+    return this.create('', '', metadata);
   }
 
   /**
@@ -44,20 +46,16 @@ export class SourceHelper {
    *
    * @param url The URL of the source
    * @param title The title of the source
-   * @param hook Whether to hook the video player with the state
    */
-  static async create(title: string, url: string, metadata?: Partial<TMetadata>, hook: boolean = true): Promise<TSource> {
+  static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
     const sourceMetadata = await this.loadSourceMetadata(url);
-
-    if (hook) {
-      this.hookPlayer(id);
-    }
 
     return {
       id,
       url,
       title,
+      pinned: false,
       metadata: {
         ...sourceMetadata,
         ...metadata
@@ -184,6 +182,37 @@ export class SourceHelper {
 
   /**
    * @description
+   * Pins a source
+   *
+   * @param id The ID of the source to pin
+   */
+  static pin(id: string): void {
+    const elementId = `#source-${id}`;
+    const container = document.querySelector('#app .view');
+    const options = { bounds: container };
+
+    setTimeout(() => Draggable.create(elementId, options));
+  }
+
+  /**
+   * @description
+   * Unpins a source
+   *
+   * @param id The ID of the source to unpin
+   */
+  static unpin(id: string): void {
+    const elementId = `#source-${id}`;
+    const draggable = Draggable.get(elementId);
+    const element = document.querySelector(elementId) as HTMLDivElement;
+
+    setTimeout(() => {
+      draggable.kill();
+      element.style.transform = 'none';
+    });
+  }
+
+  /**
+   * @description
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element
@@ -194,43 +223,14 @@ export class SourceHelper {
 
   /**
    * @description
-   * Loads metadata for video
-   *
-   * @param url The URL to load
-   */
-  private static loadSourceMetadata(url: string): Promise<TMetadata> {
-    return new Promise(resolve => {
-      const video = document.createElement('video');
-      video.src = url;
-
-      video.onerror = video.onloadedmetadata = () => {
-        resolve({
-          start: 0,
-          muted: video.muted,
-          playing: !video.paused,
-          end: video.duration ?? 0,
-          duration: video.duration,
-          speed: video.playbackRate,
-          currentTime: video.currentTime,
-          buffering: video.readyState < ReadyState.HaveEnoughData
-        });
-
-        video.remove();
-      }
-    });
-  }
-
-  /**
-   * @description
    * Hooks in to a player element
    *
    * @param id The ID of the player
    */
-  private static hookPlayer(id: string): void {
+  static hookPlayer(id: string): void {
     const target = document.getElementById('app') as HTMLDivElement;
     const options = { childList: true, subtree: true };
     const elementId = `#player-${id}`;
-
     const observer = new MutationObserver((mutationList, observer) => {
       const mutations = mutationList.flatMap(e => e.addedNodes);
       const nodes = mutations.flatMap(e => e.item(0)) as Array<HTMLDivElement>;
@@ -238,7 +238,7 @@ export class SourceHelper {
       const players = sources.map(e => e.querySelector(elementId)) as Array<HTMLVideoElement>;
 
       for (const player of players) {
-        if (elementId.endsWith(player?.id ?? '')) {
+        if (player && elementId.endsWith(player?.id ?? '')) {
           const store = useSourcesStore();
 
           player.ontimeupdate = () => {
@@ -279,5 +279,33 @@ export class SourceHelper {
     });
 
     observer.observe(target, options);
+  }
+
+  /**
+   * @description
+   * Loads metadata for video
+   *
+   * @param url The URL to load
+   */
+  private static loadSourceMetadata(url: string): Promise<TMetadata> {
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.src = url;
+
+      video.onerror = video.onloadedmetadata = () => {
+        resolve({
+          start: 0,
+          muted: video.muted,
+          playing: !video.paused,
+          end: video.duration ?? 0,
+          duration: video.duration,
+          speed: video.playbackRate,
+          currentTime: video.currentTime,
+          buffering: video.readyState < ReadyState.HaveEnoughData
+        });
+
+        video.remove();
+      }
+    });
   }
 }

@@ -11,8 +11,21 @@ export function hookSourcesEffect() {
   const store = useSourcesStore();
 
   store.$onAction(({ name, store, args, after }) => {
+    let cachedCurrentTime = 0;
+
+    if (name === 'switchSources') {
+      cachedCurrentTime = store.longestSource.metadata?.currentTime;
+    }
+
     after(() => {
       switch (name) {
+        case 'addSource': {
+          const [{ id }] = args;
+          SourceHelper.hookPlayer(id);
+
+          break;
+        }
+
         case 'setPlaying': {
           for (const source of store.sources) {
             if (store.playing) {
@@ -24,7 +37,7 @@ export function hookSourcesEffect() {
 
           break;
         }
-        
+
         case 'setBufferPause': {
           for (const source of store.sources) {
             if (store.bufferPause) {
@@ -88,8 +101,33 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'switchSources': {
+          const [id1, id2] = args;
+
+          setTimeout(() => {
+            [id1, id2].forEach(id => {
+              SourceHelper.hookPlayer(id);
+              SourceHelper.setTime(id, cachedCurrentTime);
+            })
+          });
+
+          break;
+        }
+
+        case 'toggleSourcePin': {
+          const [id, pinned] = args;
+
+          if (pinned) {
+            SourceHelper.pin(id);
+          } else {
+            SourceHelper.unpin(id);
+          }
+
+          break;
+        }
+
         case 'updateSourceMetadata': {
-          const [id, metadata] = args;
+          const [_, metadata] = args; // eslint-disable-line
 
           if ('playing' in metadata) {
             if (store.sources.every(e => e.metadata.playing === metadata.playing)) {

@@ -6,6 +6,7 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   props: {
+    min: Number,
     label: String,
     modelValue: String,
     placeholder: String,
@@ -42,6 +43,7 @@ export default defineComponent({
       >{{ label }}</div>
 
       <input
+        :min="min"
         :type="type"
         :value="modelValue"
         class="input__input"

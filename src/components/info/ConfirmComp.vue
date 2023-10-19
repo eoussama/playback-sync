@@ -56,14 +56,14 @@ export default defineComponent({
 
     <div class="confirm__controls">
       <div class="confirm__reject">
-        <Button
+        <ButtonComp
           @click="onReject"
           :label="params?.rejectLabel"
         />
       </div>
 
       <div class="confirm__resolve">
-        <Button
+        <ButtonComp
           @click="onResolve"
           :label="params?.resolveLabel"
         />
