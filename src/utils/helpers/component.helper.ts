@@ -7,9 +7,9 @@ import FootSection from '@/components/layout/FootSection.vue';
 import View from '@/components/layout/View.vue';
 import Controls from '@/components/layout/Controls.vue';
 
-import Modal from '@/components/info/Modal.vue';
-import Tooltip from '@/components/info/Tooltip.vue';
-import Confirm from '@/components/info/Confirm.vue';
+import ModalComp from '@/components/info/ModalComp.vue';
+import TooltipComp from '@/components/info/TooltipComp.vue';
+import ConfirmComp from '@/components/info/ConfirmComp.vue';
 
 import Source from '@/components/source/Source.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
@@ -41,9 +41,9 @@ export function addComponent(app: App<Element>) {
   app.component('View', View);
   app.component('Controls', Controls);
 
-  app.component('Modal', Modal);
-  app.component('Tooltip', Tooltip);
-  app.component('Confirm', Confirm);
+  app.component('ModalComp', ModalComp);
+  app.component('TooltipComp', TooltipComp);
+  app.component('ConfirmComp', ConfirmComp);
 
   app.component('Tilling', Tilling);
   app.component('TillingCustom', TillingCustom);

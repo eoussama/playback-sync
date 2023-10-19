@@ -1,5 +1,5 @@
 import { ModalHelper } from './modal.helper';
-import Confirm from '@/components/info/Confirm.vue';
+import ConfirmComp from '@/components/info/ConfirmComp.vue';
 import type { TConfirm } from '../types/composition/confirm.type';
 
 
@@ -25,7 +25,7 @@ export class ConfirmHelper {
       const resolveLabel = props.resolveLabel ?? 'Confirm';
 
       ModalHelper
-        .open(title, Confirm, { message, icon, rejectLabel, resolveLabel })
+        .open(title, ConfirmComp, { message, icon, rejectLabel, resolveLabel })
         .then(modal => resolve(modal.payload));
     });
   }

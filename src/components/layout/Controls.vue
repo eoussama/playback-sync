@@ -158,12 +158,12 @@ export default defineComponent({
 
 <template>
   <div class="controls">
-    <Tooltip text="Add a new source">
+    <TooltipComp text="Add a new source">
       <ButtonComp
         icon="plus"
         @click="onAdd"
       />
-    </Tooltip>
+    </TooltipComp>
 
     <hr>
 
