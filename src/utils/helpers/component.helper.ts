@@ -1,11 +1,11 @@
 import type { App } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import ViewComp from '@/components/layout/ViewComp.vue';
 import HeadSection from '@/components/layout/HeadSection.vue';
 import BodySection from '@/components/layout/BodySection.vue';
 import FootSection from '@/components/layout/FootSection.vue';
-import View from '@/components/layout/View.vue';
-import Controls from '@/components/layout/Controls.vue';
+import ControlsComp from '@/components/layout/ControlsComp.vue';
 
 import ModalComp from '@/components/info/ModalComp.vue';
 import TooltipComp from '@/components/info/TooltipComp.vue';
@@ -35,11 +35,11 @@ import PlayPauseComp from '@/components/controls/PlayPauseComp.vue';
  * @param app The vue app
  */
 export function addComponent(app: App<Element>) {
+  app.component('ViewComp', ViewComp);
   app.component('HeadSection', HeadSection);
   app.component('BodySection', BodySection);
   app.component('FootSection', FootSection);
-  app.component('View', View);
-  app.component('Controls', Controls);
+  app.component('ControlsComp', ControlsComp);
 
   app.component('ModalComp', ModalComp);
   app.component('TooltipComp', TooltipComp);

@@ -6,8 +6,8 @@ export default defineComponent({});
 
 <template>
   <div class="body">
-    <View />
-    <Controls />
+    <ViewComp />
+    <ControlsComp />
   </div>
 </template>
 
