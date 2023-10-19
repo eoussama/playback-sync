@@ -65,10 +65,20 @@ export default defineComponent({
      * @description
      * Pins a source
      *
-     * @param id The ID of the sourec to pin
+     * @param id The ID of the source to pin
      */
     onPin(id: string): void {
       this.toggleSourcePin(id, true);
+    },
+
+    /**
+     * @description
+     * Unpins a source
+     *
+     * @param id The ID of the source to unpin
+     */
+    onUnpin(id: string): void {
+      this.toggleSourcePin(id, false);
     },
 
     /**
@@ -136,6 +146,7 @@ export default defineComponent({
           :source="source"
           @pin="onPin"
           @edit="onEdit"
+          @unpin="onUnpin"
           @remove="onRemove"
         />
       </div>

@@ -115,8 +115,13 @@ export function hookSourcesEffect() {
         }
 
         case 'toggleSourcePin': {
-          const [id] = args;
-          SourceHelper.pin(id);
+          const [id, pinned] = args;
+
+          if (pinned) {
+            SourceHelper.pin(id);
+          } else {
+            SourceHelper.unpin(id);
+          }
 
           break;
         }

@@ -188,7 +188,25 @@ export class SourceHelper {
    */
   static pin(id: string): void {
     const elementId = `#source-${id}`;
-    Draggable.create(elementId);
+    const container = document.querySelector('#app .view');
+    const options = { bounds: container };
+
+    Draggable.create(elementId, options);
+  }
+
+  /**
+   * @description
+   * Unpins a source
+   *
+   * @param id The ID of the source to unpin
+   */
+  static unpin(id: string): void {
+    const elementId = `#source-${id}`;
+    const draggable = Draggable.get(elementId);
+    const element = document.querySelector(elementId) as HTMLDivElement;
+
+    draggable.kill();
+    element.style.transform = 'none';
   }
 
   /**

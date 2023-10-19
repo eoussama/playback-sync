@@ -5,7 +5,7 @@ import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
-  emits: ['remove', 'edit', 'pin'],
+  emits: ['remove', 'edit', 'pin', 'unpin'],
 
   props: {
     source: Object as PropType<TSource>
@@ -73,6 +73,14 @@ export default defineComponent({
      */
     onPin(): void {
       this.$emit('pin', this.source?.id);
+    },
+
+    /**
+     * @description
+     * Emits the unpin event
+     */
+    onUnpin(): void {
+      this.$emit('unpin', this.source?.id);
     }
   }
 });
@@ -114,6 +122,13 @@ export default defineComponent({
     </div>
 
     <div class="source__body">
+      <div class="source__controls">
+        <Button
+          icon="xmark"
+          @click="onUnpin"
+        />
+      </div>
+
       <video
         preload="auto"
         :id="playerId"
@@ -136,10 +151,17 @@ export default defineComponent({
     width: 100%;
   }
 
+  &__controls {
+    display: none;
+  }
+
   &--pinned {
     .source__head {
       display: none;
     }
+
+    .source__controls {
+      display: block;
+    }
   }
-}
-</style>
+}</style>
