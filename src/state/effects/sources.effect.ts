@@ -114,6 +114,18 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'toggleSourcePin': {
+          const [id, pinned] = args;
+
+          if (pinned) {
+            SourceHelper.pin(id);
+          } else {
+            SourceHelper.unpin(id);
+          }
+
+          break;
+        }
+
         case 'updateSourceMetadata': {
           const [id, metadata] = args;
 

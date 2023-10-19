@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
+import { TillingValue } from '@/utils/enums/tillingValue.enum';
+
 import type { TSource } from '@/utils/types/composition/source.type';
 import type { TMetadata } from '@/utils/types/composition/metadata.type';
 import type { TSourcesStore } from '@/utils/types/store/sourceStore.type';
-import { TillingValue } from '@/utils/enums/tillingValue.enum';
 
 
 
@@ -173,6 +174,22 @@ export const useSourcesStore = defineStore('sources', {
 
       this.sources[index1] = this.sources[index2];
       this.sources[index2] = tmp;
+    },
+
+    /**
+     * @description
+     * Toggles the pin state of a source
+     *
+     * @param id The ID of the source to toggle the pin state for
+     * @param state The new state of the pin to update to
+     */
+    toggleSourcePin(id: string, state: boolean): void {
+      const index = this.sources.findIndex(e => e.id === id);
+
+      this.sources[index] = {
+        ...this.sources[index],
+        pinned: state
+      }
     },
 
     /**
