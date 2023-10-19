@@ -198,7 +198,7 @@ export default defineComponent({
 
     <hr>
 
-    <Speed
+    <SpeedComp
       v-if="!disabled"
       :value="speed"
       @speedChanged="onSpeed"
