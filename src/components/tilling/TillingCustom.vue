@@ -14,7 +14,7 @@ export default defineComponent({
     modalId: String,
     params: {
       default: { tilling: TillingValue.Custom },
-      type: Object as PropType<TillingCustomType>
+      type: () => Object as PropType<TillingCustomType>
     }
   },
 
