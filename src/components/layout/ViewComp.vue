@@ -153,6 +153,7 @@ export default defineComponent({
       <div
         v-for="source in unpinnedSources"
         class="source"
+        :key="source.id"
         :draggable="!source.pinned"
         @drop="e => onDrop(source.id, e)"
         @dragstart="e => onDrag(source.id, e)"
@@ -171,6 +172,7 @@ export default defineComponent({
       <div
         v-for="source in pinnedSources"
         class="source"
+        :key="source.id"
       >
         <Source
           :source="source"
