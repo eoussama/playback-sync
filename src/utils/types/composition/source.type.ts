@@ -28,6 +28,12 @@ export type TSource = {
 
   /**
    * @description
+   * If the source if pinned
+   */
+  pinned: boolean;
+
+  /**
+   * @description
    * Source metadata
    */
   metadata: TMetadata;
