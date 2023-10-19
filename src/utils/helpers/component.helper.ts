@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import Head from '@/components/layout/Head.vue';
+import HeadSection from '@/components/layout/HeadSection.vue';
 import BodySection from '@/components/layout/BodySection.vue';
 import Foot from '@/components/layout/Foot.vue';
 import View from '@/components/layout/View.vue';
@@ -35,7 +35,7 @@ import PlayPause from '@/components/controls/PlayPause.vue';
  * @param app The vue app
  */
 export function addComponent(app: App<Element>) {
-  app.component('Head', Head);
+  app.component('HeadSection', HeadSection);
   app.component('BodySection', BodySection);
   app.component('Foot', Foot);
   app.component('View', View);

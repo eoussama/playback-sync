@@ -16,7 +16,7 @@ const store = useModalStore();
 <template>
   <div class="root">
     <div class="root__content">
-      <Head />
+      <HeadSection />
       <BodySection />
       <Foot />
     </div>
