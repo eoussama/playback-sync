@@ -188,7 +188,7 @@ export default defineComponent({
 
     <hr>
 
-    <Volume
+    <VolumeComp
       v-if="!disabled"
       :muted="muted"
       :value="volume"
