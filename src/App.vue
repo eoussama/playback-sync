@@ -3,9 +3,9 @@
 import { hookEffects } from './state/effects';
 import { useModalStore } from './state/stores/modal.store';
 
-import Head from './components/layout/Head.vue';
-import Body from './components/layout/Body.vue';
-import Foot from './components/layout/Foot.vue';
+import Head from './components/layout/HeadSection.vue';
+import Body from './components/layout/BodySection.vue';
+import Foot from './components/layout/FootSection.vue';
 
 
 
@@ -18,7 +18,7 @@ const store = useModalStore();
     <div class="root__content">
       <HeadSection />
       <BodySection />
-      <Foot />
+      <FootSection />
     </div>
 
     <div class="root__modals">

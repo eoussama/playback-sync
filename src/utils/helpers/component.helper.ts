@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import HeadSection from '@/components/layout/HeadSection.vue';
 import BodySection from '@/components/layout/BodySection.vue';
-import Foot from '@/components/layout/Foot.vue';
+import FootSection from '@/components/layout/FootSection.vue';
 import View from '@/components/layout/View.vue';
 import Controls from '@/components/layout/Controls.vue';
 
@@ -37,7 +37,7 @@ import PlayPause from '@/components/controls/PlayPause.vue';
 export function addComponent(app: App<Element>) {
   app.component('HeadSection', HeadSection);
   app.component('BodySection', BodySection);
-  app.component('Foot', Foot);
+  app.component('FootSection', FootSection);
   app.component('View', View);
   app.component('Controls', Controls);
 
