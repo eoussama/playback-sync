@@ -7,8 +7,8 @@ export default defineComponent({
 
   props: {
     options: {
-      default: [],
-      type: Object as PropType<Array<TOption>>
+      default: () => [],
+      type: Array as PropType<Array<TOption>>
     },
     modelValue: String,
     placeholder: String
@@ -48,9 +48,10 @@ export default defineComponent({
     </option>
 
     <option
+      :key="index"
       :value="option.value"
       class="select__option"
-      v-for="option in options"
+      v-for="(option, index) in options"
     >
       {{ option.label }}
     </option>
