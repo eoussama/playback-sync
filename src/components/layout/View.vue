@@ -56,6 +56,16 @@ export default defineComponent({
 
     /**
      * @description
+     * Pins a source
+     *
+     * @param id The ID of the sourec to pin
+     */
+    onPin(id: string): void {
+      console.log({ id });
+    },
+
+    /**
+     * @description
      * Handles dragging
      *
      * @param id The ID of the source to drag
@@ -93,7 +103,7 @@ export default defineComponent({
       :style="{ gridTemplateColumns }"
     >
       <div
-        v-for="source  in  sources"
+        v-for="source in sources"
         class="source"
         :draggable="true"
         @drop="e => onDrop(source.id, e)"
@@ -102,6 +112,7 @@ export default defineComponent({
       >
         <Source
           :source="source"
+          @pin="onPin"
           @edit="onEdit"
           @remove="onRemove"
         />

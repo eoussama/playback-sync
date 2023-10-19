@@ -5,10 +5,21 @@ import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
-  emits: ['remove', 'edit'],
+  emits: ['remove', 'edit', 'pin'],
 
   props: {
     source: Object as PropType<TSource>
+  },
+
+  computed: {
+
+    /**
+     * @description
+     * The cropped source URL
+     */
+    sourceUrl(): string {
+      return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
+    }
   },
 
   methods: {
@@ -38,6 +49,14 @@ export default defineComponent({
      */
     onEdit() {
       this.$emit('edit', this.source?.id);
+    },
+
+    /**
+     * @description
+     * Emits the pin event
+     */
+    onPin(): void {
+      this.$emit('pin', this.source?.id);
     }
   }
 });
@@ -67,6 +86,11 @@ export default defineComponent({
           icon="pen"
           @click="onEdit"
         />
+
+        <Button
+          icon="thumbtack"
+          @click="onPin"
+        />
       </div>
 
     </div>
@@ -79,7 +103,7 @@ export default defineComponent({
       >
         <source
           type="video/mp4"
-          :src="`${source.url}#t=${source.metadata?.start},${source.metadata?.end}`"
+          :src="sourceUrl"
         >
       </video>
     </div>
