@@ -206,7 +206,7 @@ export default defineComponent({
 
     <hr>
 
-    <Timeline
+    <TimelineComp
       v-if="!disabled"
       :duration="duration"
       :value="timelineValue"
