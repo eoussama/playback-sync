@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faThumbTack,
+  faThumbTack, faTrash,
   faPlay, faPause, faRepeat, faBackward, faForward,
   faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
   faPlus, faXmark, faCheck, faPen, faTriangleExclamation
@@ -14,7 +14,7 @@ import {
  */
 export function loadIcons(): void {
   library.add(
-    faThumbTack,
+    faThumbTack, faTrash,
     faPlay, faPause, faRepeat, faBackward, faForward,
     faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
     faPlus, faXmark, faCheck, faPen, faTriangleExclamation

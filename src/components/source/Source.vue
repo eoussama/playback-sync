@@ -78,7 +78,7 @@ export default defineComponent({
         </a>
 
         <Button
-          icon="xmark"
+          icon="trash"
           @click="onRemove"
         />
 
