@@ -17,7 +17,6 @@ import SourceDetail from '@/components/source/SourceDetail.vue';
 import Tilling from '@/components/tilling/Tilling.vue';
 import TillingCustom from '@/components/tilling/TillingCustom.vue';
 
-import PlayPause from '@/components/controls/PlayPause.vue';
 import RangeComp from '@/components/controls/RangeComp.vue';
 import InputComp from '@/components/controls/InputComp.vue';
 import SpeedComp from '@/components/controls/SpeedComp.vue';
@@ -25,6 +24,7 @@ import VolumeComp from '@/components/controls/VolumeComp.vue';
 import SelectComp from '@/components/controls/SelectComp.vue';
 import ButtonComp from '@/components/controls/ButtonComp.vue';
 import TimelineComp from '@/components/controls/TimelineComp.vue';
+import PlayPauseComp from '@/components/controls/PlayPauseComp.vue';
 
 
 
@@ -55,7 +55,7 @@ export function addComponent(app: App<Element>) {
   app.component('ButtonComp', ButtonComp);
   app.component('SelectComp', SelectComp);
   app.component('TimelineComp', TimelineComp);
-  app.component('PlayPause', PlayPause);
+  app.component('PlayPauseComp', PlayPauseComp);
 
   app.component('Source', Source);
   app.component('SourceDetail', SourceDetail);

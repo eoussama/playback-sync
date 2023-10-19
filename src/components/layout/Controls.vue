@@ -173,7 +173,7 @@ export default defineComponent({
       @click="onBackward"
     />
 
-    <PlayPause
+    <PlayPauseComp
       v-if="!disabled"
       :repeat="ended"
       :value="playing"
