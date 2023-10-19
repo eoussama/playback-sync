@@ -170,14 +170,14 @@ export default defineComponent({
     class="source"
   >
     <div class="source__form">
-      <Input
+      <InputComp
         type="text"
         label="Source Title"
         v-model="source.title"
         placeholder="Enter a title for the source"
       />
 
-      <Input
+      <InputComp
         type="text"
         label="Source URL"
         v-model="source.url"

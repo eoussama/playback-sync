@@ -41,7 +41,7 @@ export default defineComponent({
   <div class="tilling-custom">
     <div class="tilling-custom__body">
       Tilling Custom
-      <Input
+      <InputComp
         min="1"
         type="number"
         v-model="tilling"

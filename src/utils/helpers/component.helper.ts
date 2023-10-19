@@ -18,7 +18,7 @@ import Tilling from '@/components/tilling/Tilling.vue';
 import TillingCustom from '@/components/tilling/TillingCustom.vue';
 
 import RangeComp from '@/components/controls/RangeComp.vue';
-import Input from '@/components/controls/Input.vue';
+import InputComp from '@/components/controls/InputComp.vue';
 import Speed from '@/components/controls/Speed.vue';
 import Select from '@/components/controls/Select.vue';
 import ButtonComp from '@/components/controls/ButtonComp.vue';
@@ -50,7 +50,7 @@ export function addComponent(app: App<Element>) {
 
   app.component('Speed', Speed);
   app.component('RangeComp', RangeComp);
-  app.component('Input', Input);
+  app.component('InputComp', InputComp);
   app.component('Volume', Volume);
   app.component('ButtonComp', ButtonComp);
   app.component('Select', Select);
