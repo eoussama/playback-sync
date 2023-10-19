@@ -40,7 +40,7 @@ export default defineComponent({
 
 <template>
   <div class="speed">
-    <Select
+    <SelectComp
       :value="value"
       :options="playbackRateOptions"
       @change="onPlaybackRateChanged"

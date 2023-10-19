@@ -54,7 +54,7 @@ export default defineComponent({
 
 <template>
   <div class="tilling">
-    <Select
+    <SelectComp
       :value="value"
       :options="options"
       @changed="onChanged"
