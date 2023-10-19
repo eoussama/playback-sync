@@ -159,7 +159,7 @@ export default defineComponent({
         @dragstart="e => onDrag(source.id, e)"
         @dragover="e => onDragOver(source.id, e)"
       >
-        <Source
+        <SourceComp
           :source="source"
           @pin="onPin"
           @edit="onEdit"
@@ -174,7 +174,7 @@ export default defineComponent({
         class="source"
         :key="source.id"
       >
-        <Source
+        <SourceComp
           :source="source"
           @unpin="onUnpin"
         />

@@ -11,7 +11,7 @@ import ModalComp from '@/components/info/ModalComp.vue';
 import TooltipComp from '@/components/info/TooltipComp.vue';
 import ConfirmComp from '@/components/info/ConfirmComp.vue';
 
-import Source from '@/components/source/Source.vue';
+import SourceComp from '@/components/source/SourceComp.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import Tilling from '@/components/tilling/Tilling.vue';
@@ -57,7 +57,7 @@ export function addComponent(app: App<Element>) {
   app.component('TimelineComp', TimelineComp);
   app.component('PlayPauseComp', PlayPauseComp);
 
-  app.component('Source', Source);
+  app.component('SourceComp', SourceComp);
   app.component('SourceDetail', SourceDetail);
 
   app.component('font-awesome-icon', FontAwesomeIcon);
