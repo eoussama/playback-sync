@@ -13,8 +13,8 @@ export default defineComponent({
   props: {
     modalId: String,
     params: {
-      default: { tilling: TillingValue.Custom },
-      type: () => Object as PropType<TillingCustomType>
+      default: () => { TillingValue.Custom },
+      type: Object as PropType<TillingCustomType>
     }
   },
 
