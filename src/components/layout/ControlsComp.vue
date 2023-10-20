@@ -2,10 +2,6 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
-import SourceDetail from '@/components/source/SourceDetail.vue';
-
-import { PageType } from '@/utils/enums/pageType.enum';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
@@ -13,8 +9,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useSourcesStore, [
-      'addSource',
-      'resetSources',
       'setPlaying',
       'setMuted',
       'setVolume',
@@ -22,20 +16,6 @@ export default defineComponent({
       'setTimeline',
       'seek'
     ]),
-
-    /**
-     * @description
-     * Opens source addition modal
-     */
-    onAdd(): void {
-      ModalHelper
-        .open('Add Source', SourceDetail, { type: PageType.Creation })
-        .then(modal => {
-          if (modal.payload) {
-            this.addSource(modal.payload);
-          }
-        });
-    },
 
     /**
      * @description
@@ -142,79 +122,66 @@ export default defineComponent({
     disabled() {
       return this.sources.length === 0;
     }
-  },
-
-  created() {
-    this.resetSources();
-
-    [{ title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
-    { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }].forEach(async e => {
-      const source = await SourceHelper.create(e.title, e.url);
-      this.addSource(source);
-    });
   }
 });
 </script>
 
 <template>
   <div class="controls">
-    <TooltipComp text="Add a new source">
-      <ButtonComp
-        icon="plus"
-        @click="onAdd"
+    <div class="controls__top">
+      <TimelineComp
+        v-if="!disabled"
+        :duration="duration"
+        :value="timelineValue"
+        @timeline-updated="onTimelineChanged"
       />
-    </TooltipComp>
+    </div>
 
-    <hr>
+    <div class="controls__bottom">
+      <ButtonComp
+        v-if="!disabled"
+        icon="backward"
+        @click="onBackward"
+      />
 
-    <ButtonComp
-      v-if="!disabled"
-      icon="backward"
-      @click="onBackward"
-    />
+      <PlayPauseComp
+        v-if="!disabled"
+        :repeat="ended"
+        :value="playing"
+        @toggled="onToggle"
+      />
 
-    <PlayPauseComp
-      v-if="!disabled"
-      :repeat="ended"
-      :value="playing"
-      @toggled="onToggle"
-    />
+      <ButtonComp
+        v-if="!disabled"
+        icon="forward"
+        @click="onForward"
+      />
 
-    <ButtonComp
-      v-if="!disabled"
-      icon="forward"
-      @click="onForward"
-    />
+      <hr>
 
-    <hr>
+      <VolumeComp
+        v-if="!disabled"
+        :muted="muted"
+        :value="volume"
+        @volumeUpdated="onVolume"
+        @muteToggled="onMuteToggled"
+      />
 
-    <VolumeComp
-      v-if="!disabled"
-      :muted="muted"
-      :value="volume"
-      @volumeUpdated="onVolume"
-      @muteToggled="onMuteToggled"
-    />
+      <hr>
 
-    <hr>
-
-    <SpeedComp
-      v-if="!disabled"
-      :value="speed"
-      @speedChanged="onSpeed"
-    />
-
-    <hr>
-
-    <TimelineComp
-      v-if="!disabled"
-      :duration="duration"
-      :value="timelineValue"
-      @timeline-updated="onTimelineChanged"
-    />
+      <SpeedComp
+        v-if="!disabled"
+        :value="speed"
+        @speedChanged="onSpeed"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.controls {}
+.controls {
+  &__top {}
+
+  &__bottom {}
+}
 </style>
