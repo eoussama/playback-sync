@@ -1,4 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faThumbTack, faTrash,
   faPlay, faPause, faRepeat, faBackward, faForward,
@@ -14,7 +15,7 @@ import {
  */
 export function loadIcons(): void {
   library.add(
-    faThumbTack, faTrash,
+    faThumbTack, faTrash, faGithub,
     faPlay, faPause, faRepeat, faBackward, faForward,
     faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
     faPlus, faXmark, faCheck, faPen, faTriangleExclamation
