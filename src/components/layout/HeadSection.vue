@@ -71,7 +71,7 @@ export default defineComponent({
 
   box-sizing: border-box;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  background-color: hsl(var(--color-secondary-hsl), 92%);
+  background-color: hsl(var(--color-secondary-hsl), 94%);
 
   &__left {
     display: flex;
