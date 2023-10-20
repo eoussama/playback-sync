@@ -27,7 +27,7 @@ export default defineComponent({});
   padding: 2px 10px;
 
   box-sizing: border-box;
-  background-color: hsl(var(--color-secondary-hsl), 96%);
+  background-color: hsl(var(--color-secondary-hsl), 94%);
 
   &__content {
     text-align: center;

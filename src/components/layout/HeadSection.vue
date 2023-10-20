@@ -32,8 +32,13 @@ export default defineComponent({
   created() {
     this.resetSources();
 
-    [{ title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
-    { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }].forEach(async e => {
+    [
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }
+    ].forEach(async e => {
       const source = await SourceHelper.create(e.title, e.url);
       this.addSource(source);
     });
@@ -76,7 +81,7 @@ export default defineComponent({
     align-items: center;
     flex-direction: row;
 
-    & > *{
+    &>* {
       margin-right: 10px;
     }
   }

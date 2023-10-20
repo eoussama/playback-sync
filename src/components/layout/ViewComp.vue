@@ -186,7 +186,10 @@ export default defineComponent({
 <style scoped lang="scss">
 .view {
   flex: 1;
-  height: 100%;
+
+  overflow: auto;
+  box-sizing: border-box;
+  max-height: calc(100vh - 176px);
 
   .sources--unpinned {
     display: grid;
