@@ -18,7 +18,7 @@ export default defineComponent({
   max-height: 50px;
 
   box-sizing: border-box;
-  background-color: hsl(var(--color-secondary-hsl), 92%);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  background-color: hsl(var(--color-secondary-hsl), 92%);
 }
 </style>
