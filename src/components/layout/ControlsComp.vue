@@ -138,50 +138,72 @@ export default defineComponent({
     </div>
 
     <div class="controls__bottom">
-      <ButtonComp
-        v-if="!disabled"
-        icon="backward"
-        @click="onBackward"
-      />
+      <div class="controls__speed">
+        <SpeedComp
+          v-if="!disabled"
+          :value="speed"
+          @speedChanged="onSpeed"
+        />
+      </div>
 
-      <PlayPauseComp
-        v-if="!disabled"
-        :repeat="ended"
-        :value="playing"
-        @toggled="onToggle"
-      />
+      <div class="controls__rewind">
+        <ButtonComp
+          v-if="!disabled"
+          icon="backward"
+          @click="onBackward"
+        />
 
-      <ButtonComp
-        v-if="!disabled"
-        icon="forward"
-        @click="onForward"
-      />
+        <PlayPauseComp
+          v-if="!disabled"
+          :repeat="ended"
+          :value="playing"
+          @toggled="onToggle"
+        />
 
-      <hr>
+        <ButtonComp
+          v-if="!disabled"
+          icon="forward"
+          @click="onForward"
+        />
+      </div>
 
-      <VolumeComp
-        v-if="!disabled"
-        :muted="muted"
-        :value="volume"
-        @volumeUpdated="onVolume"
-        @muteToggled="onMuteToggled"
-      />
+      <div class="controls__volume">
+        <VolumeComp
+          v-if="!disabled"
+          :muted="muted"
+          :value="volume"
+          @volumeUpdated="onVolume"
+          @muteToggled="onMuteToggled"
+        />
+      </div>
 
-      <hr>
-
-      <SpeedComp
-        v-if="!disabled"
-        :value="speed"
-        @speedChanged="onSpeed"
-      />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .controls {
-  &__top {}
+  padding: 10px;
+  background-color: hsl(var(--color-secondary-hsl), 90%);
 
-  &__bottom {}
+  &__top {
+    margin-bottom: 10px;
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: relative;
+
+    .controls__rewind {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 </style>
