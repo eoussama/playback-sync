@@ -13,5 +13,12 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-.head {}
+.head {
+  padding: 10px;
+  max-height: 50px;
+
+  box-sizing: border-box;
+  background-color: hsl(var(--color-secondary-hsl), 92%);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+}
 </style>
