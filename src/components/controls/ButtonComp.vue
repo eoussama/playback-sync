@@ -111,10 +111,6 @@ export default defineComponent({
     background-color: hsl(var(--color-secondary-hsl), 85%);
   }
 
-  &:focus {
-    outline: none;
-  }
-
   &:hover {
 
     &#{$root}--plain,
