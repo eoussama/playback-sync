@@ -100,10 +100,21 @@ export default defineComponent({
     box-sizing: border-box;
 
     position: fixed;
+    padding: 4px 8px;
     width: max-content;
+
+    font-size: 14px;
+    color: var(--color-secondary);
+
+    border-radius: 5px;
+    background-color: rgba(var(--color-primary-rgb), 0.4);
   }
 
   &__element {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     box-sizing: border-box;
   }
 
