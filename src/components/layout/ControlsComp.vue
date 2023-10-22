@@ -146,24 +146,30 @@ export default defineComponent({
       </div>
 
       <div class="controls__rewind">
-        <ButtonComp
-          v-if="!disabled"
-          icon="backward"
-          @click="onBackward"
-        />
+        <div class="controls__backward">
+          <ButtonComp
+            v-if="!disabled"
+            icon="backward"
+            @click="onBackward"
+          />
+        </div>
 
-        <PlayPauseComp
-          v-if="!disabled"
-          :repeat="ended"
-          :value="playing"
-          @toggled="onToggle"
-        />
+        <div class="controls__play-pause">
+          <PlayPauseComp
+            v-if="!disabled"
+            :repeat="ended"
+            :value="playing"
+            @toggled="onToggle"
+          />
+        </div>
 
-        <ButtonComp
-          v-if="!disabled"
-          icon="forward"
-          @click="onForward"
-        />
+        <div class="controls__forward">
+          <ButtonComp
+            v-if="!disabled"
+            icon="forward"
+            @click="onForward"
+          />
+        </div>
       </div>
 
       <div class="controls__volume">
@@ -198,10 +204,19 @@ export default defineComponent({
     position: relative;
 
     .controls__rewind {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+
+      .controls__play-pause {
+        margin: 0 10px;
+      }
     }
   }
 }
