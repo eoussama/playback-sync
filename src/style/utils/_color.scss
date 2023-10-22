@@ -1,13 +1,7 @@
-:root {
-  --color-primary: #383f51;
-  --color-primary-rgb: 56, 63, 81;
-  --color-primary-hsl: 223, 18%;
+@function colorToRgb($color) {
+  @return red($color), green($color), blue($color);
+}
 
-  --color-secondary: #dddbf1;
-  --color-secondary-rgb: 221, 219, 241;
-  --color-secondary-hsl: 245, 44%;
-
-  --color-text: var(--color-primary);
-  --color-text-rgb: var(--color-primary-rgb);
-  --color-text-hsl: var(--color-primary-hsl);
+@function colorToHsl($color) {
+  @return hue($color), saturation($color);
 }
