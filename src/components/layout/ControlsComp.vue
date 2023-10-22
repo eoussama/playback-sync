@@ -190,11 +190,12 @@ export default defineComponent({
 .controls {
   $root: &;
 
-  padding: 10px;
+  padding: 15px 15px 35px 15px;
+  box-sizing: border-box;
   background-color: hsl(var(--color-secondary-hsl), 90%);
 
   &__top {
-    margin-bottom: 10px;
+    margin-bottom: 24px;
   }
 
   &__bottom {
