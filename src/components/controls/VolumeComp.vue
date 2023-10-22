@@ -130,7 +130,7 @@ export default defineComponent({
         cursor: pointer;
 
         width: 100%;
-        height: 8px;
+        height: 4px;
 
         border-radius: 10px;
       }
@@ -138,7 +138,7 @@ export default defineComponent({
       &::-webkit-slider-thumb {
         transform: scale(0.8);
 
-        margin-top: -4px;
+        margin-top: -6px;
         border-radius: 5px;
       }
     }
