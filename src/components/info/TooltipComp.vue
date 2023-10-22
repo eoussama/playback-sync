@@ -99,7 +99,6 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
 
-  z-index: 1;
   position: relative;
 
   &__text {
