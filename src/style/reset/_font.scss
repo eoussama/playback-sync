@@ -1,26 +1,25 @@
+@use '../vars/font' as vars;
+@use '../utils/font' as utils;
+
+:root {
+  @include utils.loadFont;
+
+  --font-weight-bold: #{vars.$font-weight-bold};
+  --font-weight-light: #{vars.$font-weight-light};
+  --font-weight-regular: #{vars.$font-weight-regular};
+
+  --line-height: 1.6;
+  --font-family: vars.$font-primary;
+}
+
 body {
   color: var(--color-text);
-
-  font-family:
-    'Open Sans',
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-
-  font-weight: var(--font-light);
+  line-height: var(--line-height);
 
   font-size: 16px;
-  line-height: 1.6;
+  font-family: vars.$font-primary;
   text-rendering: optimizeLegibility;
+  font-weight: var(--font-weight-light);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
