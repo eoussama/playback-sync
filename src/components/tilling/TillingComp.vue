@@ -55,8 +55,8 @@ export default defineComponent({
 <template>
   <div class="tilling">
     <SelectComp
-      :value="value"
       :options="options"
+      :modelValue="value"
       @changed="onChanged"
     />
   </div>
