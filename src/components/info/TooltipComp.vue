@@ -23,6 +23,7 @@ export default defineComponent({
       const tooltip = document.getElementById(this.id);
 
       if (tooltip) {
+        const offset = 10;
         const tooltipText = tooltip.childNodes[0] as HTMLDivElement;
         const tooltipElement = tooltip.childNodes[1] as HTMLDivElement;
 
@@ -30,6 +31,7 @@ export default defineComponent({
         const elementX = elementRect?.left ?? 0;
         const elementY = elementRect?.top ?? 0;
         const elementWidth = elementRect?.width ?? 0;
+        const elementHeight = elementRect?.height ?? 0;
 
         const textRect = tooltipText.getClientRects().item(0);
         const textWidth = textRect?.width ?? 0;
@@ -37,7 +39,12 @@ export default defineComponent({
 
         const textXOffset = elementX + (elementWidth / 2) - (textWidth / 2);
         const textX = Math.max(textXOffset, 0);
-        const textY = elementY - textHeight;
+
+        let textY = elementY - textHeight - offset;
+
+        if (textY < 0) {
+          textY = elementY + elementHeight + offset;
+        }
 
         tooltipText.style.left = `${textX}px`;
         tooltipText.style.top = `${textY}px`;
@@ -92,6 +99,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
 
+  z-index: 1;
   position: relative;
 
   &__text {
@@ -103,11 +111,28 @@ export default defineComponent({
     padding: 4px 8px;
     width: max-content;
 
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-secondary);
 
     border-radius: 5px;
-    background-color: rgba(var(--color-primary-rgb), 0.4);
+    backdrop-filter: blur(5px);
+    background-color: rgba(var(--color-primary-rgb), 0.6);
+
+    animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
   }
 
   &__element {
