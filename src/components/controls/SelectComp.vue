@@ -74,12 +74,12 @@ export default defineComponent({
 
   .select {
     display: block;
-    
+
     font-size: 14px;
     text-align: center;
     color: var(--color-primary);
     font-family: var(--font-primary);
-    
+
     width: 100%;
     height: 38px;
     padding: 0 30px 0 10px;
@@ -92,8 +92,9 @@ export default defineComponent({
     background-color: hsl(var(--color-secondary-hsl), 86%);
 
     transition-duration: 0.2s;
-    transition-property: background-color;
+    transition-property: background-color outline;
 
+    @extend %focusable;
     @extend %selectable;
   }
 

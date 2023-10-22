@@ -4,6 +4,9 @@
   &:hover {
     background-color: hsl(var(--color-secondary-hsl), 83%);
   }
+}
+
+%focusable {
 
   &:focus {
     outline-offset: 2px;

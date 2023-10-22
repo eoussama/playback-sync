@@ -65,8 +65,9 @@ export default defineComponent({
   background-color: transparent;
 
   transition-duration: 0.2s;
-  transition-property: background-color;
+  transition-property: background-color outline;
 
+  @extend %focusable;
   @extend %selectable;
 
   &__label {
