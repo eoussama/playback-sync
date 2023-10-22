@@ -270,10 +270,6 @@ export default defineComponent({
         visibility: visible;
       }
     }
-
-    #{$root}__crop {
-      margin-bottom: 45px;
-    }
   }
 
   &__controls {
