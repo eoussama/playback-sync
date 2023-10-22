@@ -188,6 +188,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .controls {
+  $root: &;
+
   padding: 10px;
   background-color: hsl(var(--color-secondary-hsl), 90%);
 
@@ -203,7 +205,11 @@ export default defineComponent({
 
     position: relative;
 
-    .controls__rewind {
+    #{$root}__speed {
+      width: auto;
+    }
+
+    #{$root}__rewind {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -214,7 +220,7 @@ export default defineComponent({
       left: 50%;
       transform: translate(-50%, -50%);
 
-      .controls__play-pause {
+      #{$root}__play-pause {
         margin: 0 10px;
       }
     }

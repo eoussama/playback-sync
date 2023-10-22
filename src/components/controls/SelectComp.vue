@@ -59,5 +59,25 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-.select {}
+@use '@/style/mixins/selectable';
+
+.select {
+  font-size: 14px;
+  color: var(--color-primary);
+  font-family: var(--font-primary);
+
+  width: 100%;
+  height: 38px;
+  padding: 0 10px;
+
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  background-color: hsl(var(--color-secondary-hsl), 86%);
+
+  transition-duration: 0.2s;
+  transition-property: background-color;
+
+  @extend %selectable;
+}
 </style>
