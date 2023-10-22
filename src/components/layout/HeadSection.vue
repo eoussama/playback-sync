@@ -49,6 +49,7 @@ export default defineComponent({
       <TooltipComp text="Add a new source">
         <ButtonComp
           icon="plus"
+          type="primary"
           @click="onAdd"
         />
       </TooltipComp>
