@@ -46,12 +46,14 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/selectable';
+
 .button {
+  $root: &;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  cursor: pointer;
 
   padding: 10px;
   min-width: 35px;
@@ -65,8 +67,11 @@ export default defineComponent({
   transition-duration: 0.2s;
   transition-property: background-color;
 
+  @extend %selectable;
+
   &__label {
     color: var(--color-primary);
+    font-family: var(--font-primary);
   }
 
   &__icon {
@@ -85,12 +90,15 @@ export default defineComponent({
     padding: 16px;
     border-radius: 50%;
 
-    .button__icon {
-      font-size: 18px;
+    width: 52px;
+    height: 52px;
 
-      width: 20px;
-      height: 20px;
-      transform: translate(2px, 1px);
+    .button__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 18px;
     }
   }
 
@@ -109,13 +117,13 @@ export default defineComponent({
 
   &:hover {
 
-    &.button--plain,
-    &.button--outline {
-      background-color: rgba(var(--color-primary-rgb), 0.1);
+    &#{$root}--plain,
+    &#{$root}--outline {
+      background-color: hsl(var(--color-secondary-hsl), 83%);
     }
 
-    &.button--radial,
-    &.button--primary {
+    &#{$root}--radial,
+    &#{$root}--primary {
       background-color: hsl(var(--color-secondary-hsl), 80%);
     }
   }

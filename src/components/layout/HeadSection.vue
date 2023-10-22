@@ -53,7 +53,9 @@ export default defineComponent({
         />
       </TooltipComp>
 
-      <TillingComp />
+      <div class="tilling">
+        <TillingComp />
+      </div>
     </div>
 
     <div class="head__right"></div>
@@ -71,7 +73,7 @@ export default defineComponent({
 
   box-sizing: border-box;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  background-color: hsl(var(--color-secondary-hsl), 94%);
+  background-color: hsl(var(--color-secondary-hsl), 90%);
 
   &__left {
     display: flex;
@@ -80,6 +82,10 @@ export default defineComponent({
 
     &>* {
       margin-right: 10px;
+    }
+
+    .tilling {
+      width: auto;
     }
   }
 }
