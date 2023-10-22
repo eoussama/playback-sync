@@ -55,11 +55,45 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/selectable';
+
 .input {
-  &__wrapper {}
+  $root: &;
 
-  &__label {}
+  &__wrapper {
+    #{$root}__label {
+      margin-bottom: 5px;
 
-  &__input {}
+      font-size: 14px;
+      font-weight: var(--font-weight-light);
+
+      transition-duration: 0.2s;
+      transition-property: color;
+    }
+
+    #{$root}__input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid var(--color-secondary);
+
+      color: var(--color-primary);
+      font-size: 16px;
+      font-family: var(--font-primary);
+      font-weight: var(--font-weight-regular);
+
+      &::placeholder {
+        color: hsl(var(--color-secondary-hsl), 80%);
+      }
+
+      @extend %focusable;
+    }
+
+    &:focus-within {
+      #{$root}__label {
+        color: hsl(var(--color-secondary-hsl), 60%);
+      }
+    }
+  }
 }
 </style>
