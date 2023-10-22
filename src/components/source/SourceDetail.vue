@@ -170,19 +170,23 @@ export default defineComponent({
     class="source"
   >
     <div class="source__form">
-      <InputComp
-        type="text"
-        label="Source Title"
-        v-model="source.title"
-        placeholder="Enter a title for the source"
-      />
+      <div class="source__input">
+        <InputComp
+          type="text"
+          label="Source Title"
+          v-model="source.title"
+          placeholder="Enter a title for the source"
+        />
+      </div>
 
-      <InputComp
-        type="text"
-        label="Source URL"
-        v-model="source.url"
-        placeholder="Enter the URL of the source"
-      />
+      <div class="source__input">
+        <InputComp
+          type="text"
+          label="Source URL"
+          v-model="source.url"
+          placeholder="Enter the URL of the source"
+        />
+      </div>
 
       <div
         class="source__preview"
@@ -201,56 +205,85 @@ export default defineComponent({
 
       </div>
 
-      <RangeComp
-        :min="0"
-        :start="source.metadata?.start"
-        :end="source.metadata?.end"
-        :max="source.metadata?.duration"
-        :disabled="!previewLoaded"
-        :valueFormater="valueFormater"
-        @endChanged="onEndChanged"
-        @startChanged="onStartChanged"
-      />
+      <div class="source__crop">
+        <RangeComp
+          :min="0"
+          :start="source.metadata?.start"
+          :end="source.metadata?.end"
+          :max="source.metadata?.duration"
+          :disabled="!previewLoaded"
+          :valueFormater="valueFormater"
+          @endChanged="onEndChanged"
+          @startChanged="onStartChanged"
+        />
+      </div>
 
     </div>
 
     <div class="source__controls">
-      <ButtonComp
-        label="Clear"
-        type="outline"
-        @click="onClear"
-      />
+      <div class="source__clear">
+        <ButtonComp
+          label="Clear"
+          type="outline"
+          @click="onClear"
+        />
+      </div>
 
-      <ButtonComp
-        icon="check"
-        type="primary"
-        :label="validateLabel"
-        @click="onValidate"
-      />
+      <div class="source__resolve">
+        <ButtonComp
+          icon="check"
+          type="primary"
+          :label="validateLabel"
+          @click="onValidate"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .source {
-  &__preview {
-    height: 450px;
-    width: 600px;
+  $root: &;
 
-    visibility: hidden;
+  &__form {
+    margin-bottom: 20px;
 
-    &--show {
-      visibility: visible;
+    #{$root}__input {
+      margin-bottom: 15px;
+    }
+
+    #{$root}__preview {
+      height: 450px;
+      width: 600px;
+      margin-bottom: 15px;
+
+      visibility: hidden;
+
+      #{$root}__player {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+      }
+
+      &--show {
+        visibility: visible;
+      }
+    }
+
+    #{$root}__crop {
+      margin-bottom: 45px;
     }
   }
 
-  &__player {
-    display: block;
+  &__controls {
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
 
-    width: 100%;
-    height: 100%;
+    #{$root}__clear {
+      margin-right: 12px;
+    }
   }
-
-  &__controls {}
 }
 </style>
