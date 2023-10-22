@@ -47,5 +47,3 @@ export default defineComponent({
     @click="onClick"
   />
 </template>
-
-<style scoped lang="scss"></style>
