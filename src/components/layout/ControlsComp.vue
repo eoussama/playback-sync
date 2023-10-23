@@ -2,19 +2,12 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
-import SourceDetail from '@/components/source/SourceDetail.vue';
-
-import { PageType } from '@/utils/enums/pageType.enum';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
-import { SourceHelper } from '@/utils/helpers/source.helper';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
 
   methods: {
     ...mapActions(useSourcesStore, [
-      'addSource',
-      'resetSources',
       'setPlaying',
       'setMuted',
       'setVolume',
@@ -22,20 +15,6 @@ export default defineComponent({
       'setTimeline',
       'seek'
     ]),
-
-    /**
-     * @description
-     * Opens source addition modal
-     */
-    onAdd(): void {
-      ModalHelper
-        .open('Add Source', SourceDetail, { type: PageType.Creation })
-        .then(modal => {
-          if (modal.payload) {
-            this.addSource(modal.payload);
-          }
-        });
-    },
 
     /**
      * @description
@@ -142,79 +121,107 @@ export default defineComponent({
     disabled() {
       return this.sources.length === 0;
     }
-  },
-
-  created() {
-    this.resetSources();
-
-    [{ title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
-    { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }].forEach(async e => {
-      const source = await SourceHelper.create(e.title, e.url);
-      this.addSource(source);
-    });
   }
 });
 </script>
 
 <template>
-  <div class="controls">
-    <TooltipComp text="Add a new source">
-      <ButtonComp
-        icon="plus"
-        @click="onAdd"
+  <div
+    v-if="!disabled"
+    class="controls"
+  >
+    <div class="controls__top">
+      <TimelineComp
+        :duration="duration"
+        :value="timelineValue"
+        @timeline-updated="onTimelineChanged"
       />
-    </TooltipComp>
+    </div>
 
-    <hr>
+    <div class="controls__bottom">
+      <div class="controls__speed">
+        <SpeedComp
+          :value="speed"
+          @speedChanged="onSpeed"
+        />
+      </div>
 
-    <ButtonComp
-      v-if="!disabled"
-      icon="backward"
-      @click="onBackward"
-    />
+      <div class="controls__rewind">
+        <div class="controls__backward">
+          <ButtonComp
+            icon="backward"
+            @click="onBackward"
+          />
+        </div>
 
-    <PlayPauseComp
-      v-if="!disabled"
-      :repeat="ended"
-      :value="playing"
-      @toggled="onToggle"
-    />
+        <div class="controls__play-pause">
+          <PlayPauseComp
+            :repeat="ended"
+            :value="playing"
+            @toggled="onToggle"
+          />
+        </div>
 
-    <ButtonComp
-      v-if="!disabled"
-      icon="forward"
-      @click="onForward"
-    />
+        <div class="controls__forward">
+          <ButtonComp
+            icon="forward"
+            @click="onForward"
+          />
+        </div>
+      </div>
 
-    <hr>
+      <div class="controls__volume">
+        <VolumeComp
+          :muted="muted"
+          :value="volume"
+          @volumeUpdated="onVolume"
+          @muteToggled="onMuteToggled"
+        />
+      </div>
 
-    <VolumeComp
-      v-if="!disabled"
-      :muted="muted"
-      :value="volume"
-      @volumeUpdated="onVolume"
-      @muteToggled="onMuteToggled"
-    />
-
-    <hr>
-
-    <SpeedComp
-      v-if="!disabled"
-      :value="speed"
-      @speedChanged="onSpeed"
-    />
-
-    <hr>
-
-    <TimelineComp
-      v-if="!disabled"
-      :duration="duration"
-      :value="timelineValue"
-      @timeline-updated="onTimelineChanged"
-    />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.controls {}
+.controls {
+  $root: &;
+
+  padding: 15px 15px 35px 15px;
+  box-sizing: border-box;
+  background-color: hsl(var(--color-secondary-hsl), 90%);
+
+  &__top {
+    margin-bottom: 24px;
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: relative;
+
+    #{$root}__speed {
+      width: auto;
+    }
+
+    #{$root}__rewind {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      #{$root}__play-pause {
+        margin: 0 10px;
+      }
+    }
+  }
+}
 </style>

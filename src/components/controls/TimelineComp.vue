@@ -51,8 +51,9 @@ export default defineComponent({
 <template>
   <div class="timeline">
     <div class="timeline__label">
-      {{ displayTime }} / {{ displayDuration }}
+      {{ displayTime }}
     </div>
+
     <div class="timeline__track">
       <input
         min="0"
@@ -62,14 +63,60 @@ export default defineComponent({
         @input="onChanged"
       >
     </div>
+
+    <div class="timeline__label">
+      {{ displayDuration }}
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/selectable';
+
 .timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  &__label {
+    color: var(--text-color);
+
+    font-size: 14px;
+    font-weight: var(--font-weight-light);
+  }
+
   &__track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+    margin: 0 10px;
+
     input {
       width: 100%;
+      border-radius: 4px;
+      accent-color: var(--color-primary);
+
+      @extend %focusable;
+
+      &::-webkit-slider-runnable-track {
+        cursor: pointer;
+
+        width: 100%;
+        height: 4px;
+
+        border-radius: 10px;
+      }
+
+      &::-webkit-slider-thumb {
+        transform: scale(0.8);
+
+        margin-top: -6px;
+        border-radius: 5px;
+      }
     }
   }
 }
