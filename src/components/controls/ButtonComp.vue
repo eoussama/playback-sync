@@ -46,13 +46,94 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/selectable';
+
 .button {
+  $root: &;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  &__label {}
+  padding: 10px;
+  min-width: 35px;
+  min-height: 35px;
 
-  &__icon {}
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  background-color: transparent;
+
+  transition-duration: 0.2s;
+  transition-property: background-color outline;
+
+  @extend %focusable;
+  @extend %selectable;
+
+  &__label {
+    color: var(--color-primary);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__icon {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+    color: var(--color-primary);
+
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
+  }
+
+  &--radial {
+    padding: 16px;
+    border-radius: 50%;
+
+    width: 52px;
+    height: 52px;
+
+    .button__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 18px;
+    }
+  }
+
+  &--outline {
+    border-color: rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  &--secondary {
+    #{$root}__icon {
+      color: hsl(var(--color-primary-hsl), 65%);
+    }
+  }
+
+  &--radial,
+  &--primary {
+    background-color: hsl(var(--color-secondary-hsl), 85%);
+  }
+
+  &:hover {
+
+    &#{$root}--plain,
+    &#{$root}--outline {
+      background-color: hsl(var(--color-secondary-hsl), 83%);
+    }
+
+    &#{$root}--secondary {
+      background-color: hsl(var(--color-primary-hsl), 87%);
+    }
+
+    &#{$root}--radial,
+    &#{$root}--primary {
+      background-color: hsl(var(--color-secondary-hsl), 80%);
+    }
+  }
 }
 </style>

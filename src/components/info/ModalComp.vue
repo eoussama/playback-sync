@@ -56,6 +56,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .modal {
+  $root: &;
+  $padding: 20px;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -71,7 +74,50 @@ export default defineComponent({
   justify-content: center;
 
   &__element {
+    overflow: hidden;
+
+    border-radius: 10px;
+    box-sizing: border-box;
+
     background-color: white;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+
+    animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+
+    #{$root}__head {
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: $padding;
+      background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 95%));
+
+      #{$root}__title {
+        font-size: 20px;
+        font-weight: var(--font-weight-bold);
+        font-family: var(--font-family-primary);
+      }
+    }
+
+    #{$root}__body {
+      padding: $padding;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   }
 }
 </style>

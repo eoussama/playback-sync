@@ -57,15 +57,18 @@ export default defineComponent({
     <div class="confirm__controls">
       <div class="confirm__reject">
         <ButtonComp
-          @click="onReject"
+          type="outline"
           :label="params?.rejectLabel"
+          @click="onReject"
         />
       </div>
 
       <div class="confirm__resolve">
         <ButtonComp
-          @click="onResolve"
+          icon="trash"
+          type="primary"
           :label="params?.resolveLabel"
+          @click="onResolve"
         />
       </div>
     </div>
@@ -74,8 +77,34 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .confirm {
-  &__body {}
+  $root: &;
 
-  &__controls {}
+  &__body {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.5);
+
+    #{$root}__icon {
+      font-size: 40px;
+      margin-top: -10px;
+      color: var(--color-primary);
+    }
+
+    #{$root}__message {
+      font-size: 16px;
+      color: var(--color-primary);
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    #{$root}__resolve {
+      margin-left: 12px;
+    }
+  }
 }
 </style>

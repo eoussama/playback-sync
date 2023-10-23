@@ -186,7 +186,11 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/selectable';
+
 .range {
+  $root: &;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,43 +198,16 @@ export default defineComponent({
   height: 16px;
   position: relative;
 
-  &__track {
-    position: relative;
+  &__label {
+    font-size: 14px;
+    color: var(--color-primary);
 
-    width: 100%;
-    height: 5px;
-    border-radius: 5px;
+    &--start {
+      margin-right: 10px;
+    }
 
-    background-color: rgb(194, 194, 194);
-  }
-
-  &__thumb {
-    pointer-events: none;
-
-    width: 100%;
-    height: 100%;
-
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background-color: gray;
-
-    .range__value {
-      position: absolute;
-      top: 12px;
-
-      &--start {
-        left: -6px;
-      }
-
-      &--end {
-        right: -6px;
-      }
+    &--end {
+      margin-left: 10px;
     }
   }
 
@@ -244,35 +221,102 @@ export default defineComponent({
 
     width: 100%;
     height: 100%;
-  }
 
-  &__end,
-  &__start {
-    cursor: grab;
-    z-index: 1;
+    #{$root}__track {
+      position: relative;
 
-    top: 0;
-    left: 0;
-    position: absolute;
+      width: 100%;
+      height: 5px;
+      border-radius: 5px;
 
-    width: 100%;
+      background-color: var(--color-secondary);
 
-    &:active {
-      cursor: grabbing;
+      #{$root}__thumb {
+        pointer-events: none;
+
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        background-color: var(--color-primary);
+
+        #{$root}__value {
+          position: absolute;
+          top: -5px;
+
+          z-index: 2;
+          padding: 0 6px;
+
+          font-size: 10px;
+          color: var(--color-secondary);
+          font-weight: var(--font-weight-light);
+
+          border-radius: 10px;
+          background-color: var(--color-primary);
+
+          &--start {
+            left: -6px;
+          }
+
+          &--end {
+            right: -6px;
+          }
+        }
+      }
     }
 
-    &::-webkit-slider-runnable-track {
-      height: 0;
+    #{$root}__end,
+    #{$root}__start {
+      cursor: grab;
+      z-index: 1;
+
+      top: 0;
+      left: 0;
+      position: absolute;
+
+      width: 100%;
+      accent-color: var(--color-primary);
+
+      &:active {
+        cursor: grabbing;
+      }
+
+      &::-webkit-slider-runnable-track {
+        cursor: pointer;
+
+        height: 0;
+        width: 100%;
+
+        border-radius: 10px;
+      }
+
+      &::-webkit-slider-thumb {
+        padding: 0 15px;
+        opacity: 0;
+      }
     }
   }
 
   &--disabled {
-    .range__track {
+    #{$root}__track {
       background-color: rgb(235, 235, 235);
     }
 
-    .range__thumb {
+    #{$root}__thumb {
       background-color: rgb(204, 204, 204);
+    }
+  }
+
+  &:focus-within {
+    #{$root}__track {
+      @extend %focus-outline;
     }
   }
 }

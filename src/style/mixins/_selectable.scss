@@ -1,0 +1,19 @@
+%selectable {
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(var(--color-secondary-hsl), 83%);
+  }
+}
+
+%focusable {
+
+  &:focus {
+    @extend %focus-outline;
+  }
+}
+
+%focus-outline {
+  outline-offset: 2px;
+  outline: 2px solid hsl(var(--color-secondary-hsl), 75%);
+}
