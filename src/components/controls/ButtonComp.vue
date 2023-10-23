@@ -72,7 +72,8 @@ export default defineComponent({
 
   &__label {
     color: var(--color-primary);
-    font-family: var(--font-primary);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-regular);
   }
 
   &__icon {
@@ -107,6 +108,12 @@ export default defineComponent({
     border-color: rgba(var(--color-primary-rgb), 0.2);
   }
 
+  &--secondary {
+    #{$root}__icon {
+      color: hsl(var(--color-primary-hsl), 65%);
+    }
+  }
+
   &--radial,
   &--primary {
     background-color: hsl(var(--color-secondary-hsl), 85%);
@@ -117,6 +124,10 @@ export default defineComponent({
     &#{$root}--plain,
     &#{$root}--outline {
       background-color: hsl(var(--color-secondary-hsl), 83%);
+    }
+
+    &#{$root}--secondary {
+      background-color: hsl(var(--color-primary-hsl), 87%);
     }
 
     &#{$root}--radial,
