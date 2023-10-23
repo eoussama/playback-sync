@@ -189,10 +189,29 @@ export default defineComponent({
 
   overflow: auto;
   box-sizing: border-box;
-  max-height: calc(100vh - 176px);
+  max-height: calc(100vh - 208px);
 
-  .sources--unpinned {
-    display: grid;
+  --dot-size: 2px;
+  --dot-space: 22px;
+  --dot-bg: #ffffff;
+  --dot-color: hsl(var(--color-secondary-hsl), 94%);
+
+  background:
+    linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+    linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+    var(--dot-color);
+
+  .sources {
+    &--unpinned {
+      $gap: 4px;
+
+      height: 100%;
+      display: grid;
+
+      padding: $gap;
+      row-gap: $gap;
+      column-gap: $gap;
+    }
   }
 }
 </style>
