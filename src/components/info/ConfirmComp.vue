@@ -83,7 +83,7 @@ export default defineComponent({
     text-align: center;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-secondary);
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.5);
 
     #{$root}__icon {
       font-size: 40px;

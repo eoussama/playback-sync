@@ -69,7 +69,7 @@ export default defineComponent({});
 
   &__text {
     font-size: 12px;
-    font-family: var(--font-family);
+    font-family: var(--font-family-primary);
   }
 }
 </style>

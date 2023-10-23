@@ -112,6 +112,8 @@ export default defineComponent({
 
     font-size: 13px;
     color: var(--color-secondary);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-regular);
 
     border-radius: 5px;
     backdrop-filter: blur(5px);
@@ -126,7 +128,7 @@ export default defineComponent({
         opacity: 0;
         transform: translateY(10px);
       }
-      
+
       to {
         opacity: 1;
         transform: translateY(0px);

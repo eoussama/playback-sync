@@ -78,7 +78,7 @@ export default defineComponent({
     font-size: 14px;
     text-align: center;
     color: var(--color-primary);
-    font-family: var(--font-primary);
+    font-family: var(--font-family-primary);
 
     width: 100%;
     height: 38px;

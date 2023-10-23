@@ -79,7 +79,7 @@ export default defineComponent({
 
       color: var(--color-primary);
       font-size: 16px;
-      font-family: var(--font-primary);
+      font-family: var(--font-family-primary);
       font-weight: var(--font-weight-regular);
 
       &::placeholder {

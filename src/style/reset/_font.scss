@@ -9,7 +9,7 @@
   --font-weight-regular: #{vars.$font-weight-regular};
 
   --line-height: 1.6;
-  --font-family: vars.$font-primary;
+  --font-family-primary: #{vars.$font-primary};
 }
 
 body {
@@ -17,9 +17,9 @@ body {
   line-height: var(--line-height);
 
   font-size: 16px;
-  font-family: vars.$font-primary;
   text-rendering: optimizeLegibility;
   font-weight: var(--font-weight-light);
+  font-family: var(--font-family-primary);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

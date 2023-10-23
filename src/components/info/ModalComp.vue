@@ -98,8 +98,8 @@ export default defineComponent({
 
       #{$root}__title {
         font-size: 20px;
-        font-family: var(--font-primary);
         font-weight: var(--font-weight-bold);
+        font-family: var(--font-family-primary);
       }
     }
 
