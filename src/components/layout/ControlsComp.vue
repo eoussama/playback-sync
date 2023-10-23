@@ -126,10 +126,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="controls">
+  <div
+    v-if="!disabled"
+    class="controls"
+  >
     <div class="controls__top">
       <TimelineComp
-        v-if="!disabled"
         :duration="duration"
         :value="timelineValue"
         @timeline-updated="onTimelineChanged"
@@ -139,7 +141,6 @@ export default defineComponent({
     <div class="controls__bottom">
       <div class="controls__speed">
         <SpeedComp
-          v-if="!disabled"
           :value="speed"
           @speedChanged="onSpeed"
         />
@@ -148,7 +149,6 @@ export default defineComponent({
       <div class="controls__rewind">
         <div class="controls__backward">
           <ButtonComp
-            v-if="!disabled"
             icon="backward"
             @click="onBackward"
           />
@@ -156,7 +156,6 @@ export default defineComponent({
 
         <div class="controls__play-pause">
           <PlayPauseComp
-            v-if="!disabled"
             :repeat="ended"
             :value="playing"
             @toggled="onToggle"
@@ -165,7 +164,6 @@ export default defineComponent({
 
         <div class="controls__forward">
           <ButtonComp
-            v-if="!disabled"
             icon="forward"
             @click="onForward"
           />
@@ -174,7 +172,6 @@ export default defineComponent({
 
       <div class="controls__volume">
         <VolumeComp
-          v-if="!disabled"
           :muted="muted"
           :value="volume"
           @volumeUpdated="onVolume"

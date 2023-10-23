@@ -36,6 +36,14 @@ export default defineComponent({
      */
     unpinnedSources(): Array<TSource> {
       return this.sources.filter(source => !source.pinned);
+    },
+
+    /**
+     * @description
+     * If not sources are available
+     */
+    empty() {
+      return this.sources.length === 0;
     }
   },
 
@@ -145,7 +153,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="view">
+  <div
+    class="view"
+    :class="{ 'view--empty': empty }"
+  >
     <div
       class="sources sources--unpinned"
       :style="{ gridTemplateColumns }"
@@ -212,6 +223,10 @@ export default defineComponent({
       row-gap: $gap;
       column-gap: $gap;
     }
+  }
+
+  &--empty {
+    max-height: calc(100vh - 73px);
   }
 }
 </style>
