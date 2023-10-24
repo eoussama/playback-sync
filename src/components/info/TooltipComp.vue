@@ -102,6 +102,8 @@ export default defineComponent({
   position: relative;
 
   &__text {
+    z-index: 1;
+    
     display: none;
     pointer-events: none;
     box-sizing: border-box;
