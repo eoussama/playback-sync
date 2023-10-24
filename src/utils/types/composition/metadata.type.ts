@@ -42,6 +42,12 @@ export type TMetadata = {
 
   /**
    * @description
+   * The volme of the source
+  */
+  volume: number;
+
+  /**
+   * @description
    * If the source is muted
    */
   muted: boolean;

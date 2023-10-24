@@ -54,7 +54,8 @@ export default defineComponent({
       'updateSource',
       'removeSource',
       'switchSources',
-      'toggleSourcePin'
+      'toggleSourcePin',
+      'updateSourceMetadata'
     ]),
 
     /**
@@ -103,6 +104,17 @@ export default defineComponent({
      */
     onUnpin(id: string): void {
       this.toggleSourcePin(id, false);
+    },
+
+    /**
+     * @description
+     * Toggles the mute state for a source
+     *
+     * @param id The ID of the source to toggle the mute state for
+     * @param mute The mute state value to toggle to
+     */
+    onToggleMute(id: string, mute: boolean): void {
+      this.updateSourceMetadata(id, { muted: mute });
     },
 
     /**
@@ -175,6 +187,7 @@ export default defineComponent({
           @pin="onPin"
           @edit="onEdit"
           @remove="onRemove"
+          @toggleMute="onToggleMute"
         />
       </div>
     </div>
@@ -187,7 +200,10 @@ export default defineComponent({
       >
         <SourceComp
           :source="source"
+          @edit="onEdit"
           @unpin="onUnpin"
+          @remove="onRemove"
+          @toggleMute="onToggleMute"
         />
       </div>
     </div>

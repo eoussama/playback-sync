@@ -22,3 +22,22 @@ export function loadIcons(): void {
     faPlus, faXmark, faCheck, faPen, faTriangleExclamation
   );
 }
+
+/**
+ * @description
+ * Gets a contextual volume icon
+ *
+ * @param volume The volume value
+ * @param muted The mute state value
+ */
+export function getVolumeIcon(volume: number, muted: boolean): string {
+  if (muted || volume === 0) {
+    return 'volume-xmark';
+  } else if (volume < 30) {
+    return 'volume-off';
+  } else if (volume < 60) {
+    return 'volume-low';
+  } else {
+    return 'volume-high';
+  }
+}
