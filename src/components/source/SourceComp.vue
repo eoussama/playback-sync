@@ -168,6 +168,14 @@ export default defineComponent({
       <div class="source__controls">
         <div class="source__control">
           <ButtonComp
+            type="secondary"
+            :icon="volumeIcon"
+            @click="onToggleMute"
+          />
+        </div>
+
+        <div class="source__control">
+          <ButtonComp
             icon="xmark"
             type="secondary"
             @click="onUnpin"
@@ -268,6 +276,11 @@ export default defineComponent({
       opacity: 0;
       display: none;
 
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+
       transition-duration: 0.2s;
       transition-property: opacity;
     }
@@ -307,7 +320,7 @@ export default defineComponent({
       }
 
       #{$root}__controls {
-        display: block;
+        display: flex;
       }
 
     }

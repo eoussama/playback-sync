@@ -201,6 +201,7 @@ export default defineComponent({
         <SourceComp
           :source="source"
           @unpin="onUnpin"
+          @toggleMute="onToggleMute"
         />
       </div>
     </div>
