@@ -168,6 +168,14 @@ export default defineComponent({
       <div class="source__controls">
         <div class="source__control">
           <ButtonComp
+            icon="pen"
+            type="secondary"
+            @click="onEdit"
+          />
+        </div>
+
+        <div class="source__control">
+          <ButtonComp
             type="secondary"
             :icon="volumeIcon"
             @click="onToggleMute"
