@@ -202,6 +202,7 @@ export default defineComponent({
           :source="source"
           @edit="onEdit"
           @unpin="onUnpin"
+          @remove="onRemove"
           @toggleMute="onToggleMute"
         />
       </div>
