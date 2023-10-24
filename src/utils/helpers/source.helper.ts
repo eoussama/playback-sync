@@ -22,7 +22,7 @@ export class SourceHelper {
   static async init(): Promise<TSource> {
     const metadata: TMetadata = {
       duration: 0, currentTime: 0,
-      speed: 1, end: 0, start: 0,
+      speed: 1, end: 0, start: 0, volume: 1,
       muted: false, playing: false, buffering: false
     };
 
@@ -159,9 +159,10 @@ export class SourceHelper {
    */
   static setVolume(id: string, volume: number): void {
     const player = this.getPlayer(id);
+    const sanitizedVolume = Math.max(Math.min(1, volume), 0);
 
     if (player) {
-      player.volume = volume;
+      player.volume = sanitizedVolume;
     }
   }
 
@@ -258,7 +259,7 @@ export class SourceHelper {
           }
 
           player.onvolumechange = () => {
-            store.updateSourceMetadata(id, { muted: player.muted });
+            store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
           }
 
           player.onratechange = () => {
@@ -296,6 +297,7 @@ export class SourceHelper {
         resolve({
           start: 0,
           muted: video.muted,
+          volume: video.volume,
           playing: !video.paused,
           end: video.duration ?? 0,
           duration: video.duration,

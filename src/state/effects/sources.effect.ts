@@ -127,7 +127,7 @@ export function hookSourcesEffect() {
         }
 
         case 'updateSourceMetadata': {
-          const [_, metadata] = args; // eslint-disable-line
+          const [id, metadata] = args;
 
           if ('playing' in metadata) {
             if (store.sources.every(e => e.metadata.playing === metadata.playing)) {
@@ -136,11 +136,11 @@ export function hookSourcesEffect() {
           }
 
           if ('muted' in metadata) {
+            SourceHelper.mute(id, Boolean(metadata.muted));
+
             if (metadata.muted && store.sources.every(e => e.metadata.muted === metadata.muted)) {
               store.muted = true;
-            }
-
-            else if (!metadata.muted && store.sources.some(e => e.metadata.muted === metadata.muted)) {
+            } else if (!metadata.muted && store.sources.some(e => e.metadata.muted === metadata.muted)) {
               store.muted = false;
             }
           }
