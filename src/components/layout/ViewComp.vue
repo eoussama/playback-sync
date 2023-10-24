@@ -8,6 +8,7 @@ import SourceDetail from '@/components/source/SourceDetail.vue';
 import { PageType } from '@/utils/enums/pageType.enum';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import type { TSource } from '@/utils/types/composition/source.type';
+import { SourceHelper } from '@/utils/helpers/source.helper';
 
 export default defineComponent({
 
@@ -159,6 +160,26 @@ export default defineComponent({
       if (!source.pinned) {
         e.preventDefault();
       }
+    },
+
+    /**
+     * @description
+     * Enables dragging for a source
+     *
+     * @param id The ID of the source to enable the drag for
+     */
+    onDragEnable(id: string): void {
+      SourceHelper.enableDrag(id);
+    },
+
+    /**
+     * @description
+     * Disable dragging for a source
+     *
+     * @param id The ID of the source to disable the drag for
+     */
+    onDragDisable(id: string): void {
+      SourceHelper.disableDrag(id);
     }
   }
 });
@@ -204,6 +225,8 @@ export default defineComponent({
           @unpin="onUnpin"
           @remove="onRemove"
           @toggleMute="onToggleMute"
+          @enableDrag="onDragEnable"
+          @disableDrag="onDragDisable"
         />
       </div>
     </div>
