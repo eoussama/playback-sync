@@ -183,6 +183,32 @@ export class SourceHelper {
 
   /**
    * @description
+   * Elables dragging for a source
+   *
+   * @param id The ID of the source to enable the drag for
+   */
+  static enableDrag(id: string): void {
+    const elementId = `#source-${id}`;
+    const draggable = Draggable.get(elementId);
+
+    draggable.enable();
+  }
+
+  /**
+   * @description
+   * Disables dragging for a source
+   *
+   * @param id The ID of the source to disable the drag for
+   */
+  static disableDrag(id: string): void {
+    const elementId = `#source-${id}`;
+    const draggable = Draggable.get(elementId);
+
+    draggable.disable();
+  }
+
+  /**
+   * @description
    * Pins a source
    *
    * @param id The ID of the source to pin

@@ -1,12 +1,12 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent, ref, type PropType } from 'vue';
 import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 
-import type { TSource } from '@/utils/types/composition/source.type';
 import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
-  emits: ['remove', 'edit', 'pin', 'unpin', 'toggleMute'],
+  emits: ['remove', 'edit', 'pin', 'unpin', 'toggleMute', 'disableDrag', 'enableDrag'],
 
   props: {
     source: Object as PropType<TSource>
@@ -101,7 +101,36 @@ export default defineComponent({
      */
     onUnpin(): void {
       this.$emit('unpin', this.source?.id);
+    },
+
+    /**
+     * @description
+     * Toggles draggability
+     *
+     * @param e The mouse move event object
+     */
+    onMouseMove(e: MouseEvent): void {
+      if (this.source?.pinned) {
+        const resizerEle = this.$refs.resizerRef as HTMLDivElement;
+        const resizerRect = resizerEle.getClientRects().item(0);
+
+        const startX = resizerRect?.left ?? 0;
+        const endX = startX + (resizerRect?.width ?? 0);
+        const startY = resizerRect?.top ?? 0;
+        const endY = startY + (resizerRect?.height ?? 0);
+
+        if (e.x >= startX && e.x <= endX && e.y >= startY && e.y <= endY) {
+          this.$emit('disableDrag', this.source.id);
+        } else {
+          this.$emit('enableDrag', this.source.id);
+        }
+      }
     }
+  },
+
+  setup() {
+    const resizerRef = ref(null);
+    return { resizerRef };
   }
 });
 </script>
@@ -113,6 +142,7 @@ export default defineComponent({
     :id="sourceId"
     :key="source.id"
     :class="{ 'source--pinned': source.pinned }"
+    @mousemove="onMouseMove"
   >
     <div class="source__head">
       <div class="source__title">
@@ -210,6 +240,11 @@ export default defineComponent({
         >
       </video>
     </div>
+
+    <div
+      ref="resizerRef"
+      class="source__resizer"
+    ></div>
   </div>
 </template>
 
@@ -219,6 +254,7 @@ export default defineComponent({
 
   height: 100%;
   overflow: hidden;
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -322,8 +358,26 @@ export default defineComponent({
     }
   }
 
+  &__resizer {
+    cursor: nw-resize;
+    display: none;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    width: 20px;
+    height: 20px;
+
+    z-index: 100;
+  }
+
   &--pinned {
-    max-width: 400px;
+    overflow: auto;
+    resize: horizontal;
+
+    width: 400px;
+    min-width: 172px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
 
     #{$root}__head {
@@ -338,7 +392,10 @@ export default defineComponent({
       #{$root}__controls {
         display: flex;
       }
+    }
 
+    #{$root}__resizer {
+      display: block;
     }
 
     &:hover {
