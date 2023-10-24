@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
 
 export default defineComponent({
   emits: ['volumeUpdated', 'muteToggled'],
@@ -57,15 +58,7 @@ export default defineComponent({
      * The icon to show on the button
      */
     icon(): string {
-      if (this.muted || this.volume === 0) {
-        return 'volume-xmark';
-      } else if (this.volume < 30) {
-        return 'volume-off';
-      } else if (this.volume < 60) {
-        return 'volume-low';
-      } else {
-        return 'volume-high';
-      }
+      return getVolumeIcon(this.volume, this.muted);
     }
   }
 });

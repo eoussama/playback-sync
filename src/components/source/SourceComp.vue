@@ -3,9 +3,10 @@ import { defineComponent, type PropType } from 'vue';
 import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 
 import type { TSource } from '@/utils/types/composition/source.type';
+import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
 
 export default defineComponent({
-  emits: ['remove', 'edit', 'pin', 'unpin'],
+  emits: ['remove', 'edit', 'pin', 'unpin', 'toggleMute'],
 
   props: {
     source: Object as PropType<TSource>
@@ -35,6 +36,17 @@ export default defineComponent({
      */
     sourceUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
+    },
+
+    /**
+     * @description
+     * The icon to show on the button
+     */
+    volumeIcon(): string {
+      const volume = this.source?.metadata?.volume ?? 1;
+      const muted = this.source?.metadata?.muted ?? false;
+
+      return getVolumeIcon(volume * 100, muted);
     }
   },
 
@@ -44,7 +56,7 @@ export default defineComponent({
      * @description
      * Emits remove event
      */
-    onRemove() {
+    onRemove(): void {
       ConfirmHelper
         .open({
           title: 'Deletion',
@@ -61,9 +73,17 @@ export default defineComponent({
 
     /**
      * @description
+     * Emits the mute toggle event
+     */
+    onToggleMute(): void {
+      this.$emit('toggleMute', this.source?.id, !this.source?.metadata.muted);
+    },
+
+    /**
+     * @description
      * Emits edit event
      */
-    onEdit() {
+    onEdit(): void {
       this.$emit('edit', this.source?.id);
     },
 
@@ -110,7 +130,7 @@ export default defineComponent({
       </div>
 
       <div class="source__controls">
-        <div class="source__control">
+        <div class="source__control source__control--contextual">
           <ButtonComp
             icon="trash"
             type="secondary"
@@ -118,7 +138,7 @@ export default defineComponent({
           />
         </div>
 
-        <div class="source__control">
+        <div class="source__control source__control--contextual">
           <ButtonComp
             icon="pen"
             type="secondary"
@@ -126,11 +146,19 @@ export default defineComponent({
           />
         </div>
 
-        <div class="source__control">
+        <div class="source__control source__control--contextual">
           <ButtonComp
             icon="thumbtack"
             type="secondary"
             @click="onPin"
+          />
+        </div>
+
+        <div class="source__control">
+          <ButtonComp
+            type="secondary"
+            :icon="volumeIcon"
+            @click="onToggleMute"
           />
         </div>
       </div>
@@ -251,8 +279,17 @@ export default defineComponent({
     flex-direction: row;
     justify-content: center;
 
-    #{$root}__control:not(:last-of-type) {
-      margin-right: 5px;
+    #{$root}__control {
+      &--contextual {
+        opacity: 0;
+
+        transition-duration: 0.2s;
+        transition-property: opacity;
+      }
+
+      &:not(:last-of-type) {
+        margin-right: 5px;
+      }
     }
   }
 
@@ -279,6 +316,12 @@ export default defineComponent({
       #{$root}__controls {
         opacity: 1;
       }
+    }
+  }
+
+  &:hover {
+    #{$root}__controls #{$root}__control--contextual {
+      opacity: 1;
     }
   }
 }
