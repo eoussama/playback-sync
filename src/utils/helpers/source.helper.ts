@@ -290,20 +290,21 @@ export class SourceHelper {
    */
   private static loadSourceMetadata(url: string): Promise<TMetadata> {
     return new Promise(resolve => {
+      const store = useSourcesStore();
       const video = document.createElement('video');
       video.src = url;
 
       video.onerror = video.onloadedmetadata = () => {
         resolve({
           start: 0,
-          muted: video.muted,
-          volume: video.volume,
-          playing: !video.paused,
+          speed: store.speed,
+          muted: store.muted,
+          volume: store.volume,
+          playing: store.playing,
           end: video.duration ?? 0,
           duration: video.duration,
-          speed: video.playbackRate,
-          currentTime: video.currentTime,
-          buffering: video.readyState < ReadyState.HaveEnoughData
+          buffering: video.readyState < ReadyState.HaveEnoughData,
+          currentTime: store.longestSource.metadata?.currentTime ?? 0
         });
 
         video.remove();
