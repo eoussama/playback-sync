@@ -247,6 +247,8 @@ export default defineComponent({
 
   &__form {
     margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.5);
 
     #{$root}__input {
       margin-bottom: 15px;
