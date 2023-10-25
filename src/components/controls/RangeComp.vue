@@ -129,6 +129,11 @@ export default defineComponent({
     }
   },
 
+  mounted(): void {
+    this.endValue = this.end;
+    this.startValue = this.start;
+  },
+
   setup() {
     const elementRef = ref(null);
     return { elementRef };
