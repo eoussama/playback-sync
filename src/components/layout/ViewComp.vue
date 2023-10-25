@@ -5,10 +5,11 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
-import { PageType } from '@/utils/enums/pageType.enum';
+import { DragHelper } from '@/utils/helpers/drag.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+
+import { PageType } from '@/utils/enums/pageType.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
-import { SourceHelper } from '@/utils/helpers/source.helper';
 
 export default defineComponent({
 
@@ -169,7 +170,7 @@ export default defineComponent({
      * @param id The ID of the source to enable the drag for
      */
     onDragEnable(id: string): void {
-      SourceHelper.enableDrag(id);
+      DragHelper.enable(id);
     },
 
     /**
@@ -179,7 +180,7 @@ export default defineComponent({
      * @param id The ID of the source to disable the drag for
      */
     onDragDisable(id: string): void {
-      SourceHelper.disableDrag(id);
+      DragHelper.disable(id);
     }
   }
 });
