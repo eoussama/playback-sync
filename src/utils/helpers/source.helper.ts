@@ -1,8 +1,9 @@
 import { v4 } from 'uuid';
-import { Draggable } from 'gsap/Draggable';
 
 import { ReadyState } from '../enums/readyState.enum';
 import { useSourcesStore } from '@/state/stores/sources.store';
+
+import { DragHelper } from './drag.helper';
 
 import type { TMetadata } from '../types/composition/metadata.type';
 import type { TSource } from '@/utils/types/composition/source.type';
@@ -183,42 +184,15 @@ export class SourceHelper {
 
   /**
    * @description
-   * Elables dragging for a source
-   *
-   * @param id The ID of the source to enable the drag for
-   */
-  static enableDrag(id: string): void {
-    const elementId = `#source-${id}`;
-    const draggable = Draggable.get(elementId);
-
-    draggable.enable();
-  }
-
-  /**
-   * @description
-   * Disables dragging for a source
-   *
-   * @param id The ID of the source to disable the drag for
-   */
-  static disableDrag(id: string): void {
-    const elementId = `#source-${id}`;
-    const draggable = Draggable.get(elementId);
-
-    draggable.disable();
-  }
-
-  /**
-   * @description
    * Pins a source
    *
    * @param id The ID of the source to pin
    */
   static pin(id: string): void {
     const elementId = `#source-${id}`;
-    const container = document.querySelector('#app .view');
-    const options = { bounds: container };
+    const container = document.querySelector('#app .view') as HTMLDivElement;
 
-    setTimeout(() => Draggable.create(elementId, options));
+    DragHelper.create(elementId, container);
   }
 
   /**
@@ -229,13 +203,7 @@ export class SourceHelper {
    */
   static unpin(id: string): void {
     const elementId = `#source-${id}`;
-    const draggable = Draggable.get(elementId);
-    const element = document.querySelector(elementId) as HTMLDivElement;
-
-    setTimeout(() => {
-      draggable.kill();
-      element.style.transform = 'none';
-    });
+    DragHelper.destroy(elementId);
   }
 
   /**

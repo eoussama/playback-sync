@@ -5,10 +5,11 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
-import { PageType } from '@/utils/enums/pageType.enum';
+import { DragHelper } from '@/utils/helpers/drag.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+
+import { PageType } from '@/utils/enums/pageType.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
-import { SourceHelper } from '@/utils/helpers/source.helper';
 
 export default defineComponent({
 
@@ -169,7 +170,7 @@ export default defineComponent({
      * @param id The ID of the source to enable the drag for
      */
     onDragEnable(id: string): void {
-      SourceHelper.enableDrag(id);
+      DragHelper.enable(id);
     },
 
     /**
@@ -179,7 +180,7 @@ export default defineComponent({
      * @param id The ID of the source to disable the drag for
      */
     onDragDisable(id: string): void {
-      SourceHelper.disableDrag(id);
+      DragHelper.disable(id);
     }
   }
 });
@@ -190,6 +191,24 @@ export default defineComponent({
     class="view"
     :class="{ 'view--empty': empty }"
   >
+    <div class="sources sources--pinned">
+      <div
+        v-for="source in pinnedSources"
+        class="source"
+        :key="source.id"
+      >
+        <SourceComp
+          :source="source"
+          @edit="onEdit"
+          @unpin="onUnpin"
+          @remove="onRemove"
+          @toggleMute="onToggleMute"
+          @enableDrag="onDragEnable"
+          @disableDrag="onDragDisable"
+        />
+      </div>
+    </div>
+
     <div
       class="sources sources--unpinned"
       :style="{ gridTemplateColumns }"
@@ -212,32 +231,15 @@ export default defineComponent({
         />
       </div>
     </div>
-
-    <div class="sources sources--pinned">
-      <div
-        v-for="source in pinnedSources"
-        class="source"
-        :key="source.id"
-      >
-        <SourceComp
-          :source="source"
-          @edit="onEdit"
-          @unpin="onUnpin"
-          @remove="onRemove"
-          @toggleMute="onToggleMute"
-          @enableDrag="onDragEnable"
-          @disableDrag="onDragDisable"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .view {
   flex: 1;
-
   overflow: auto;
+  position: relative;
+
   box-sizing: border-box;
   max-height: calc(100vh - 208px);
 
@@ -261,6 +263,17 @@ export default defineComponent({
       padding: $gap;
       row-gap: $gap;
       column-gap: $gap;
+    }
+
+    &--pinned {
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      height: 0;
+      width: 0;
+
+      z-index: 1000;
     }
   }
 
