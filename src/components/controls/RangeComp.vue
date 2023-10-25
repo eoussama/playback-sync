@@ -67,6 +67,8 @@ export default defineComponent({
       const elementThumb = elementRef.querySelector('.range__thumb') as HTMLDivElement;
       const elementStart = elementRef.querySelector('.range__start') as HTMLInputElement;
       const elementEnd = elementRef.querySelector('.range__end') as HTMLInputElement;
+      const elementStartLabel = elementRef.querySelector('.range__value--start') as HTMLDivElement;
+      const elementEndLabel = elementRef.querySelector('.range__value--end') as HTMLDivElement;
 
       const trackRect = elementTrack.getClientRects().item(0);
       const trackWidth = trackRect?.width ?? 0;
@@ -79,6 +81,9 @@ export default defineComponent({
 
       elementThumb.style.left = `${thumbStart}px`;
       elementThumb.style.width = `${thumbEnd}px`;
+
+      elementStartLabel.style.transform = `translateX(-${start}%)`;
+      elementEndLabel.style.transform = `translateX(${100 - end}%)`;
 
       elementStart.value = this.startValue.toString();
       elementEnd.value = this.endValue.toString();
@@ -127,6 +132,11 @@ export default defineComponent({
     onEndChanged(): void {
       this.$emit('endChanged', this.endValue);
     }
+  },
+
+  mounted(): void {
+    this.endValue = this.end;
+    this.startValue = this.start;
   },
 
   setup() {
@@ -262,11 +272,11 @@ export default defineComponent({
           background-color: var(--color-primary);
 
           &--start {
-            left: -6px;
+            left: 0px;
           }
 
           &--end {
-            right: -6px;
+            right: 0px;
           }
         }
       }
@@ -298,14 +308,19 @@ export default defineComponent({
       }
 
       &::-webkit-slider-thumb {
-        padding: 0 15px;
+        padding: 0 20px;
         opacity: 0;
       }
     }
   }
 
   &--disabled {
+    #{$root}__wrapper {
+      pointer-events: none;
+    }
+
     #{$root}__track {
+      opacity: 0.2;
       background-color: rgb(235, 235, 235);
     }
 
