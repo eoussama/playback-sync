@@ -191,6 +191,24 @@ export default defineComponent({
     class="view"
     :class="{ 'view--empty': empty }"
   >
+    <div class="sources sources--pinned">
+      <div
+        v-for="source in pinnedSources"
+        class="source"
+        :key="source.id"
+      >
+        <SourceComp
+          :source="source"
+          @edit="onEdit"
+          @unpin="onUnpin"
+          @remove="onRemove"
+          @toggleMute="onToggleMute"
+          @enableDrag="onDragEnable"
+          @disableDrag="onDragDisable"
+        />
+      </div>
+    </div>
+
     <div
       class="sources sources--unpinned"
       :style="{ gridTemplateColumns }"
@@ -213,32 +231,15 @@ export default defineComponent({
         />
       </div>
     </div>
-
-    <div class="sources sources--pinned">
-      <div
-        v-for="source in pinnedSources"
-        class="source"
-        :key="source.id"
-      >
-        <SourceComp
-          :source="source"
-          @edit="onEdit"
-          @unpin="onUnpin"
-          @remove="onRemove"
-          @toggleMute="onToggleMute"
-          @enableDrag="onDragEnable"
-          @disableDrag="onDragDisable"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .view {
   flex: 1;
-
   overflow: auto;
+  position: relative;
+
   box-sizing: border-box;
   max-height: calc(100vh - 208px);
 
@@ -262,6 +263,17 @@ export default defineComponent({
       padding: $gap;
       row-gap: $gap;
       column-gap: $gap;
+    }
+
+    &--pinned {
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      height: 0;
+      width: 0;
+
+      z-index: 1000;
     }
   }
 
