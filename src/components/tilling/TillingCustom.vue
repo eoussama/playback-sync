@@ -50,7 +50,9 @@ export default defineComponent({
 
     <div class="tilling-custom__controls">
       <ButtonComp
+        icon="check"
         label="Apply"
+        type="primary"
         @click="onValidate"
       />
     </div>
@@ -58,5 +60,15 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-.tilling-custom {}
+.tilling-custom {
+  &__body {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.5);
+  }
+
+  &__controls {
+    text-align: right;
+  }
+}
 </style>
