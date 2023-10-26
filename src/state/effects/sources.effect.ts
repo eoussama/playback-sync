@@ -21,7 +21,7 @@ export function hookSourcesEffect() {
       switch (name) {
         case 'addSource': {
           const [{ id }] = args;
-          SourceHelper.hookPlayer(id);
+          SourceHelper.hook(id);
 
           break;
         }
@@ -106,7 +106,7 @@ export function hookSourcesEffect() {
 
           setTimeout(() => {
             [id1, id2].forEach(id => {
-              SourceHelper.hookPlayer(id);
+              SourceHelper.hook(id);
               SourceHelper.setTime(id, cachedCurrentTime);
             })
           });
