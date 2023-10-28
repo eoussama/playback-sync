@@ -150,7 +150,7 @@ export class SourceHelper {
     const player = this.getPlayer(id);
 
     if (player) {
-      player.currentTime = time;
+      player.currentTime = Math.min(time, player.duration - 0.1);
     }
   }
 
@@ -234,8 +234,10 @@ export class SourceHelper {
       .then(player => {
         const store = useSourcesStore();
 
-        player.ontimeupdate = () => {
-          store.updateSourceMetadata(id, { currentTime: player.currentTime });
+        player.onplay = () => {
+          if (!store.bufferPause) {
+            store.updateSourceMetadata(id, { playing: true });
+          }
         }
 
         player.onpause = () => {
@@ -244,10 +246,8 @@ export class SourceHelper {
           }
         }
 
-        player.onplay = () => {
-          if (!store.bufferPause) {
-            store.updateSourceMetadata(id, { playing: true });
-          }
+        player.ontimeupdate = () => {
+          store.updateSourceMetadata(id, { currentTime: player.currentTime });
         }
 
         player.onvolumechange = () => {

@@ -78,7 +78,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'seek': {
+        case 'onSeek': {
           for (const source of store.sources) {
             SourceHelper.seek(source.id, ...args);
           }
@@ -86,7 +86,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'setTimeline': {
+        case 'onTimelineSet': {
           for (const source of store.sources) {
             SourceHelper.setTime(source.id, ...args);
           }
