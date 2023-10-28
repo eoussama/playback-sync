@@ -12,8 +12,8 @@ export default defineComponent({
       'setMuted',
       'setVolume',
       'setSpeed',
-      'setTimeline',
-      'seek'
+      'onSeek',
+      'onTimelineSet'
     ]),
 
     /**
@@ -29,7 +29,7 @@ export default defineComponent({
      * Seek timeline backward
      */
     onBackward(): void {
-      this.seek(-10);
+      this.onSeek(-10);
     },
 
     /**
@@ -37,7 +37,7 @@ export default defineComponent({
      * Seek timeline forward
      */
     onForward(): void {
-      this.seek(10);
+      this.onSeek(10);
     },
 
     /**
@@ -73,7 +73,7 @@ export default defineComponent({
      * Updates the sources timelines
      */
     onTimelineChanged(time: number) {
-      this.setTimeline(time);
+      this.onTimelineSet(time);
     }
   },
 

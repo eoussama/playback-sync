@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import { ReadyState } from '../enums/readyState.enum';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
+import { DOMHelper } from './dom.helper';
 import { DragHelper } from './drag.helper';
 
 import type { TMetadata } from '../types/composition/metadata.type';
@@ -46,11 +47,10 @@ export class SourceHelper {
    * Creates a new source
    *
    * @param url The URL of the source
-   * @param title The title of the source
    */
   static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
-    const sourceMetadata = await this.loadSourceMetadata(url);
+    const sourceMetadata = await this.load(url);
 
     return {
       id,
@@ -64,7 +64,7 @@ export class SourceHelper {
     };
   }
 
-  /**
+  /**k
    * @description
    * refreshes the source's player
    *
@@ -84,7 +84,8 @@ export class SourceHelper {
    *
    * @param id The ID of the source
    */
-  static play(id: string): void {
+  static async play(id: string): Promise<void> {
+    await this.sync();
     const player = this.getPlayer(id);
 
     if (player) {
@@ -128,7 +129,8 @@ export class SourceHelper {
    * @param id The ID of the source
    * @param time The number of seconds to seek to
    */
-  static seek(id: string, time: number): void {
+  static async seek(id: string, time: number): Promise<void> {
+    await this.sync();
     const player = this.getPlayer(id);
 
     if (player) {
@@ -143,11 +145,12 @@ export class SourceHelper {
    * @param id The ID of the source
    * @param time The time to seek to
    */
-  static setTime(id: string, time: number): void {
+  static async setTime(id: string, time: number): Promise<void> {
+    await this.sync();
     const player = this.getPlayer(id);
 
     if (player) {
-      player.currentTime = time;
+      player.currentTime = Math.min(time, player.duration - 0.1);
     }
   }
 
@@ -222,58 +225,47 @@ export class SourceHelper {
    *
    * @param id The ID of the player
    */
-  static hookPlayer(id: string): void {
-    const target = document.getElementById('app') as HTMLDivElement;
-    const options = { childList: true, subtree: true };
+  static hook(id: string): void {
     const elementId = `#player-${id}`;
-    const observer = new MutationObserver((mutationList, observer) => {
-      const mutations = mutationList.flatMap(e => e.addedNodes);
-      const nodes = mutations.flatMap(e => e.item(0)) as Array<HTMLDivElement>;
-      const sources = nodes.filter(e => e?.classList?.contains('source'));
-      const players = sources.map(e => e.querySelector(elementId)) as Array<HTMLVideoElement>;
 
-      for (const player of players) {
-        if (player && elementId.endsWith(player?.id ?? '')) {
-          const store = useSourcesStore();
+    DOMHelper
+      .watch(elementId)
+      .then(e => e[0] as HTMLVideoElement)
+      .then(player => {
+        const store = useSourcesStore();
 
-          player.ontimeupdate = () => {
-            store.updateSourceMetadata(id, { currentTime: player.currentTime });
+        player.onplay = () => {
+          if (!store.bufferPause) {
+            store.updateSourceMetadata(id, { playing: true });
           }
-
-          player.onpause = () => {
-            if (!store.bufferPause) {
-              store.updateSourceMetadata(id, { playing: false });
-            }
-          }
-
-          player.onplay = () => {
-            if (!store.bufferPause) {
-              store.updateSourceMetadata(id, { playing: true });
-            }
-          }
-
-          player.onvolumechange = () => {
-            store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
-          }
-
-          player.onratechange = () => {
-            store.updateSourceMetadata(id, { speed: player.playbackRate });
-          }
-
-          player.onwaiting = () => {
-            store.updateSourceMetadata(id, { buffering: true });
-          }
-
-          player.oncanplay = () => {
-            store.updateSourceMetadata(id, { buffering: false });
-          }
-
-          observer.disconnect();
         }
-      }
-    });
 
-    observer.observe(target, options);
+        player.onpause = () => {
+          if (!store.bufferPause) {
+            store.updateSourceMetadata(id, { playing: false });
+          }
+        }
+
+        player.ontimeupdate = () => {
+          store.updateSourceMetadata(id, { currentTime: player.currentTime });
+        }
+
+        player.onvolumechange = () => {
+          store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
+        }
+
+        player.onratechange = () => {
+          store.updateSourceMetadata(id, { speed: player.playbackRate });
+        }
+
+        player.onwaiting = () => {
+          store.updateSourceMetadata(id, { buffering: true });
+        }
+
+        player.oncanplay = () => {
+          store.updateSourceMetadata(id, { buffering: false });
+        }
+      });
   }
 
   /**
@@ -282,7 +274,7 @@ export class SourceHelper {
    *
    * @param url The URL to load
    */
-  private static loadSourceMetadata(url: string): Promise<TMetadata> {
+  private static load(url: string): Promise<TMetadata> {
     return new Promise(resolve => {
       const store = useSourcesStore();
       const video = document.createElement('video');
@@ -304,5 +296,48 @@ export class SourceHelper {
         video.remove();
       }
     });
+  }
+
+  /**
+   * @description
+   * Checks if a player is fully loaded with no buffering
+   *
+   * @param player The player element to check
+   */
+  private static isLoaded(player: HTMLVideoElement): Promise<boolean> {
+    return new Promise(resolve => {
+      if (player.readyState === ReadyState.HaveEnoughData) {
+        resolve(true);
+      } else {
+        const listener = () => {
+          if (player.readyState === ReadyState.HaveEnoughData) {
+            resolve(true);
+
+            player.removeEventListener('canplay', listener);
+            player.removeEventListener('canplaythrough', listener);
+          }
+        };
+
+        player.addEventListener('canplay', listener);
+        player.addEventListener('canplaythrough', listener);
+      }
+    });
+  }
+
+  /**
+   * @description
+   * Makes sure all sources are loaded
+   */
+  private static async sync(): Promise<void> {
+    const store = useSourcesStore();
+    const sources = store.sources.slice(0);
+
+    const promises = sources.map(source => DOMHelper
+      .watch(`#player-${source.id}`)
+      .then(e => e[0] as HTMLVideoElement)
+      .then(this.isLoaded)
+    );
+
+    await Promise.all(promises);
   }
 }

@@ -96,12 +96,12 @@ export const useSourcesStore = defineStore('sources', {
 
     /**
      * @description
-     * Notify the sources that the timeline needs to be seeked
+     * Notifies the sources that the timeline needs to be seeked
      * to a specific point relative to its current position.
      *
      * @param time The time to seek
      */
-    seek(time: number): void { }, // eslint-disable-line
+    onSeek(time: number): void { }, // eslint-disable-line
 
     /**
      * @description
@@ -109,7 +109,7 @@ export const useSourcesStore = defineStore('sources', {
      *
      * @param time The time to seek to
      */
-    setTimeline(time: number): void { }, // eslint-disable-line
+    onTimelineSet(time: number): void { }, // eslint-disable-line
 
     /**
      * @description
