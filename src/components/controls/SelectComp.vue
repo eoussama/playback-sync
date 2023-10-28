@@ -6,8 +6,8 @@ export default defineComponent({
   emits: ['update:modelValue', 'changed'],
 
   props: {
-    modelValue: String,
     placeholder: String,
+    modelValue: [String, Number],
     options: {
       default: () => [],
       type: Array as PropType<Array<TOption>>
