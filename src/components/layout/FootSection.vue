@@ -16,7 +16,7 @@ export default defineComponent({});
       </span>
 
       <span class="foot__text">
-        Playback Sync
+        Playback Sync • v0.2.0
       </span>
     </a>
   </div>
