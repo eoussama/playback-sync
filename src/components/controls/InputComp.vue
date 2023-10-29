@@ -8,6 +8,7 @@ export default defineComponent({
   props: {
     min: Number,
     label: String,
+    hasError: Boolean,
     placeholder: String,
     modelValue: [String, Number],
     type: {
@@ -35,7 +36,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :class="{ 'input--error': hasError }"
+  >
     <label class="input__wrapper">
       <div
         v-if="label"
@@ -78,12 +82,20 @@ export default defineComponent({
       border: 1px solid var(--color-secondary);
 
       color: var(--color-primary);
+
       font-size: 16px;
       font-family: var(--font-family-primary);
       font-weight: var(--font-weight-regular);
 
+      transition-duration: 0.2s;
+      transition-property: color border-color;
+
       &::placeholder {
+        font-weight: var(--font-weight-light);
         color: hsl(var(--color-secondary-hsl), 80%);
+
+        transition-duration: 0.2s;
+        transition-property: color;
       }
 
       @extend %focusable;
@@ -92,6 +104,20 @@ export default defineComponent({
     &:focus-within {
       #{$root}__label {
         color: hsl(var(--color-secondary-hsl), 60%);
+      }
+    }
+  }
+
+  &--error {
+    #{$root}__label {
+      color: var(--color-error) !important;
+    }
+
+    #{$root}__input {
+      border-color: var(--color-error) !important;
+
+      &::placeholder {
+        color: var(--color-error);
       }
     }
   }
