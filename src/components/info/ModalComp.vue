@@ -43,6 +43,7 @@ export default defineComponent({
           />
         </div>
       </div>
+
       <div class="modal__body">
         <component
           :modalId="modal.id"
@@ -63,15 +64,19 @@ export default defineComponent({
   top: 0;
   left: 0;
 
+  overflow: auto;
+  box-sizing: border-box;
   backdrop-filter: blur(5px);
   background-color: rgba(var(--color-primary-rgb), 0.5);
 
   width: 100vw;
   height: 100vh;
 
-  display: flex;
+  padding: $padding;
+
+  display: grid;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
 
   &__element {
     overflow: hidden;
@@ -81,6 +86,10 @@ export default defineComponent({
 
     background-color: white;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+
+    width: 100%;
+    height: min-content;
+    max-width: 650px;
 
     animation-name: fadeIn;
     animation-duration: 0.2s;
