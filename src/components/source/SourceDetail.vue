@@ -2,11 +2,13 @@
 import { defineComponent, type PropType } from 'vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
+import { Validation } from '@/utils/enums/validation.enum';
 import { ReadyState } from '@/utils/enums/readyState.enum';
 
 import { TimeHelper } from '@/utils/helpers/time.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
+import { ValidationHelper } from '@/utils/helpers/validation.helper';
 
 import type { TSource } from '@/utils/types/composition/source.type';
 import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
@@ -66,7 +68,7 @@ export default defineComponent({
      */
     isInputValid(input: keyof TSource): boolean {
       const source: any = this.source ?? {};
-      return (source[input].length ?? 0) > 0;
+      return !ValidationHelper.isInvalid(input, source[input]);
     },
 
     /**
@@ -76,7 +78,11 @@ export default defineComponent({
      * @param input The name if the input to show the error for
      */
     canShowError(input: keyof TSource): boolean {
-      return !this.isInputValid(input) && this.submitted;
+      if (input === 'url') {
+        return (!this.isInputValid(input) || !this.previewLoaded) && this.submitted;
+      } else {
+        return !this.isInputValid(input) && this.submitted;
+      }
     },
 
     /**
@@ -180,6 +186,32 @@ export default defineComponent({
      */
     previewUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
+    },
+
+    /**
+     * @description
+     * The placeholder of the title input
+     */
+    titleError(): string {
+      const source: any = this.source ?? {};
+      const error = ValidationHelper.isInvalid('title', source.title);
+
+      return ValidationHelper.getErrorMessage(error);
+    },
+
+    /**
+     * @description
+     * The placeholder of the URL input
+     */
+    urlError(): string {
+      const source: any = this.source ?? {};
+      const error = ValidationHelper.isInvalid('url', source.url);
+
+      return error !== false
+        ? ValidationHelper.getErrorMessage(error)
+        : !this.previewLoaded
+          ? ValidationHelper.getErrorMessage(Validation.URLInvalid)
+          : '';
     }
   },
 
@@ -200,6 +232,7 @@ export default defineComponent({
           type="text"
           label="Source Title"
           v-model="source.title"
+          :error="titleError"
           :hasError="canShowError('title')"
           placeholder="Enter a title for the source"
         />
@@ -210,6 +243,7 @@ export default defineComponent({
           type="text"
           label="Source URL"
           v-model="source.url"
+          :error="urlError"
           :hasError="canShowError('url')"
           placeholder="Enter the URL of the source"
         />
