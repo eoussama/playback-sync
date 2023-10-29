@@ -15,6 +15,7 @@ export default defineComponent({
 
   data: (): TSourceDetailType => ({
     source: null,
+    submitted: false,
     previewLoaded: false
   }),
 
@@ -54,7 +55,28 @@ export default defineComponent({
      * Checks if the form is valid
      */
     isFormValid(): boolean {
-      return (this.source?.title?.length ?? 0) > 0 && (this.source?.url?.length ?? 0) > 0;
+      return this.isInputValid('title') && this.isInputValid('url');
+    },
+
+    /**
+     * @description
+     * Checks if an input is valid
+     *
+     * @param input The name of the input
+     */
+    isInputValid(input: keyof TSource): boolean {
+      const source: any = this.source ?? {};
+      return (source[input].length ?? 0) > 0;
+    },
+
+    /**
+     * @description
+     * Checks if the validion error can be shown for a specific input
+     *
+     * @param input The name if the input to show the error for
+     */
+    canShowError(input: keyof TSource): boolean {
+      return !this.isInputValid(input) && this.submitted;
     },
 
     /**
@@ -62,6 +84,7 @@ export default defineComponent({
      * Resets the form
      */
     async onClear(): Promise<void> {
+      this.submitted = false;
       this.source = await SourceHelper.reset(this.source?.id ?? '');
     },
 
@@ -70,6 +93,8 @@ export default defineComponent({
      * Returns the source
      */
     async onValidate(): Promise<void> {
+      this.submitted = true;
+
       if (this.isFormValid()) {
         if (this.modalId) {
           ModalHelper.close(this.modalId, this.source);
@@ -175,6 +200,7 @@ export default defineComponent({
           type="text"
           label="Source Title"
           v-model="source.title"
+          :hasError="canShowError('title')"
           placeholder="Enter a title for the source"
         />
       </div>
@@ -184,6 +210,7 @@ export default defineComponent({
           type="text"
           label="Source URL"
           v-model="source.url"
+          :hasError="canShowError('url')"
           placeholder="Enter the URL of the source"
         />
       </div>

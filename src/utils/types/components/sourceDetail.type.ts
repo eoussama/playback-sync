@@ -17,6 +17,12 @@ export type TSourceDetailType = {
 
   /**
    * @description
+   * If the main form has been submitted
+   */
+  submitted: boolean;
+
+  /**
+   * @description
    * If the preview is loaded
    */
   previewLoaded: boolean
