@@ -43,7 +43,7 @@ export default defineComponent({
       Tilling Custom
 
       <InputComp
-        min="1"
+        :min="1"
         type="number"
         v-model="tilling"
       />

@@ -8,8 +8,8 @@ export default defineComponent({
   props: {
     min: Number,
     label: String,
-    modelValue: String,
     placeholder: String,
+    modelValue: [String, Number],
     type: {
       type: String,
       default: 'text'
