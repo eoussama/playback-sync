@@ -11,6 +11,10 @@ export default defineComponent({
     hasError: Boolean,
     placeholder: String,
     modelValue: [String, Number],
+    error: {
+      type: String,
+      default: 'Invalid value'
+    },
     type: {
       type: String,
       default: 'text'
@@ -55,6 +59,17 @@ export default defineComponent({
         @input="onInput"
       />
     </label>
+
+    <div
+      v-if="hasError"
+      class="input__error"
+    >
+      <font-awesome-icon
+        icon="triangle-exclamation"
+        class="input__error-icon"
+      />
+      <span class="input__error-message">{{ error }}</span>
+    </div>
   </div>
 </template>
 
@@ -104,6 +119,43 @@ export default defineComponent({
     &:focus-within {
       #{$root}__label {
         color: hsl(var(--color-secondary-hsl), 60%);
+      }
+    }
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+
+    margin-top: 5px;
+    color: var(--color-error);
+
+    animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+
+    &-message {
+      font-size: 13px;
+      font-weight: var(--font-weight-light);
+    }
+
+    &-icon {
+      opacity: 0.7;
+      margin-right: 5px;
+
+      font-size: 11px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   }
