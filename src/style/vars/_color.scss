@@ -9,3 +9,7 @@ $color-primary-hsl: color.colorToHsl($color-primary);
 $color-secondary: #dddbf1;
 $color-secondary-rgb: color.colorToRgb($color-secondary);
 $color-secondary-hsl: color.colorToHsl($color-secondary);
+
+$color-error: #e43922;
+$color-error-rgb: color.colorToRgb($color-error);
+$color-error-hsl: color.colorToHsl($color-error);
