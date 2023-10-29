@@ -25,7 +25,7 @@ export default defineComponent({
      * Validates the custom tilling value
      */
     onValidate(): void {
-      if (this.modalId) {
+      if (this.modalId && this.tilling > 0) {
         ModalHelper.close(this.modalId, { value: this.tilling });
       }
     }
@@ -41,6 +41,7 @@ export default defineComponent({
   <div class="tilling-custom">
     <div class="tilling-custom__body">
       Tilling Custom
+
       <InputComp
         min="1"
         type="number"
