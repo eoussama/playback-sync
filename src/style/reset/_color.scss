@@ -11,6 +11,10 @@
   --color-secondary-rgb: #{color.$color-secondary-rgb};
   --color-secondary-hsl: #{color.$color-secondary-hsl};
 
+  --color-error: #{color.$color-error};
+  --color-error-rgb: #{color.$color-error-rgb};
+  --color-error-hsl: #{color.$color-error-hsl};
+
   --color-text: var(--color-primary);
   --color-text-rgb: var(--color-primary-rgb);
   --color-text-hsl: var(--color-primary-hsl);
