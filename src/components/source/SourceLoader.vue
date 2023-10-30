@@ -7,13 +7,21 @@ import { ReadyState } from '@/utils/enums/readyState.enum';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
+  emits: ['load'],
 
   data: () => ({
     loading: false
   }),
 
   props: {
-    buffering: Boolean
+    buffering: Boolean,
+    forceLoad: Boolean
+  },
+
+  watch: {
+    loading() {
+      this.$emit('load', this.loading);
+    }
   },
 
   computed: {
@@ -24,7 +32,7 @@ export default defineComponent({
      * Checks if source is loading
      */
     isLoading(): boolean {
-      return this.loading || this.buffering || this.bufferPause;
+      return this.loading || this.buffering || this.bufferPause || this.forceLoad;
     }
   },
 
@@ -43,6 +51,8 @@ export default defineComponent({
         player.addEventListener('stalled', listener);
         player.addEventListener('canplay', listener);
         player.addEventListener('waiting', listener);
+        player.addEventListener('suspend', listener);
+        player.addEventListener('loadstart', listener);
         player.addEventListener('loadeddata', listener);
         player.addEventListener('loadedmetadata', listener);
         player.addEventListener('canplaythrough', listener);
@@ -59,8 +69,8 @@ export default defineComponent({
 <template>
   <div
     class="loader"
-    :class="{ 'loader--loading': isLoading }"
     ref="elementRef"
+    :class="{ 'loader--loading': isLoading }"
   >
     <div
       v-if="isLoading"
