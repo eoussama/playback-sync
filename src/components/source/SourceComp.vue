@@ -391,6 +391,7 @@ export default defineComponent({
     #{$root}__body {
       #{$root}__player {
         border-radius: 4px;
+        margin-bottom: -7px;
       }
 
       #{$root}__controls {
