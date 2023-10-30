@@ -67,6 +67,8 @@ export default defineComponent({
   transition-duration: 0.2s;
   transition-property: background-color outline;
 
+  user-select: none;
+
   @extend %focusable;
   @extend %selectable;
 
