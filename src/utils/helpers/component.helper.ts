@@ -12,6 +12,7 @@ import TooltipComp from '@/components/info/TooltipComp.vue';
 import ConfirmComp from '@/components/info/ConfirmComp.vue';
 
 import SourceComp from '@/components/source/SourceComp.vue';
+import SourceEmpty from '@/components/source/SourceEmpty.vue';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import TillingComp from '@/components/tilling/TillingComp.vue';
@@ -58,6 +59,7 @@ export function addComponent(app: App<Element>) {
   app.component('PlayPauseComp', PlayPauseComp);
 
   app.component('SourceComp', SourceComp);
+  app.component('SourceEmpty', SourceEmpty);
   app.component('SourceDetail', SourceDetail);
 
   app.component('font-awesome-icon', FontAwesomeIcon);

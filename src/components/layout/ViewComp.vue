@@ -191,46 +191,48 @@ export default defineComponent({
     class="view"
     :class="{ 'view--empty': empty }"
   >
-    <div class="sources sources--pinned">
-      <div
-        v-for="source in pinnedSources"
-        class="source"
-        :key="source.id"
-      >
-        <SourceComp
-          :source="source"
-          @edit="onEdit"
-          @unpin="onUnpin"
-          @remove="onRemove"
-          @toggleMute="onToggleMute"
-          @enableDrag="onDragEnable"
-          @disableDrag="onDragDisable"
-        />
+    <SourceEmpty :isEmpty="empty">
+      <div class="sources sources--pinned">
+        <div
+          v-for="source in pinnedSources"
+          class="source"
+          :key="source.id"
+        >
+          <SourceComp
+            :source="source"
+            @edit="onEdit"
+            @unpin="onUnpin"
+            @remove="onRemove"
+            @toggleMute="onToggleMute"
+            @enableDrag="onDragEnable"
+            @disableDrag="onDragDisable"
+          />
+        </div>
       </div>
-    </div>
 
-    <div
-      class="sources sources--unpinned"
-      :style="{ gridTemplateColumns }"
-    >
       <div
-        v-for="source in unpinnedSources"
-        class="source"
-        :key="source.id"
-        :draggable="!source.pinned"
-        @drop="e => onDrop(source.id, e)"
-        @dragstart="e => onDrag(source.id, e)"
-        @dragover="e => onDragOver(source.id, e)"
+        class="sources sources--unpinned"
+        :style="{ gridTemplateColumns }"
       >
-        <SourceComp
-          :source="source"
-          @pin="onPin"
-          @edit="onEdit"
-          @remove="onRemove"
-          @toggleMute="onToggleMute"
-        />
+        <div
+          v-for="source in unpinnedSources"
+          class="source"
+          :key="source.id"
+          :draggable="!source.pinned"
+          @drop="e => onDrop(source.id, e)"
+          @dragstart="e => onDrag(source.id, e)"
+          @dragover="e => onDragOver(source.id, e)"
+        >
+          <SourceComp
+            :source="source"
+            @pin="onPin"
+            @edit="onEdit"
+            @remove="onRemove"
+            @toggleMute="onToggleMute"
+          />
+        </div>
       </div>
-    </div>
+    </SourceEmpty>
   </div>
 </template>
 
