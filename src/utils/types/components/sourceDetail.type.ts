@@ -17,6 +17,12 @@ export type TSourceDetailType = {
 
   /**
    * @description
+   * If the form has been initialized
+   */
+  initialized: boolean
+
+  /**
+   * @description
    * The source to display
    */
   source: TNullable<TSource>

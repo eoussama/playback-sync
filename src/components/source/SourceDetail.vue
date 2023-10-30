@@ -19,6 +19,7 @@ export default defineComponent({
     source: null,
     loading: false,
     submitted: false,
+    initialized: false,
     previewLoaded: false
   }),
 
@@ -145,36 +146,18 @@ export default defineComponent({
   },
 
   watch: {
-    previewUrl(): void {
-      const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
-
-      if (player) {
-        player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded) {
-            this.source.metadata.start = player.currentTime;
-            this.source.metadata.end = player.duration;
-            this.source.metadata.duration = player.duration;
-          }
-
-          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
-        }
-
-        this.previewLoaded = false;
-        player.load();
-      }
-    },
-
     'source.url'(): void {
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
       if (player) {
         player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded) {
-            this.source.metadata.start = player.currentTime;
+          if (this.source && !this.previewLoaded && this.initialized) {
+            this.source.metadata.start = 0;
             this.source.metadata.end = player.duration;
             this.source.metadata.duration = player.duration;
           }
 
+          this.initialized = true;
           this.previewLoaded = player.readyState > ReadyState.HaveNothing;
         }
 
