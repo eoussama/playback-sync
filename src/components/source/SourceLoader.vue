@@ -138,6 +138,7 @@ export default defineComponent({
 
   &::after {
     content: '';
+    pointer-events: none;
 
     position: absolute;
     top: 0;
