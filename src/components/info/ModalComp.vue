@@ -78,6 +78,8 @@ export default defineComponent({
   align-items: center;
   justify-items: center;
 
+  z-index: 1;
+
   &__element {
     overflow: hidden;
 
