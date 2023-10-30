@@ -57,7 +57,7 @@ export default defineComponent({
      * Checks if the form is valid
      */
     isFormValid(): boolean {
-      return this.isInputValid('title') && this.isInputValid('url');
+      return this.isInputValid('title') && this.isInputValid('url') && this.previewLoaded;
     },
 
     /**
