@@ -15,7 +15,19 @@ export default defineComponent({
       v-if="isEmpty"
       class="empty__positive"
     >
-      No Sources
+      <div class="dialog">
+        <div class="dialog__message">
+          Add sources and sync them up
+        </div>
+
+        <div class="dialog__actions">
+          <ButtonComp
+            icon="plus"
+            type="primary"
+            label="Add Source"
+          />
+        </div>
+      </div>
     </div>
 
     <div
@@ -33,5 +45,37 @@ export default defineComponent({
 
   width: 100%;
   height: 100%;
+
+  &__positive {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .dialog {
+      margin: 5px;
+      padding: 40px;
+
+      border-radius: 5px;
+      box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+      background-color: hsl(var(--color-secondary-hsl), 95%);
+
+      width: 350px;
+      height: auto;
+
+      &__message {
+        color: var(--color-text);
+
+        font-size: 14px;
+        text-align: center;
+        font-family: var(--font-primary);
+      }
+
+      &__actions {
+        margin-top: 20px;
+        text-align: center;
+      }
+    }
+  }
 }
 </style>
