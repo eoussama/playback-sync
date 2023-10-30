@@ -17,6 +17,7 @@ export default defineComponent({
 
   data: (): TSourceDetailType => ({
     source: null,
+    loading: false,
     submitted: false,
     previewLoaded: false
   }),
@@ -57,7 +58,7 @@ export default defineComponent({
      * Checks if the form is valid
      */
     isFormValid(): boolean {
-      return this.isInputValid('title') && this.isInputValid('url') && this.previewLoaded;
+      return this.isInputValid('title') && this.isInputValid('url') && (this.previewLoaded && !this.forceLoad);
     },
 
     /**
@@ -130,6 +131,16 @@ export default defineComponent({
       if (this.source) {
         this.source.metadata.end = end;
       }
+    },
+
+    /**
+     * @description
+     * Updates source loading state
+     *
+     * @param loading The loading state
+     */
+    onLoad(loading: boolean): void {
+      this.loading = loading;
     }
   },
 
@@ -138,6 +149,17 @@ export default defineComponent({
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
       if (player) {
+        player.onloadedmetadata = () => {
+          if (this.source && !this.previewLoaded) {
+            this.source.metadata.start = player.currentTime;
+            this.source.metadata.end = player.duration;
+            this.source.metadata.duration = player.duration;
+          }
+
+          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
+        }
+
+        this.previewLoaded = false;
         player.load();
       }
     },
@@ -186,6 +208,14 @@ export default defineComponent({
      */
     previewUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
+    },
+
+    /**
+     * @description
+     * Checks if the loader should be forced into activation
+     */
+    forceLoad(): boolean {
+      return Boolean(!this.previewLoaded && this.source && this.source.url.length > 0);
     },
 
     /**
@@ -251,22 +281,29 @@ export default defineComponent({
 
       <div
         class="source__preview"
-        :class="{ 'source__preview--show': previewLoaded }"
+        v-show="source.url.length > 0"
       >
-        <video
-          controls
-          :id="previewPlayerId"
-          class="source__player"
+        <SourceLoader
+          @load="onLoad"
+          :forceLoad="forceLoad"
         >
-          <source
-            type="video/mp4"
-            :src="previewUrl"
+          <video
+            :id="previewPlayerId"
+            :controls="!loading"
+            class="source__player"
           >
-        </video>
-
+            <source
+              type="video/mp4"
+              :src="previewUrl"
+            >
+          </video>
+        </SourceLoader>
       </div>
 
-      <div class="source__crop">
+      <div
+        class="source__crop"
+        v-show="source.url.length > 0"
+      >
         <RangeComp
           :min="0"
           :start="source.metadata?.start"
@@ -316,21 +353,15 @@ export default defineComponent({
     }
 
     #{$root}__preview {
-      height: 450px;
       width: 600px;
+      height: 100%;
       margin-bottom: 15px;
-
-      visibility: hidden;
 
       #{$root}__player {
         display: block;
 
         width: 100%;
         height: 100%;
-      }
-
-      &--show {
-        visibility: visible;
       }
     }
   }

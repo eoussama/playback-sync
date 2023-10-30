@@ -11,6 +11,12 @@ export type TSourceDetailType = {
 
   /**
    * @description
+   * The source's loading state
+   */
+  loading: boolean
+
+  /**
+   * @description
    * The source to display
    */
   source: TNullable<TSource>

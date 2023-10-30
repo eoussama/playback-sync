@@ -59,7 +59,7 @@ export default defineComponent({
     onRemove(): void {
       ConfirmHelper
         .open({
-          title: 'Deletion',
+          title: 'Delete Source',
           resolveLabel: 'Delete',
           icon: 'triangle-exclamation',
           message: 'Do you really want to delete this source?'
@@ -229,16 +229,18 @@ export default defineComponent({
         </div>
       </div>
 
-      <video
-        preload="auto"
-        :id="playerId"
-        class="source__player"
-      >
-        <source
-          type="video/mp4"
-          :src="sourceUrl"
+      <SourceLoader :buffering="source.metadata.buffering">
+        <video
+          preload="auto"
+          :id="playerId"
+          class="source__player"
         >
-      </video>
+          <source
+            type="video/mp4"
+            :src="sourceUrl"
+          >
+        </video>
+      </SourceLoader>
     </div>
 
     <div
@@ -253,6 +255,7 @@ export default defineComponent({
   $root: &;
 
   width: 100%;
+  height: 100%;
 
   overflow: hidden;
   position: relative;

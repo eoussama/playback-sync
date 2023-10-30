@@ -28,10 +28,11 @@ export class DOMHelper {
    * Observes the DOM for additions concerning a target ID
    *
    * @param selector The selector of the elemnt to watch for
+   * @param container The container to watch the children of
    */
-  static async watch<T extends Array<HTMLElement>>(selector: string): Promise<T> {
+  static async watch<T extends Array<HTMLElement>>(selector: string, container?: HTMLElement): Promise<T> {
     return new Promise(resolve => {
-      const root = document.getElementById('app') as HTMLElement;
+      const root = container ?? document.getElementById('app') as HTMLElement;
       const targets = this.get(selector, [root]);
 
       if (targets.length > 0) {
