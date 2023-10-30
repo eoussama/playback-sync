@@ -59,7 +59,7 @@ export default defineComponent({
     onRemove(): void {
       ConfirmHelper
         .open({
-          title: 'Deletion',
+          title: 'Delete Source',
           resolveLabel: 'Delete',
           icon: 'triangle-exclamation',
           message: 'Do you really want to delete this source?'
