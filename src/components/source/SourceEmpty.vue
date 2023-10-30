@@ -2,9 +2,21 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  emits: ['add'],
 
   props: {
     isEmpty: Boolean
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Emits the addition event
+     */
+    onAdd(): void {
+      this.$emit('add');
+    }
   }
 })
 </script>
@@ -25,6 +37,7 @@ export default defineComponent({
             icon="plus"
             type="primary"
             label="Add Source"
+            @click="onAdd"
           />
         </div>
       </div>

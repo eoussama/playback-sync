@@ -52,6 +52,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSourcesStore, [
       'getSource',
+      'addSource',
       'setPlaying',
       'updateSource',
       'removeSource',
@@ -68,6 +69,20 @@ export default defineComponent({
      */
     onRemove(id: string) {
       this.removeSource(id);
+    },
+
+    /**
+     * @description
+     * Opens source addition modal
+     */
+    onAdd(): void {
+      ModalHelper
+        .open('Add Source', SourceDetail, { type: PageType.Creation })
+        .then(modal => {
+          if (modal.payload) {
+            this.addSource(modal.payload);
+          }
+        });
     },
 
     /**
@@ -191,7 +206,10 @@ export default defineComponent({
     class="view"
     :class="{ 'view--empty': empty }"
   >
-    <SourceEmpty :isEmpty="empty">
+    <SourceEmpty
+      :isEmpty="empty"
+      @add="onAdd"
+    >
       <div class="sources sources--pinned">
         <div
           v-for="source in pinnedSources"
