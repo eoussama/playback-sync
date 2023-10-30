@@ -54,7 +54,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .empty {
-  display: flex;
+  display: grid;
 
   width: 100%;
   height: 100%;
