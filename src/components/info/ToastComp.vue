@@ -26,7 +26,7 @@ export default defineComponent({
 
   mounted(): void {
     setTimeout(() => {
-      // this.onClose();
+      this.onClose();
     }, 3000);
   }
 })
@@ -56,10 +56,18 @@ export default defineComponent({
   align-items: center;
   flex-direction: row;
 
+  width: 400px;
   padding: 15px;
+
+  background: linear-gradient(to right, hsl(var(--color-secondary-hsl), 90%), hsl(var(--color-secondary-hsl), 92%));
 
   &__message {
     margin-right: 10px;
+    color: var(--color-text);
+
+    font-size: 15px;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-regular);
   }
 
   &__action {

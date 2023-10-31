@@ -1,4 +1,6 @@
 import { useSourcesStore } from '../stores/sources.store';
+
+import { ToastHelper } from '@/utils/helpers/toast.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
 
 
@@ -22,7 +24,13 @@ export function hookSourcesEffect() {
         case 'addSource': {
           const [{ id }] = args;
           SourceHelper.hook(id);
+          ToastHelper.show({ message: 'Source has been added' });
 
+          break;
+        }
+
+        case 'removeSource': {
+          ToastHelper.show({ message: 'Source has been removed' });
           break;
         }
 
