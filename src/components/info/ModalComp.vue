@@ -2,6 +2,7 @@
 import { defineComponent, type PropType } from 'vue';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 
+import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
 import type { TModal } from '@/utils/types/composition/modal.type';
 import type { TComponent } from '@/utils/types/composition/component.type';
 
@@ -11,7 +12,29 @@ export default defineComponent({
     modal: Object as PropType<TModal<TComponent>>
   },
 
+  computed: {
+
+    /**
+     * @description
+     * Alignment enumerator
+     */
+    ModalAlignment(): typeof ModalAlignment {
+      return ModalAlignment;
+    }
+  },
+
   methods: {
+
+    /**
+     * @description
+     * Checks if alighments match
+     *
+     * @param alignment The alignment to check
+     * @param mode The aligment to check against
+     */
+    isAlignment(alignment: ModalAlignment, mode: ModalAlignment): boolean {
+      return alignment === mode;
+    },
 
     /**
      * @description
@@ -33,7 +56,10 @@ export default defineComponent({
     :id="`modal-${modal.id}`"
     :class="{
       'modal--dialog': modal.params.dialog,
-      'modal--overlay': modal.params.overlay
+      'modal--overlay': modal.params.overlay,
+      'modal--top': isAlignment(modal.params.alignment, ModalAlignment.Top),
+      'modal--center': isAlignment(modal.params.alignment, ModalAlignment.Center),
+      'modal--bottom': isAlignment(modal.params.alignment, ModalAlignment.Bottom)
     }"
   >
     <div class="modal__element">
@@ -77,7 +103,6 @@ export default defineComponent({
   padding: $padding;
 
   display: grid;
-  align-items: center;
   justify-items: center;
 
   z-index: 1;
@@ -93,9 +118,8 @@ export default defineComponent({
     background-color: white;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 
-    width: 100%;
+    max-width: 100vw;
     height: min-content;
-    max-width: 650px;
 
     animation-name: fadeIn;
     animation-duration: 0.2s;
@@ -143,6 +167,18 @@ export default defineComponent({
   &--overlay {
     pointer-events: all;
     background-color: rgba(var(--color-primary-rgb), 0.7);
+  }
+
+  &--top {
+    align-items: start;
+  }
+
+  &--center {
+    align-items: center;
+  }
+
+  &--bottom {
+    align-items: end;
   }
 }
 </style>
