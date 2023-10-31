@@ -22,6 +22,12 @@ export default defineComponent({
         ModalHelper.close(this.modalId, false);
       }
     }
+  },
+
+  mounted(): void {
+    setTimeout(() => {
+      // this.onClose();
+    }, 3000);
   }
 })
 </script>
@@ -44,4 +50,20 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.toast {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  padding: 15px;
+
+  &__message {
+    margin-right: 10px;
+  }
+
+  &__action {
+    margin-left: auto;
+  }
+}
+</style>
