@@ -151,9 +151,12 @@ export default defineComponent({
 
       if (player) {
         player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded && this.initialized) {
-            this.source.metadata.start = 0;
-            this.source.metadata.end = player.duration;
+          if (this.source && !this.previewLoaded && !this.initialized) {
+            if (this.params?.type === PageType.Creation) {
+              this.source.metadata.start = 0;
+              this.source.metadata.end = player.duration;
+            }
+
             this.source.metadata.duration = player.duration;
           }
 
