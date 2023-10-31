@@ -19,7 +19,7 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', SourceDetail, { type: PageType.Creation })
+        .open('Add Source', null, SourceDetail, { type: PageType.Creation })
         .then(modal => {
           if (modal.payload) {
             this.addSource(modal.payload);
