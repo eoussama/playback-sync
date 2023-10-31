@@ -8,6 +8,7 @@ import FootSection from '@/components/layout/FootSection.vue';
 import ControlsComp from '@/components/layout/ControlsComp.vue';
 
 import ModalComp from '@/components/info/ModalComp.vue';
+import ToastComp from '@/components/info/ToastComp.vue';
 import TooltipComp from '@/components/info/TooltipComp.vue';
 import ConfirmComp from '@/components/info/ConfirmComp.vue';
 
@@ -44,6 +45,7 @@ export function addComponent(app: App<Element>) {
   app.component('ControlsComp', ControlsComp);
 
   app.component('ModalComp', ModalComp);
+  app.component('ToastComp', ToastComp);
   app.component('TooltipComp', TooltipComp);
   app.component('ConfirmComp', ConfirmComp);
 
