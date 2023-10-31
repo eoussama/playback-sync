@@ -42,7 +42,7 @@ export default defineComponent({
       let changedValue = parseInt(e?.toString());
 
       if (changedValue == TillingValue.Custom) {
-        const customValue = await ModalHelper.open('Custom Tilling', TillingCustom, { tilling: this.tilling });
+        const customValue = await ModalHelper.open('Custom Tilling', null, TillingCustom, { tilling: this.tilling });
         changedValue = customValue.payload?.value ?? this.value;
       }
 
@@ -61,7 +61,3 @@ export default defineComponent({
     />
   </div>
 </template>
-
-<style scoped lang="scss">
-.tilling {}
-</style>
