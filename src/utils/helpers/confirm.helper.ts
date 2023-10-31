@@ -6,7 +6,7 @@ import type { TConfirm } from '../types/composition/confirm.type';
 
 /**
  * @description
- * helps with confirmation modals
+ * Helps with confirmation modals
  */
 export class ConfirmHelper {
 
@@ -25,7 +25,7 @@ export class ConfirmHelper {
       const resolveLabel = props.resolveLabel ?? 'Confirm';
 
       ModalHelper
-        .open(title, ConfirmComp, { message, icon, rejectLabel, resolveLabel })
+        .open(title, null, ConfirmComp, { message, icon, rejectLabel, resolveLabel })
         .then(modal => resolve(modal.payload));
     });
   }
