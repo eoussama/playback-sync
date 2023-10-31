@@ -31,6 +31,7 @@ export default defineComponent({
     v-if="modal"
     class="modal"
     :id="`modal-${modal.id}`"
+    :class="{ 'modal--overlay': modal.overlay }"
   >
     <div class="modal__element">
       <div class="modal__head">
@@ -66,8 +67,6 @@ export default defineComponent({
 
   overflow: auto;
   box-sizing: border-box;
-  backdrop-filter: blur(5px);
-  background-color: rgba(var(--color-primary-rgb), 0.5);
 
   width: 100vw;
   height: 100vh;
@@ -79,9 +78,16 @@ export default defineComponent({
   justify-items: center;
 
   z-index: 1;
+  pointer-events: none;
+
+  &--overlay {
+    pointer-events: all;
+    background-color: rgba(var(--color-primary-rgb), 0.7);
+  }
 
   &__element {
     overflow: hidden;
+    pointer-events: all;
 
     border-radius: 10px;
     box-sizing: border-box;

@@ -17,10 +17,12 @@ export class ModalHelper {
    * 
    * @param title The title of the modal
    * @param component The component to show in the body of the modal
+   * @param props The properties to pass to the modal
+   * @param overlay If the modal should overlay the page
    */
-  private static create<T extends TComponent, U = any>(title: string, component: InstanceType<T>, props: U): TModal<T, U> {
+  private static create<T extends TComponent, U = any>(title: string, overlay: boolean, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    return { id, title, component, props };
+    return { id, title, overlay, component, props };
   }
 
   /**
@@ -34,7 +36,7 @@ export class ModalHelper {
   static open<T extends TComponent, U = { id: string, payload: any }, V = any>(title: string, component: InstanceType<T>, props?: V): Promise<U> {
     return new Promise(resolve => {
       const store = useModalStore();
-      const modal = this.create(title, component, props);
+      const modal = this.create(title, true, component, props);
 
       store.addModal(modal);
 

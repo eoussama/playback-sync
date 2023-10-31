@@ -22,6 +22,12 @@ export type TModal<T extends TComponent, U = any> = {
 
   /**
    * @description
+   * If the modal should overlay the page
+   */
+  overlay: boolean;
+
+  /**
+   * @description
    * The props to pass to the component
    */
   props: U;
