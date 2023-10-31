@@ -1,4 +1,5 @@
 import type { TComponent } from './component.type';
+import type { TModalParams } from './modalParams.type';
 
 
 
@@ -22,12 +23,6 @@ export type TModal<T extends TComponent, U = any> = {
 
   /**
    * @description
-   * If the modal should overlay the page
-   */
-  overlay: boolean;
-
-  /**
-   * @description
    * The props to pass to the component
    */
   props: U;
@@ -37,4 +32,10 @@ export type TModal<T extends TComponent, U = any> = {
    * The content displayed in the body
    */
   component: InstanceType<T>;
+
+  /**
+   * @description
+   * Modal-related paraleters
+   */
+  params: TModalParams;
 }

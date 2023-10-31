@@ -31,7 +31,10 @@ export default defineComponent({
     v-if="modal"
     class="modal"
     :id="`modal-${modal.id}`"
-    :class="{ 'modal--overlay': modal.overlay }"
+    :class="{
+      'modal--dialog': modal.params.dialog,
+      'modal--overlay': modal.params.overlay
+    }"
   >
     <div class="modal__element">
       <div class="modal__head">
@@ -80,11 +83,6 @@ export default defineComponent({
   z-index: 1;
   pointer-events: none;
 
-  &--overlay {
-    pointer-events: all;
-    background-color: rgba(var(--color-primary-rgb), 0.7);
-  }
-
   &__element {
     overflow: hidden;
     pointer-events: all;
@@ -105,7 +103,24 @@ export default defineComponent({
     animation-timing-function: ease-in-out;
 
     #{$root}__head {
+      display: none;
+    }
 
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  &--dialog {
+    #{$root}__head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -123,18 +138,11 @@ export default defineComponent({
     #{$root}__body {
       padding: $padding;
     }
+  }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  &--overlay {
+    pointer-events: all;
+    background-color: rgba(var(--color-primary-rgb), 0.7);
   }
 }
 </style>

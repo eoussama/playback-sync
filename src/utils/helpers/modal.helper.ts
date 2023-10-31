@@ -1,7 +1,9 @@
 import { v4 } from 'uuid';
 import { useModalStore } from '@/state/stores/modal.store';
 import type { TModal } from '../types/composition/modal.type';
+import type { TNullable } from '../types/generic/nullable.type';
 import type { TComponent } from '../types/composition/component.type';
+import type { TModalParams } from '../types/composition/modalParams.type';
 
 
 
@@ -16,13 +18,15 @@ export class ModalHelper {
    * Creates a new modal
    * 
    * @param title The title of the modal
+   * @param params Modal parameters
    * @param component The component to show in the body of the modal
    * @param props The properties to pass to the modal
-   * @param overlay If the modal should overlay the page
    */
-  private static create<T extends TComponent, U = any>(title: string, overlay: boolean, component: InstanceType<T>, props: U): TModal<T, U> {
+  private static create<T extends TComponent, U = any>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    return { id, title, overlay, component, props };
+    const modalParams = params ?? { dialog: true, overlay: true };
+
+    return { id, title, component, props, params: modalParams };
   }
 
   /**
@@ -30,13 +34,14 @@ export class ModalHelper {
    * Opens a component as a modal
    *
    * @param title The title to show on top of the modal
+   * @param params Modal parameters
    * @param component The component to show in the body of the modal
    * @param props Optional props to pass to the component
    */
-  static open<T extends TComponent, U = { id: string, payload: any }, V = any>(title: string, component: InstanceType<T>, props?: V): Promise<U> {
+  static open<T extends TComponent, U = { id: string, payload: any }, V = any>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props?: V): Promise<U> {
     return new Promise(resolve => {
       const store = useModalStore();
-      const modal = this.create(title, true, component, props);
+      const modal = this.create(title, params, component, props);
 
       store.addModal(modal);
 
