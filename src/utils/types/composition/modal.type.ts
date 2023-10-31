@@ -1,4 +1,5 @@
 import type { TComponent } from './component.type';
+import type { TModalParams } from './modalParams.type';
 
 
 
@@ -31,4 +32,10 @@ export type TModal<T extends TComponent, U = any> = {
    * The content displayed in the body
    */
   component: InstanceType<T>;
+
+  /**
+   * @description
+   * Modal-related paraleters
+   */
+  params: TModalParams;
 }

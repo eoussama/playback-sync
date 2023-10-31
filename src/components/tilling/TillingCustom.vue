@@ -62,6 +62,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .tilling-custom {
+  width: 400px;
+
   &__body {
     margin-bottom: 20px;
     padding-bottom: 20px;

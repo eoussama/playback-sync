@@ -328,6 +328,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .source {
   $root: &;
+  min-width: 620px;
 
   &__form {
     margin-bottom: 20px;

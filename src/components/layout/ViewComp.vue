@@ -77,7 +77,7 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', SourceDetail, { type: PageType.Creation })
+        .open('Add Source', null, SourceDetail, { type: PageType.Creation })
         .then(modal => {
           if (modal.payload) {
             this.addSource(modal.payload);
@@ -95,7 +95,7 @@ export default defineComponent({
       const source = this.getSource(id);
 
       ModalHelper
-        .open('Edit Source', SourceDetail, { type: PageType.Edition, source: { ...source } })
+        .open('Edit Source', null, SourceDetail, { type: PageType.Edition, source: { ...source } })
         .then(modal => {
           if (modal.payload) {
             this.updateSource(modal.payload);
