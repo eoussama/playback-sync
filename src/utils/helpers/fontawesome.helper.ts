@@ -1,7 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
-  faCircleNotch, faHourglassHalf,
+  faCircleNotch, faHourglassHalf, faExpand,
   faThumbTack, faTrash, faChevronDown, faVideo,
   faPlay, faPause, faRepeat, faBackward, faForward,
   faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
@@ -16,7 +16,7 @@ import {
  */
 export function loadIcons(): void {
   library.add(
-    faVideo, faCircleNotch, faHourglassHalf,
+    faVideo, faCircleNotch, faHourglassHalf, faExpand,
     faThumbTack, faTrash, faGithub, faChevronDown,
     faPlay, faPause, faRepeat, faBackward, faForward,
     faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,

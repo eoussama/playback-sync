@@ -26,6 +26,14 @@ export default defineComponent({
           }
         });
     },
+
+    /**
+     * @descripion
+     * Toggles fullscreen mode
+     */
+    onFullscreen(): void {
+	alert('Toggle Fullscreen');
+    }
   },
 
   created() {
@@ -50,7 +58,15 @@ export default defineComponent({
       </div>
     </div>
 
-    <div class="head__right"></div>
+    <div class="head__right">
+	<TooltipComp text="Toggle fullscreen">
+		<ButtonComp
+		  icon="expand"
+		  type="primary"
+		  @click="onFullscreen"
+		/>
+	</TooltipComp>
+    </div>
   </div>
 </template>
 
@@ -67,7 +83,8 @@ export default defineComponent({
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   background-color: hsl(var(--color-secondary-hsl), 90%);
 
-  &__left {
+  &__left,
+  &__right {
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -79,6 +96,10 @@ export default defineComponent({
     .tilling {
       width: auto;
     }
+  }
+
+  &__right {
+    margin-left: auto;
   }
 }
 </style>
