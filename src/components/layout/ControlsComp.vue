@@ -257,6 +257,7 @@ export default defineComponent({
     left: 50%;
 
     width: 90%;
+    max-width: 1000px;
     border-radius: 10px;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
 

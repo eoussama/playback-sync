@@ -7,7 +7,9 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
+
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { SourceHelper } from '@/utils/helpers/source.helper';
 
 export default defineComponent({
 
@@ -68,6 +70,14 @@ export default defineComponent({
 
   created() {
     this.resetSources();
+
+    [
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }
+    ].forEach(async e => {
+      const source = await SourceHelper.create(e.title, e.url);
+      this.addSource(source);
+    });
   }
 });
 </script>
@@ -152,6 +162,10 @@ export default defineComponent({
     transition-property: transform;
 
     @extend %triggerable;
+
+    &::before {
+      top: 10px;
+    }
 
     &#{$root}--show {
       transform: translateY(0);
