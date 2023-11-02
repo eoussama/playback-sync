@@ -1,11 +1,47 @@
 <script lang="ts">
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-export default defineComponent({});
+import { useAppStore } from '@/state/stores/app.store';
+
+export default defineComponent({
+
+  computed: {
+    ...mapState(useAppStore, ['fullscreen', 'hover'])
+  },
+
+  methods: {
+    ...mapActions(useAppStore, ['updateFootHover']),
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateFootHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateFootHover(false);
+    }
+  }
+});
 </script>
 
 <template>
-  <div class="foot">
+  <div
+    class="foot"
+    :class="{
+      'foot--show': hover.foot,
+      'foot--fullscreen': fullscreen
+    }"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
     <a
       target="_blank"
       class="foot__content"
@@ -23,7 +59,11 @@ export default defineComponent({});
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .foot {
+  $root: &;
+
   padding: 2px 10px;
 
   box-sizing: border-box;
@@ -70,6 +110,26 @@ export default defineComponent({});
   &__text {
     font-size: 12px;
     font-family: var(--font-family-primary);
+  }
+
+  &--fullscreen {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    z-index: 1;
+    width: 100%;
+
+    transform: translateY(100%);
+
+    transition-duration: 0.2s;
+    transition-property: transform;
+
+    @extend %triggerable;
+
+    &#{$root}--show {
+      transform: translateY(0);
+    }
   }
 }
 </style>
