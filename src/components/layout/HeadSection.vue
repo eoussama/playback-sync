@@ -12,7 +12,7 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen']),
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
 
     /**
      * @description
@@ -24,7 +24,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useAppStore, ['toggleFullscreen']),
+    ...mapActions(useAppStore, ['toggleFullscreen', 'updateHeadHover']),
     ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
 
     /**
@@ -47,6 +47,22 @@ export default defineComponent({
      */
     onFullscreen(): void {
       this.toggleFullscreen();
+    },
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateHeadHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateHeadHover(false);
     }
   },
 
@@ -57,7 +73,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="head">
+  <div
+    class="head"
+    :class="{
+      'head--show': hover.head,
+      'head--fullscreen': fullscreen
+    }"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
     <div class="head__left">
       <TooltipComp text="Add a new source">
         <ButtonComp
@@ -85,7 +109,12 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .head {
+  $root: &;
+  z-index: 1;
+
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -114,6 +143,19 @@ export default defineComponent({
 
   &__right {
     margin-left: auto;
+  }
+
+  &--fullscreen {
+    transform: translateY(-100%);
+
+    transition-duration: 0.2s;
+    transition-property: transform;
+
+    @extend %triggerable;
+
+    &#{$root}--show {
+      transform: translateY(0);
+    }
   }
 }
 </style>
