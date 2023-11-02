@@ -146,64 +146,68 @@ export default defineComponent({
 
 <template>
   <div
-    v-if="!disabled"
-    class="controls"
+    class="controls-wrapper"
     :class="{
-      'controls--show': hover.controls,
-      'controls--fullscreen': fullscreen
+      'controls-wrapper--show': hover.controls,
+      'controls-wrapper--fullscreen': fullscreen
     }"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
   >
-    <div class="controls__top">
-      <TimelineComp
-        :duration="duration"
-        :value="timelineValue"
-        @timeline-updated="onTimelineChanged"
-      />
-    </div>
-
-    <div class="controls__bottom">
-      <div class="controls__speed">
-        <SpeedComp
-          :value="speed"
-          @speedChanged="onSpeed"
+    <div
+      v-if="!disabled"
+      class="controls"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+    >
+      <div class="controls__top">
+        <TimelineComp
+          :duration="duration"
+          :value="timelineValue"
+          @timeline-updated="onTimelineChanged"
         />
       </div>
 
-      <div class="controls__rewind">
-        <div class="controls__backward">
-          <ButtonComp
-            icon="backward"
-            @click="onBackward"
+      <div class="controls__bottom">
+        <div class="controls__speed">
+          <SpeedComp
+            :value="speed"
+            @speedChanged="onSpeed"
           />
         </div>
 
-        <div class="controls__play-pause">
-          <PlayPauseComp
-            :repeat="ended"
-            :value="playing"
-            @toggled="onToggle"
+        <div class="controls__rewind">
+          <div class="controls__backward">
+            <ButtonComp
+              icon="backward"
+              @click="onBackward"
+            />
+          </div>
+
+          <div class="controls__play-pause">
+            <PlayPauseComp
+              :repeat="ended"
+              :value="playing"
+              @toggled="onToggle"
+            />
+          </div>
+
+          <div class="controls__forward">
+            <ButtonComp
+              icon="forward"
+              @click="onForward"
+            />
+          </div>
+        </div>
+
+        <div class="controls__volume">
+          <VolumeComp
+            :muted="muted"
+            :value="volume"
+            @volumeUpdated="onVolume"
+            @muteToggled="onMuteToggled"
           />
         </div>
 
-        <div class="controls__forward">
-          <ButtonComp
-            icon="forward"
-            @click="onForward"
-          />
-        </div>
       </div>
-
-      <div class="controls__volume">
-        <VolumeComp
-          :muted="muted"
-          :value="volume"
-          @volumeUpdated="onVolume"
-          @muteToggled="onMuteToggled"
-        />
-      </div>
-
     </div>
   </div>
 </template>
@@ -251,27 +255,40 @@ export default defineComponent({
     }
   }
 
-  &--fullscreen {
-    position: absolute;
-    bottom: 35px;
-    left: 50%;
+  &-wrapper {
+    $wrapper: &;
 
-    width: 90%;
-    max-width: 1000px;
-    border-radius: 10px;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+    width: 100%;
 
-    opacity: 0;
-    transform: translate(-50%, 10px);
+    &--fullscreen {
+      position: fixed;
+      bottom: 35px;
+      left: 0;
 
-    transition-duration: 0.2s;
-    transition-property: transform opacity;
+      #{$root} {
+        margin: auto;
+        position: relative;
 
-    @extend %triggerable;
+        width: 90%;
+        max-width: 1000px;
+        border-radius: 10px;
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
 
-    &#{$root}--show {
-      opacity: 1;
-      transform: translate(-50%, 0);
+        top: 10px;
+        opacity: 0;
+
+        transition-duration: 0.2s;
+        transition-property: top opacity;
+
+        @extend %triggerable;
+      }
+
+      &#{$wrapper}--show {
+        #{$root} {
+          top: 0;
+          opacity: 1;
+        }
+      }
     }
   }
 }
