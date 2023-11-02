@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
+
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 import SourceDetail from '@/components/source/SourceDetail.vue';
@@ -50,6 +52,7 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useAppStore, ['toggleFullscreen']),
     ...mapActions(useSourcesStore, [
       'getSource',
       'addSource',
@@ -196,6 +199,14 @@ export default defineComponent({
      */
     onDragDisable(id: string): void {
       DragHelper.disable(id);
+    },
+
+    /**
+     * @description
+     * Toggles fullscreen mode
+     */
+    onToggleFullscreen(): void {
+      this.toggleFullscreen();
     }
   }
 });
@@ -204,6 +215,7 @@ export default defineComponent({
 <template>
   <div
     class="view"
+    @dblclick="onToggleFullscreen"
     :class="{ 'view--empty': empty }"
   >
     <SourceEmpty
