@@ -8,7 +8,8 @@ export const useAppStore = defineStore('app', {
     fullscreen: true,
     hover: {
       head: false,
-      foot: false
+      foot: false,
+      controls: false
     }
   }),
 
@@ -50,6 +51,16 @@ export const useAppStore = defineStore('app', {
      */
     updateFootHover(hover: boolean): void {
       this.hover.foot = hover;
+    },
+
+    /**
+     * @description
+     * Updates the hover state of the controls
+     *
+     * @param hover The hover state to update to
+     */
+    updateControlsHover(hover: boolean): void {
+      this.hover.controls = hover;
     }
   }
 });

@@ -18,13 +18,19 @@ export type TAppStore = {
 
     /**
      * @description
-     * The head area
+     * The head hover
      */
     head: boolean
 
     /**
      * @description
-     * The foot area
+     * The controls hover
+     */
+    controls: boolean
+
+    /**
+     * @description
+     * The foot hover
      */
     foot: boolean
   }

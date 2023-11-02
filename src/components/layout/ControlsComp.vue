@@ -2,11 +2,13 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
 
   methods: {
+    ...mapActions(useAppStore, ['updateControlsHover']),
     ...mapActions(useSourcesStore, [
       'setPlaying',
       'setMuted',
@@ -74,10 +76,27 @@ export default defineComponent({
      */
     onTimelineChanged(time: number) {
       this.onTimelineSet(time);
+    },
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateControlsHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateControlsHover(false);
     }
   },
 
   computed: {
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',
@@ -129,6 +148,12 @@ export default defineComponent({
   <div
     v-if="!disabled"
     class="controls"
+    :class="{
+      'controls--show': hover.controls,
+      'controls--fullscreen': fullscreen
+    }"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
   >
     <div class="controls__top">
       <TimelineComp
@@ -184,6 +209,8 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .controls {
   $root: &;
 
@@ -221,6 +248,21 @@ export default defineComponent({
       #{$root}__play-pause {
         margin: 0 10px;
       }
+    }
+  }
+
+  &--fullscreen {
+    opacity: 0;
+    transform: translateY(10px);
+    
+    transition-duration: 0.2s;
+    transition-property: transform opacity;
+    
+    @extend %triggerable;
+    
+    &#{$root}--show {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
