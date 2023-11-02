@@ -16,6 +16,7 @@ import type { TSource } from '@/utils/types/composition/source.type';
 export default defineComponent({
 
   computed: {
+    ...mapState(useAppStore, ['fullscreen']),
     ...mapState(useSourcesStore, ['sources', 'tilling']),
 
     /**
@@ -216,7 +217,10 @@ export default defineComponent({
   <div
     class="view"
     @dblclick="onToggleFullscreen"
-    :class="{ 'view--empty': empty }"
+    :class="{
+      'view--empty': empty,
+      'view--fullscreen': fullscreen
+    }"
   >
     <SourceEmpty
       :isEmpty="empty"
@@ -268,6 +272,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .view {
+  $root: &;
+
   flex: 1;
   overflow: auto;
   position: relative;
@@ -311,6 +317,12 @@ export default defineComponent({
 
   &--empty {
     max-height: calc(100vh - 73px);
+  }
+
+  &--fullscreen {
+    &#{$root}--empty {
+      max-height: 100%;
+    }
   }
 }
 </style>
