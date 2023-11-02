@@ -15,7 +15,7 @@ import {
  * @description
  * Loads Font Awesome icons
  */
-export function loadIcons(): void {
+export function initIcons(): void {
   library.add(
     faExpand, faCompress,
     faVideo, faCircleNotch, faHourglassHalf,
