@@ -105,7 +105,7 @@ export default defineComponent({
   display: grid;
   justify-items: center;
 
-  z-index: 1;
+  z-index: 1000;
   pointer-events: none;
 
   &__element {
