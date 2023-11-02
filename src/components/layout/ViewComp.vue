@@ -320,9 +320,7 @@ export default defineComponent({
   }
 
   &--fullscreen {
-    &#{$root}--empty {
-      max-height: 100%;
-    }
+    max-height: 100%;
   }
 }
 </style>

@@ -252,17 +252,25 @@ export default defineComponent({
   }
 
   &--fullscreen {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+
+    width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
     opacity: 0;
-    transform: translateY(10px);
-    
+    transform: translate(-50%, 10px);
+
     transition-duration: 0.2s;
     transition-property: transform opacity;
-    
+
     @extend %triggerable;
-    
+
     &#{$root}--show {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate(-50%, 0);
     }
   }
 }
