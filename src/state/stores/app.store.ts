@@ -5,7 +5,11 @@ import type { TAppStore } from '@/utils/types/store/appStore.type';
 
 export const useAppStore = defineStore('app', {
   state: (): TAppStore => ({
-    fullscreen: false
+    fullscreen: true,
+    hover: {
+      head: false,
+      foot: false
+    }
   }),
 
   actions: {
@@ -26,6 +30,26 @@ export const useAppStore = defineStore('app', {
      */
     toggleFullscreen(): void {
       this.updateFullscreen(!this.fullscreen);
+    },
+
+    /**
+     * @description
+     * Updates the hover state of the head
+     *
+     * @param hover The hover state to update to
+     */
+    updateHeadHover(hover: boolean): void {
+      this.hover.head = hover;
+    },
+
+    /**
+     * @description
+     * Updates the hover state of the foot
+     *
+     * @param hover The hover state to update to
+     */
+    updateFootHover(hover: boolean): void {
+      this.hover.foot = hover;
     }
   }
 });

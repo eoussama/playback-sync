@@ -9,4 +9,23 @@ export type TAppStore = {
    * The state of the fullscreen mode
    */
   fullscreen: boolean
+
+  /**
+   * @description
+   * If areas are hovered
+   */
+  hover: {
+
+    /**
+     * @description
+     * The head area
+     */
+    head: boolean
+
+    /**
+     * @description
+     * The foot area
+     */
+    foot: boolean
+  }
 }
