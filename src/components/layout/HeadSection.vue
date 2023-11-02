@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
@@ -10,7 +11,20 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
 
+  computed: {
+    ...mapState(useAppStore, ['fullscreen']),
+
+    /**
+     * @description
+     * The contextual fullscreen icon
+     */
+    fullscreenIcon(): string {
+      return this.fullscreen ? 'compress' : 'expand';
+    }
+  },
+
   methods: {
+    ...mapActions(useAppStore, ['toggleFullscreen']),
     ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
 
     /**
@@ -32,7 +46,7 @@ export default defineComponent({
      * Toggles fullscreen mode
      */
     onFullscreen(): void {
-	alert('Toggle Fullscreen');
+      this.toggleFullscreen();
     }
   },
 
@@ -59,13 +73,13 @@ export default defineComponent({
     </div>
 
     <div class="head__right">
-	<TooltipComp text="Toggle fullscreen">
-		<ButtonComp
-		  icon="expand"
-		  type="primary"
-		  @click="onFullscreen"
-		/>
-	</TooltipComp>
+      <TooltipComp text="Toggle fullscreen">
+        <ButtonComp
+          type="primary"
+          :icon="fullscreenIcon"
+          @click="onFullscreen"
+        />
+      </TooltipComp>
     </div>
   </div>
 </template>
