@@ -2,11 +2,13 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
 
   methods: {
+    ...mapActions(useAppStore, ['updateControlsHover']),
     ...mapActions(useSourcesStore, [
       'setPlaying',
       'setMuted',
@@ -74,10 +76,27 @@ export default defineComponent({
      */
     onTimelineChanged(time: number) {
       this.onTimelineSet(time);
+    },
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateControlsHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateControlsHover(false);
     }
   },
 
   computed: {
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',
@@ -129,6 +148,12 @@ export default defineComponent({
   <div
     v-if="!disabled"
     class="controls"
+    :class="{
+      'controls--show': hover.controls,
+      'controls--fullscreen': fullscreen
+    }"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
   >
     <div class="controls__top">
       <TimelineComp
@@ -184,6 +209,8 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .controls {
   $root: &;
 
@@ -221,6 +248,30 @@ export default defineComponent({
       #{$root}__play-pause {
         margin: 0 10px;
       }
+    }
+  }
+
+  &--fullscreen {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
+    opacity: 0;
+    transform: translate(-50%, 10px);
+
+    transition-duration: 0.2s;
+    transition-property: transform opacity;
+
+    @extend %triggerable;
+
+    &#{$root}--show {
+      opacity: 1;
+      transform: translate(-50%, 0);
     }
   }
 }

@@ -6,7 +6,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 
 import { initGSAP } from './utils/helpers/gsap.helper';
-import { loadIcons } from './utils/helpers/fontawesome.helper';
+import { initIcons } from './utils/helpers/fontawesome.helper';
 import { addComponent } from './utils/helpers/component.helper';
 
 
@@ -17,7 +17,7 @@ const app = createApp(App);
 app.use(pinia);
 
 initGSAP();
-loadIcons();
+initIcons();
 addComponent(app);
 
 app.mount('#app');

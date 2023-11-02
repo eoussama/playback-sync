@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
+
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 import SourceDetail from '@/components/source/SourceDetail.vue';
@@ -14,6 +16,7 @@ import type { TSource } from '@/utils/types/composition/source.type';
 export default defineComponent({
 
   computed: {
+    ...mapState(useAppStore, ['fullscreen']),
     ...mapState(useSourcesStore, ['sources', 'tilling']),
 
     /**
@@ -50,6 +53,7 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useAppStore, ['toggleFullscreen']),
     ...mapActions(useSourcesStore, [
       'getSource',
       'addSource',
@@ -196,6 +200,14 @@ export default defineComponent({
      */
     onDragDisable(id: string): void {
       DragHelper.disable(id);
+    },
+
+    /**
+     * @description
+     * Toggles fullscreen mode
+     */
+    onToggleFullscreen(): void {
+      this.toggleFullscreen();
     }
   }
 });
@@ -204,7 +216,11 @@ export default defineComponent({
 <template>
   <div
     class="view"
-    :class="{ 'view--empty': empty }"
+    @dblclick="onToggleFullscreen"
+    :class="{
+      'view--empty': empty,
+      'view--fullscreen': fullscreen
+    }"
   >
     <SourceEmpty
       :isEmpty="empty"
@@ -256,6 +272,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .view {
+  $root: &;
+
   flex: 1;
   overflow: auto;
   position: relative;
@@ -299,6 +317,10 @@ export default defineComponent({
 
   &--empty {
     max-height: calc(100vh - 73px);
+  }
+
+  &--fullscreen {
+    max-height: 100%;
   }
 }
 </style>

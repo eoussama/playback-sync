@@ -1,16 +1,32 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
+
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { SourceHelper } from '@/utils/helpers/source.helper';
 
 export default defineComponent({
 
+  computed: {
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
+
+    /**
+     * @description
+     * The contextual fullscreen icon
+     */
+    fullscreenIcon(): string {
+      return this.fullscreen ? 'compress' : 'expand';
+    }
+  },
+
   methods: {
+    ...mapActions(useAppStore, ['toggleFullscreen', 'updateHeadHover']),
     ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
 
     /**
@@ -26,16 +42,56 @@ export default defineComponent({
           }
         });
     },
+
+    /**
+     * @descripion
+     * Toggles fullscreen mode
+     */
+    onFullscreen(): void {
+      this.toggleFullscreen();
+    },
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateHeadHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateHeadHover(false);
+    }
   },
 
   created() {
     this.resetSources();
+
+    [
+      { title: 'Futari no Yakusoku', url: 'https://v.animethemes.moe/Basquash-ED3.webm' },
+      { title: 'Brave', url: 'https://v.animethemes.moe/Kindaichi-OP4.webm' }
+    ].forEach(async e => {
+      const source = await SourceHelper.create(e.title, e.url);
+      this.addSource(source);
+    });
   }
 });
 </script>
 
 <template>
-  <div class="head">
+  <div
+    class="head"
+    :class="{
+      'head--show': hover.head,
+      'head--fullscreen': fullscreen
+    }"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
     <div class="head__left">
       <TooltipComp text="Add a new source">
         <ButtonComp
@@ -50,12 +106,25 @@ export default defineComponent({
       </div>
     </div>
 
-    <div class="head__right"></div>
+    <div class="head__right">
+      <TooltipComp text="Toggle fullscreen">
+        <ButtonComp
+          type="primary"
+          :icon="fullscreenIcon"
+          @click="onFullscreen"
+        />
+      </TooltipComp>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .head {
+  $root: &;
+  z-index: 1;
+
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -67,17 +136,39 @@ export default defineComponent({
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   background-color: hsl(var(--color-secondary-hsl), 90%);
 
-  &__left {
+  &__left,
+  &__right {
     display: flex;
     align-items: center;
     flex-direction: row;
 
-    &>* {
+    &>*:not(:last-child) {
       margin-right: 10px;
     }
 
     .tilling {
       width: auto;
+    }
+  }
+
+  &__right {
+    margin-left: auto;
+  }
+
+  &--fullscreen {
+    transform: translateY(-100%);
+
+    transition-duration: 0.2s;
+    transition-property: transform;
+
+    @extend %triggerable;
+
+    &::before {
+      top: 10px;
+    }
+
+    &#{$root}--show {
+      transform: translateY(0);
     }
   }
 }
