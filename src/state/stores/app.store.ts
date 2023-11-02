@@ -12,10 +12,20 @@ export const useAppStore = defineStore('app', {
 
     /**
      * @description
+     * Updates the fullscreen state
+     *
+     * @param fullscreen The fullscreen state to update
+     */
+    updateFullscreen(fullscreen: boolean): void {
+      this.fullscreen = fullscreen;
+    },
+
+    /**
+     * @description
      * Toggles the fullscreen mode
      */
     toggleFullscreen(): void {
-      this.fullscreen = !this.fullscreen;
+      this.updateFullscreen(!this.fullscreen);
     }
   }
 });
