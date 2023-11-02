@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 import { hookEffects } from './state/effects';
+
+import { useAppStore } from './state/stores/app.store';
 import { useModalStore } from './state/stores/modal.store';
 
 import HeadSection from './components/layout/HeadSection.vue';
@@ -10,11 +12,17 @@ import FootSection from './components/layout/FootSection.vue';
 
 
 hookEffects();
-const store = useModalStore();
+
+const appStore = useAppStore();
+const modalStore = useModalStore();
 </script>
 
 <template>
-  <div class="root">
+  <div
+    class="root"
+    :class="{ 'root--fullscreen': appStore.fullscreen }"
+  >
+
     <div class="root__content">
       <HeadSection />
       <BodySection />
@@ -25,7 +33,7 @@ const store = useModalStore();
       <ModalComp
         :modal="modal"
         :key="modal.id"
-        v-for="modal in store.modals"
+        v-for="modal in modalStore.modals"
       />
     </div>
   </div>
@@ -44,6 +52,10 @@ const store = useModalStore();
 
     display: flex;
     flex-direction: column;
+  }
+
+  &--fullscreen {
+    overflow: hidden;
   }
 }
 </style>
