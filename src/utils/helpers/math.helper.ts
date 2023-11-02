@@ -12,7 +12,7 @@ export class MathHelper {
    * @param max The minimum value
    * @param min The maximum valie
    */
-  static clamp(value: number, max: number, min: number): number {
+  static clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
   }
 }
