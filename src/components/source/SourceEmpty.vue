@@ -37,6 +37,7 @@ export default defineComponent({
             icon="plus"
             type="primary"
             label="Add Source"
+            :autofocus="true"
             @click="onAdd"
           />
         </div>
