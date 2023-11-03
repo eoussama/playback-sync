@@ -4,7 +4,9 @@ import { mapState, mapActions } from 'pinia';
 
 import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
+
 import SourceDetail from '@/components/source/SourceDetail.vue';
+import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
 
@@ -48,6 +50,14 @@ export default defineComponent({
      */
     onFullscreen(): void {
       this.toggleFullscreen();
+    },
+
+    /**
+     * @descripion
+     * Opens the shortcuts modal
+     */
+    onShortcuts(): void {
+      ModalHelper.open('Shortcuts', null, ShortcutsComp);
     },
 
     /**
@@ -99,6 +109,15 @@ export default defineComponent({
     </div>
 
     <div class="head__right">
+      <TooltipComp text="Shortcuts">
+        <ButtonComp
+          type="primary"
+          icon="question"
+          id="button-shortcuts"
+          @click="onShortcuts"
+        />
+      </TooltipComp>
+
       <TooltipComp text="Toggle fullscreen">
         <ButtonComp
           type="primary"
