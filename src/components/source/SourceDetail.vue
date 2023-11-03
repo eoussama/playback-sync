@@ -20,6 +20,7 @@ export default defineComponent({
     source: null,
     loading: false,
     submitted: false,
+    initialized: false,
     previewLoaded: false
   }),
 
@@ -153,36 +154,21 @@ export default defineComponent({
       });
     },
 
-    previewUrl(): void {
-      const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
-
-      if (player) {
-        player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded) {
-            this.source.metadata.start = player.currentTime;
-            this.source.metadata.end = player.duration;
-            this.source.metadata.duration = player.duration;
-          }
-
-          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
-        }
-
-        this.previewLoaded = false;
-        player.load();
-      }
-    },
-
     'source.url'(): void {
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
       if (player) {
         player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded) {
-            this.source.metadata.start = player.currentTime;
-            this.source.metadata.end = player.duration;
+          if (this.source && !this.previewLoaded && !this.initialized) {
+            if (this.params?.type === PageType.Creation) {
+              this.source.metadata.start = 0;
+              this.source.metadata.end = player.duration;
+            }
+
             this.source.metadata.duration = player.duration;
           }
 
+          this.initialized = true;
           this.previewLoaded = player.readyState > ReadyState.HaveNothing;
         }
 
@@ -357,6 +343,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .source {
   $root: &;
+  min-width: 620px;
 
   &__form {
     margin-bottom: 20px;

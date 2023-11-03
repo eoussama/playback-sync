@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import type { TModal } from '@/utils/types/composition/modal.type';
 import type { TModalsStore } from '@/utils/types/store/modalsStore.type';
 import type { TComponent } from '@/utils/types/composition/component.type';

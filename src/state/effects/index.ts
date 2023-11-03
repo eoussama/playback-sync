@@ -1,3 +1,4 @@
+import { hookAppEffect } from './app.effect';
 import { hookModalEffect } from './modal.effect';
 import { hookSourcesEffect } from './sources.effect';
 
@@ -8,6 +9,7 @@ import { hookSourcesEffect } from './sources.effect';
  * Hooks in all effects
  */
 export function hookEffects() {
+  hookAppEffect();
   hookModalEffect();
   hookSourcesEffect();
 }

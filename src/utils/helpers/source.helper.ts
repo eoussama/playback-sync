@@ -5,6 +5,7 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 
 import { DOMHelper } from './dom.helper';
 import { DragHelper } from './drag.helper';
+import { MathHelper } from './math.helper';
 
 import type { TMetadata } from '../types/composition/metadata.type';
 import type { TSource } from '@/utils/types/composition/source.type';
@@ -163,7 +164,7 @@ export class SourceHelper {
    */
   static setVolume(id: string, volume: number): void {
     const player = this.getPlayer(id);
-    const sanitizedVolume = Math.max(Math.min(1, volume), 0);
+    const sanitizedVolume = MathHelper.clamp(volume, 0, 1);
 
     if (player) {
       player.volume = sanitizedVolume;

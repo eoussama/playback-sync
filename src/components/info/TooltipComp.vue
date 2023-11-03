@@ -1,4 +1,5 @@
 <script lang="ts">
+import { MathHelper } from '@/utils/helpers/math.helper';
 import { v4 } from 'uuid';
 import { defineComponent } from 'vue';
 
@@ -38,7 +39,7 @@ export default defineComponent({
         const textHeight = textRect?.height ?? 0;
 
         const textXOffset = elementX + (elementWidth / 2) - (textWidth / 2);
-        const textX = Math.max(textXOffset, 0);
+        const textX = MathHelper.clamp(textXOffset, 0, window.innerWidth - textWidth);
 
         let textY = elementY - textHeight - offset;
 
@@ -95,6 +96,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .tooltip {
+  $root: &;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -147,7 +150,7 @@ export default defineComponent({
   }
 
   &--hovered {
-    .tooltip__text {
+    #{$root}__text {
       display: block;
     }
   }

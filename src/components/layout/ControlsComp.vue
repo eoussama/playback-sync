@@ -2,11 +2,13 @@
 import { defineComponent } from 'vue';
 import { mapState, mapActions } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
 export default defineComponent({
 
   methods: {
+    ...mapActions(useAppStore, ['updateControlsHover']),
     ...mapActions(useSourcesStore, [
       'setPlaying',
       'setMuted',
@@ -74,10 +76,27 @@ export default defineComponent({
      */
     onTimelineChanged(time: number) {
       this.onTimelineSet(time);
+    },
+
+    /**
+     * @description
+     * Handles mouse enter
+     */
+    onMouseEnter(): void {
+      this.updateControlsHover(true);
+    },
+
+    /**
+     * @description
+     * Handles mouse leave
+     */
+    onMouseLeave(): void {
+      this.updateControlsHover(false);
     }
   },
 
   computed: {
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',
@@ -127,63 +146,75 @@ export default defineComponent({
 
 <template>
   <div
-    v-if="!disabled"
-    class="controls"
+    class="controls-wrapper"
+    :class="{
+      'controls-wrapper--show': hover.controls,
+      'controls-wrapper--fullscreen': fullscreen
+    }"
   >
-    <div class="controls__top">
-      <TimelineComp
-        :duration="duration"
-        :value="timelineValue"
-        @timeline-updated="onTimelineChanged"
-      />
-    </div>
-
-    <div class="controls__bottom">
-      <div class="controls__speed">
-        <SpeedComp
-          :value="speed"
-          @speedChanged="onSpeed"
+    <div
+      v-if="!disabled"
+      class="controls"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+    >
+      <div class="controls__top">
+        <TimelineComp
+          :duration="duration"
+          :value="timelineValue"
+          @timeline-updated="onTimelineChanged"
         />
       </div>
 
-      <div class="controls__rewind">
-        <div class="controls__backward">
-          <ButtonComp
-            icon="backward"
-            @click="onBackward"
+      <div class="controls__bottom">
+        <div class="controls__speed">
+          <SpeedComp
+            :value="speed"
+            @speedChanged="onSpeed"
           />
         </div>
 
-        <div class="controls__play-pause">
-          <PlayPauseComp
-            :repeat="ended"
-            :value="playing"
-            @toggled="onToggle"
+        <div class="controls__rewind">
+          <div class="controls__backward">
+            <ButtonComp
+              icon="backward"
+              @click="onBackward"
+            />
+          </div>
+
+          <div class="controls__play-pause">
+            <PlayPauseComp
+              :repeat="ended"
+              :value="playing"
+              @toggled="onToggle"
+            />
+          </div>
+
+          <div class="controls__forward">
+            <ButtonComp
+              icon="forward"
+              @click="onForward"
+            />
+          </div>
+        </div>
+
+        <div class="controls__volume">
+          <VolumeComp
+            :muted="muted"
+            :value="volume"
+            @volumeUpdated="onVolume"
+            @muteToggled="onMuteToggled"
           />
         </div>
 
-        <div class="controls__forward">
-          <ButtonComp
-            icon="forward"
-            @click="onForward"
-          />
-        </div>
       </div>
-
-      <div class="controls__volume">
-        <VolumeComp
-          :muted="muted"
-          :value="volume"
-          @volumeUpdated="onVolume"
-          @muteToggled="onMuteToggled"
-        />
-      </div>
-
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '@/style/mixins/triggerable';
+
 .controls {
   $root: &;
 
@@ -220,6 +251,43 @@ export default defineComponent({
 
       #{$root}__play-pause {
         margin: 0 10px;
+      }
+    }
+  }
+
+  &-wrapper {
+    $wrapper: &;
+
+    width: 100%;
+
+    &--fullscreen {
+      position: fixed;
+      bottom: 35px;
+      left: 0;
+
+      #{$root} {
+        margin: auto;
+        position: relative;
+
+        width: 90%;
+        max-width: 1000px;
+        border-radius: 10px;
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
+        top: 10px;
+        opacity: 0;
+
+        transition-duration: 0.2s;
+        transition-property: top opacity;
+
+        @extend %triggerable;
+      }
+
+      &#{$wrapper}--show {
+        #{$root} {
+          top: 0;
+          opacity: 1;
+        }
       }
     }
   }
