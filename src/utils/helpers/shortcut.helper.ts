@@ -1,4 +1,7 @@
 import { Key } from '../enums/key.enum';
+import { speed } from '../const/speed.const';
+
+import { MathHelper } from './math.helper';
 
 import { useAppStore } from '@/state/stores/app.store';
 import { useModalStore } from '@/state/stores/modal.store';
@@ -65,6 +68,22 @@ export function initShortcuts(): void {
 
       case Key.VolumeDown: {
         sourceStore.setVolume(sourceStore.volume - appStore.volumeStep);
+        break;
+      }
+
+      case Key.SpeedUp: {
+        const speedIndex = speed.indexOf(sourceStore.speed);
+        const index = MathHelper.clamp(speedIndex + 1, 0, speed.length - 1);
+
+        sourceStore.setSpeed(speed[index]);
+        break;
+      }
+
+      case Key.SpeedDown: {
+        const speedIndex = speed.indexOf(sourceStore.speed);
+        const index = MathHelper.clamp(speedIndex - 1, 0, speed.length - 1);
+
+        sourceStore.setSpeed(speed[index]);
         break;
       }
     }
