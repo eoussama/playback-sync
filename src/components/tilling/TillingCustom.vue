@@ -6,6 +6,7 @@ import type { TillingCustomType } from '@/utils/types/components/tillingCustom.t
 
 import { DOMHelper } from '@/utils/helpers/dom.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
 
@@ -25,6 +26,29 @@ export default defineComponent({
 
     /**
      * @description
+     * Focuses on the input
+     */
+    setFocus(): void {
+      const { elementRef } = this.$refs;
+      DOMHelper.focus('input', elementRef as HTMLElement);
+    },
+
+    /**
+     * @description
+     * Listens to validation shortcut
+     */
+    detectValidation(): void {
+      useAppStore().$onAction(({ name, after }) => {
+        after(() => {
+          if (name === 'onValidate') {
+            this.onValidate();
+          }
+        });
+      });
+    },
+
+    /**
+     * @description
      * Validates the custom tilling value
      */
     onValidate(): void {
@@ -35,10 +59,10 @@ export default defineComponent({
   },
 
   mounted(): void {
-    const { elementRef } = this.$refs;
-    this.tilling = this.params.tilling ?? TillingValue.Custom;
+    this.setFocus();
+    this.detectValidation();
 
-    DOMHelper.focus('input', elementRef as HTMLElement);
+    this.tilling = this.params.tilling ?? TillingValue.Custom;
   },
 
   setup() {

@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, ref, type PropType } from 'vue';
 
+import { useAppStore } from '@/state/stores/app.store';
+
 import { PageType } from '@/utils/enums/pageType.enum';
 import { Validation } from '@/utils/enums/validation.enum';
 import { ReadyState } from '@/utils/enums/readyState.enum';
@@ -241,6 +243,13 @@ export default defineComponent({
 
   created() {
     this.initForm();
+    useAppStore().$onAction(({ name, after }) => {
+      after(() => {
+        if (name === 'onValidate') {
+          this.onValidate();
+        }
+      });
+    });
   },
 
   setup() {

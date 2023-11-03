@@ -1,6 +1,7 @@
 export enum Key {
   Close = 'Escape',
   Add = 'KeyN',
+  Validate = 'Enter',
   Shortcuts = 'KeyK',
   Fullscreen = 'F11',
   ToggleFullscreen = 'KeyF',

@@ -63,6 +63,12 @@ export const useAppStore = defineStore('app', {
      */
     updateControlsHover(hover: boolean): void {
       this.hover.controls = hover;
-    }
+    },
+
+    /**
+     * @description
+     * Form validation notification
+     */
+    onValidate(): void { }
   }
 });
