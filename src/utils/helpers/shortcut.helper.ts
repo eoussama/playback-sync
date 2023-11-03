@@ -41,6 +41,13 @@ export function initShortcuts(): void {
           break;
         }
 
+        case Key.Shortcuts: {
+          const addButton = document.getElementById('button-shortcuts');
+          addButton?.click();
+
+          break;
+        }
+
         case Key.ToggleMute: {
           sourceStore.setMuted(!sourceStore.muted);
           break;

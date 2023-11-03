@@ -51,6 +51,14 @@ export default defineComponent({
     },
 
     /**
+     * @descripion
+     * Opens the shortcuts modal
+     */
+    onShortcuts(): void {
+      console.log('shortcuts');
+    },
+
+    /**
      * @description
      * Handles mouse enter
      */
@@ -99,6 +107,15 @@ export default defineComponent({
     </div>
 
     <div class="head__right">
+      <TooltipComp text="Shortcuts">
+        <ButtonComp
+          type="primary"
+          icon="question"
+          id="button-shortcuts"
+          @click="onShortcuts"
+        />
+      </TooltipComp>
+
       <TooltipComp text="Toggle fullscreen">
         <ButtonComp
           type="primary"
