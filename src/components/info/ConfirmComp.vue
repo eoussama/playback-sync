@@ -1,5 +1,7 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent, ref, type PropType } from 'vue';
+
+import { DOMHelper } from '@/utils/helpers/dom.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 import type { TConfirm } from '@/utils/types/composition/confirm.type';
@@ -32,12 +34,25 @@ export default defineComponent({
         ModalHelper.close(this.modalId, true);
       }
     }
+  },
+
+  mounted(): void {
+    const { elementRef } = this.$refs;
+    DOMHelper.focus('.confirm__resolve button', elementRef as HTMLElement);
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
   }
 });
 </script>
 
 <template>
-  <div class="confirm">
+  <div
+    class="confirm"
+    ref="elementRef"
+  >
     <div class="confirm__body">
       <div
         v-if="params?.icon"

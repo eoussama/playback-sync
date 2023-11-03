@@ -1,10 +1,11 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent, ref, type PropType } from 'vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
 import { Validation } from '@/utils/enums/validation.enum';
 import { ReadyState } from '@/utils/enums/readyState.enum';
 
+import { DOMHelper } from '@/utils/helpers/dom.helper';
 import { TimeHelper } from '@/utils/helpers/time.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 import { SourceHelper } from '@/utils/helpers/source.helper';
@@ -146,6 +147,13 @@ export default defineComponent({
   },
 
   watch: {
+    source(): void {
+      setTimeout(() => {
+        const { elementRef } = this.$refs;
+        DOMHelper.focus('input', elementRef as HTMLElement);
+      });
+    },
+
     'source.url'(): void {
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
@@ -233,6 +241,11 @@ export default defineComponent({
 
   created() {
     this.initForm();
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
   }
 });
 </script>
@@ -241,6 +254,7 @@ export default defineComponent({
   <div
     v-if="source"
     class="source"
+    ref="elementRef"
   >
     <div class="source__form">
       <div class="source__input">
@@ -248,6 +262,7 @@ export default defineComponent({
           type="text"
           label="Source Title"
           v-model="source.title"
+          :autofocus="true"
           :error="titleError"
           :hasError="canShowError('title')"
           placeholder="Enter a title for the source"

@@ -1,8 +1,11 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { defineComponent, ref, type PropType } from 'vue';
+
 import { TillingValue } from '@/utils/enums/tillingValue.enum';
 import type { TillingCustomType } from '@/utils/types/components/tillingCustom.type';
+
+import { DOMHelper } from '@/utils/helpers/dom.helper';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 export default defineComponent({
 
@@ -32,13 +35,24 @@ export default defineComponent({
   },
 
   mounted(): void {
+    const { elementRef } = this.$refs;
     this.tilling = this.params.tilling ?? TillingValue.Custom;
+
+    DOMHelper.focus('input', elementRef as HTMLElement);
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
   }
 });
 </script>
 
 <template>
-  <div class="tilling-custom">
+  <div
+    ref="elementRef"
+    class="tilling-custom"
+  >
     <div class="tilling-custom__body">
       Tilling Custom
 

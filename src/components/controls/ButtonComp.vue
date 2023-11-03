@@ -7,6 +7,7 @@ export default defineComponent({
   props: {
     icon: String,
     label: String,
+    autofocus: Boolean,
     type: String as PropType<TButtonType>
   },
 
@@ -28,6 +29,7 @@ export default defineComponent({
   <button
     class="button"
     :class="[typeClass]"
+    :autofocus="autofocus"
   >
     <div
       v-if="icon"

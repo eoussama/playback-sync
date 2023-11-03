@@ -54,4 +54,20 @@ export class DOMHelper {
       observer.observe(root, options);
     });
   }
+
+  /**
+   * @description
+   * Sets focus on a target element
+   *
+   * @param selector The target element's selector
+   * @param container The parent container to look for the element in
+   */
+  static focus(selector: string, container?: HTMLElement): void {
+    const parent = container ?? document.getElementById('app') as HTMLElement;
+    const firstInput = parent.querySelector(selector) as HTMLElement;
+
+    if (firstInput) {
+      firstInput.focus();
+    }
+  }
 }
