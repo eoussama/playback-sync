@@ -69,8 +69,9 @@ export function initShortcuts(): void {
       case Key.ToggleMute: {
         if (notInputFocused) {
           sourceStore.setMuted(!sourceStore.muted);
-          break;
         }
+
+        break;
       }
 
       case Key.TogglePlay: {
@@ -137,29 +138,3 @@ export function initShortcuts(): void {
     }
   }
 }
-
-// /**
-//  * @description
-//  * Helps with shortcuts
-//  */
-// export class ShortcutHelper {
-
-//   /**
-//    * @description
-//    * Listens for key events
-//    *
-//    * @param key The key to listen to
-//    */
-//   static async on(key: string): Promise<void> {
-//     return new Promise(resolve => {
-//       const listener = (e: KeyboardEvent) => {
-//         if (e.code === key) {
-//           resolve();
-//           window.removeEventListener('keyup', listener);
-//         }
-//       }
-
-//       window.addEventListener('keyup', listener);
-//     });
-//   }
-// }
