@@ -6,6 +6,12 @@ export type TAppStore = {
 
   /**
    * @description
+   * The the number of seconds to seek by
+   */
+  seek: number
+
+  /**
+   * @description
    * The state of the fullscreen mode
    */
   fullscreen: boolean

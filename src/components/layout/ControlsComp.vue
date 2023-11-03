@@ -31,7 +31,7 @@ export default defineComponent({
      * Seek timeline backward
      */
     onBackward(): void {
-      this.onSeek(-10);
+      this.onSeek(-this.seek);
     },
 
     /**
@@ -39,7 +39,7 @@ export default defineComponent({
      * Seek timeline forward
      */
     onForward(): void {
-      this.onSeek(10);
+      this.onSeek(this.seek);
     },
 
     /**
@@ -96,7 +96,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover']),
+    ...mapState(useAppStore, ['seek', 'fullscreen', 'hover']),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',

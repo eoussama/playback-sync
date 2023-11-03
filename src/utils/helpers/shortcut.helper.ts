@@ -47,6 +47,11 @@ export function initShortcuts(): void {
         sourceStore.setPlaying(!sourceStore.playing);
         break;
       }
+
+      case Key.Backward: {
+        sourceStore.onSeek(-appStore.seek);
+        break;
+      }
     }
   }
 }
