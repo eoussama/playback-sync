@@ -5,6 +5,7 @@ import type { TButtonType } from '@/utils/types/composition/buttonType.type';
 export default defineComponent({
 
   props: {
+    id: String,
     icon: String,
     label: String,
     autofocus: Boolean,
@@ -27,6 +28,7 @@ export default defineComponent({
 
 <template>
   <button
+    :id="id"
     class="button"
     :class="[typeClass]"
     :autofocus="autofocus"

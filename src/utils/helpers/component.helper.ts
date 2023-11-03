@@ -11,6 +11,7 @@ import ModalComp from '@/components/info/ModalComp.vue';
 import ToastComp from '@/components/info/ToastComp.vue';
 import TooltipComp from '@/components/info/TooltipComp.vue';
 import ConfirmComp from '@/components/info/ConfirmComp.vue';
+import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
 
 import SourceComp from '@/components/source/SourceComp.vue';
 import SourceEmpty from '@/components/source/SourceEmpty.vue';
@@ -48,6 +49,7 @@ export function addComponent(app: App<Element>) {
   app.component('ToastComp', ToastComp);
   app.component('TooltipComp', TooltipComp);
   app.component('ConfirmComp', ConfirmComp);
+  app.component('ShortcutsComp', ShortcutsComp);
 
   app.component('TillingComp', TillingComp);
   app.component('TillingCustom', TillingCustom);

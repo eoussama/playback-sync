@@ -5,6 +5,8 @@ import type { TAppStore } from '@/utils/types/store/appStore.type';
 
 export const useAppStore = defineStore('app', {
   state: (): TAppStore => ({
+    seekStep: 10,
+    volumeStep: 0.1,
     fullscreen: false,
     hover: {
       head: false,
@@ -61,6 +63,12 @@ export const useAppStore = defineStore('app', {
      */
     updateControlsHover(hover: boolean): void {
       this.hover.controls = hover;
-    }
+    },
+
+    /**
+     * @description
+     * Form validation notification
+     */
+    onValidate(): void { }
   }
 });

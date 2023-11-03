@@ -8,7 +8,7 @@ import { hookSourcesEffect } from './sources.effect';
  * @description
  * Hooks in all effects
  */
-export function hookEffects() {
+export function initEffects() {
   hookAppEffect();
   hookModalEffect();
   hookSourcesEffect();

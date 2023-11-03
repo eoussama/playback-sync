@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { useModalStore } from '@/state/stores/modal.store';
 
 import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
 import type { TModal } from '@/utils/types/composition/modal.type';
@@ -45,6 +47,18 @@ export default defineComponent({
         ModalHelper.close(this.modal.id);
       }
     }
+  },
+
+  mounted(): void {
+    useModalStore().$onAction(({ name, after }) => {
+      after(() => {
+        if (name === 'addModal') {
+          if (this.modal) {
+            ModalHelper.close(this.modal.id);
+          }
+        }
+      });
+    });
   }
 });
 </script>
@@ -69,6 +83,7 @@ export default defineComponent({
         <div class="modal__close">
           <ButtonComp
             icon="xmark"
+            :autofocus="true"
             @click="onClose"
           />
         </div>

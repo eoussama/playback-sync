@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-import { hookEffects } from './state/effects';
-
 import { useAppStore } from './state/stores/app.store';
 import { useModalStore } from './state/stores/modal.store';
 
@@ -10,8 +8,6 @@ import BodySection from './components/layout/BodySection.vue';
 import FootSection from './components/layout/FootSection.vue';
 
 
-
-hookEffects();
 
 const appStore = useAppStore();
 const modalStore = useModalStore();
@@ -22,7 +18,6 @@ const modalStore = useModalStore();
     class="root"
     :class="{ 'root--fullscreen': appStore.fullscreen }"
   >
-
     <div class="root__content">
       <HeadSection />
       <BodySection />

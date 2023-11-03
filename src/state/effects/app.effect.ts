@@ -9,6 +9,11 @@ import { useAppStore } from '../stores/app.store';
 export function hookAppEffect() {
   const appStore = useAppStore();
 
+  document.documentElement.onfullscreenchange = () => {
+    const fullscreen = Boolean(document.fullscreenElement);
+    appStore.updateFullscreen(fullscreen);
+  }
+
   appStore.$onAction(({ name, store, after }) => {
     after(() => {
       switch (name) {

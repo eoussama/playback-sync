@@ -4,6 +4,7 @@ import { TillingValue } from '@/utils/enums/tillingValue.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
 import type { TMetadata } from '@/utils/types/composition/metadata.type';
 import type { TSourcesStore } from '@/utils/types/store/sourceStore.type';
+import { MathHelper } from '@/utils/helpers/math.helper';
 
 
 
@@ -81,7 +82,7 @@ export const useSourcesStore = defineStore('sources', {
      * @param volume The volume to set
      */
     setVolume(volume: number): void {
-      this.volume = volume;
+      this.volume = MathHelper.clamp(volume, 0, 1);
     },
 
     /**

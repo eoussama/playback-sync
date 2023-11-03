@@ -36,6 +36,18 @@ export const useModalStore = defineStore('modals', {
       if (index >= 0) {
         this.modals.splice(index, 1);
       }
+    },
+
+    /**
+     * @description
+     * Closes the overlaying modal
+     */
+    closeModal(): void {
+      const modal = this.modals.slice(0).reverse()[0];
+
+      if (modal) {
+        this.removeModal(modal.id, { id: modal.id });
+      }
     }
   }
 });
