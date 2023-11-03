@@ -4,7 +4,9 @@ import { mapState, mapActions } from 'pinia';
 
 import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
+
 import SourceDetail from '@/components/source/SourceDetail.vue';
+import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
 
 import { PageType } from '@/utils/enums/pageType.enum';
 
@@ -55,7 +57,7 @@ export default defineComponent({
      * Opens the shortcuts modal
      */
     onShortcuts(): void {
-      console.log('shortcuts');
+      ModalHelper.open('Shortcuts', null, ShortcutsComp);
     },
 
     /**
