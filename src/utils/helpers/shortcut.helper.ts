@@ -94,7 +94,9 @@ export function initShortcuts(): void {
           break;
         }
       }
-    } else if (code === Key.Close) {
+    }
+
+    if (code === Key.Close) {
       modalStore.closeModal();
     }
   }
