@@ -42,6 +42,11 @@ export function initShortcuts(): void {
         sourceStore.setMuted(!sourceStore.muted);
         break;
       }
+
+      case Key.TogglePlay: {
+        sourceStore.setPlaying(!sourceStore.playing);
+        break;
+      }
     }
   }
 }
