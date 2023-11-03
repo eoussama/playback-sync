@@ -5,7 +5,8 @@ import type { TAppStore } from '@/utils/types/store/appStore.type';
 
 export const useAppStore = defineStore('app', {
   state: (): TAppStore => ({
-    seek: 10,
+    seekStep: 10,
+    volumeStep: 0.1,
     fullscreen: false,
     hover: {
       head: false,

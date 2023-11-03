@@ -8,7 +8,13 @@ export type TAppStore = {
    * @description
    * The the number of seconds to seek by
    */
-  seek: number
+  seekStep: number
+
+  /**
+   * @description
+   * The the step to update the volume by
+   */
+  volumeStep: number
 
   /**
    * @description

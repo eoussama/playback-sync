@@ -49,12 +49,22 @@ export function initShortcuts(): void {
       }
 
       case Key.Forward: {
-        sourceStore.onSeek(appStore.seek);
+        sourceStore.onSeek(appStore.seekStep);
         break;
       }
 
       case Key.Backward: {
-        sourceStore.onSeek(-appStore.seek);
+        sourceStore.onSeek(-appStore.seekStep);
+        break;
+      }
+
+      case Key.VolumeUp: {
+        sourceStore.setVolume(sourceStore.volume + appStore.volumeStep);
+        break;
+      }
+
+      case Key.VolumeDown: {
+        sourceStore.setVolume(sourceStore.volume - appStore.volumeStep);
         break;
       }
     }
