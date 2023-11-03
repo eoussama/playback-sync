@@ -2,6 +2,7 @@ import { Key } from '../enums/key.enum';
 
 import { useAppStore } from '@/state/stores/app.store';
 import { useModalStore } from '@/state/stores/modal.store';
+import { useSourcesStore } from '@/state/stores/sources.store';
 
 
 
@@ -12,6 +13,7 @@ import { useModalStore } from '@/state/stores/modal.store';
 export function initShortcuts(): void {
   const appStore = useAppStore();
   const modalStore = useModalStore();
+  const sourceStore = useSourcesStore();
 
   window.onkeydown = ({ code }) => {
     if (code === Key.Fullscreen) {
@@ -33,6 +35,11 @@ export function initShortcuts(): void {
 
       case Key.Close: {
         modalStore.closeModal();
+        break;
+      }
+
+      case Key.ToggleMute: {
+        sourceStore.setMuted(!sourceStore.muted);
         break;
       }
     }
