@@ -48,6 +48,11 @@ export function initShortcuts(): void {
         break;
       }
 
+      case Key.Forward: {
+        sourceStore.onSeek(appStore.seek);
+        break;
+      }
+
       case Key.Backward: {
         sourceStore.onSeek(-appStore.seek);
         break;
