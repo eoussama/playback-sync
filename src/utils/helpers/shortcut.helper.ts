@@ -25,83 +25,115 @@ export function initShortcuts(): void {
   }
 
   window.onkeyup = ({ code }) => {
-    const noButtonFocused = document.activeElement?.nodeName.toLocaleLowerCase() !== 'button';
-    const notInputFocused = document.activeElement?.nodeName.toLocaleLowerCase() !== 'input';
+    const focusedElementName = document.activeElement?.nodeName.toLocaleLowerCase();
+    const noButtonFocused = focusedElementName !== 'button';
+    const notInputFocused = focusedElementName !== 'input';
 
-    if (notInputFocused) {
-      switch (code) {
-        case Key.ToggleFullscreen: {
+    switch (code) {
+      case Key.Close: {
+        modalStore.closeModal();
+        break;
+      }
+
+      case Key.Validate: {
+        appStore.onValidate();
+        break;
+      }
+
+      case Key.ToggleFullscreen: {
+        if (notInputFocused) {
           appStore.toggleFullscreen();
-          break;
         }
 
-        case Key.Add: {
+        break;
+      }
+
+      case Key.Add: {
+        if (notInputFocused) {
           const addButton = document.getElementById('button-add-modal');
           addButton?.click();
-
-          break;
         }
 
-        case Key.Shortcuts: {
+        break;
+      }
+
+      case Key.Shortcuts: {
+        if (notInputFocused) {
           const addButton = document.getElementById('button-shortcuts');
           addButton?.click();
-
-          break;
         }
 
-        case Key.ToggleMute: {
+        break;
+      }
+
+      case Key.ToggleMute: {
+        if (notInputFocused) {
           sourceStore.setMuted(!sourceStore.muted);
           break;
         }
+      }
 
-        case Key.TogglePlay: {
-          if (noButtonFocused) {
-            sourceStore.setPlaying(!sourceStore.playing);
-          }
-
-          break;
+      case Key.TogglePlay: {
+        if (noButtonFocused && notInputFocused) {
+          sourceStore.setPlaying(!sourceStore.playing);
         }
 
-        case Key.Forward: {
+        break;
+      }
+
+      case Key.Forward: {
+        if (notInputFocused) {
           sourceStore.onSeek(appStore.seekStep);
-          break;
         }
 
-        case Key.Backward: {
+        break;
+      }
+
+      case Key.Backward: {
+        if (notInputFocused) {
           sourceStore.onSeek(-appStore.seekStep);
-          break;
         }
 
-        case Key.VolumeUp: {
+        break;
+      }
+
+      case Key.VolumeUp: {
+        if (notInputFocused) {
           sourceStore.setVolume(sourceStore.volume + appStore.volumeStep);
-          break;
         }
 
-        case Key.VolumeDown: {
+        break;
+      }
+
+      case Key.VolumeDown: {
+        if (notInputFocused) {
           sourceStore.setVolume(sourceStore.volume - appStore.volumeStep);
-          break;
         }
 
-        case Key.SpeedUp: {
+        break;
+      }
+
+      case Key.SpeedUp: {
+        if (notInputFocused) {
           const speedIndex = speed.indexOf(sourceStore.speed);
           const index = MathHelper.clamp(speedIndex + 1, 0, speed.length - 1);
 
           sourceStore.setSpeed(speed[index]);
-          break;
         }
 
-        case Key.SpeedDown: {
+        break;
+      }
+
+      case Key.SpeedDown: {
+        if (notInputFocused) {
           const speedIndex = speed.indexOf(sourceStore.speed);
           const index = MathHelper.clamp(speedIndex - 1, 0, speed.length - 1);
 
           sourceStore.setSpeed(speed[index]);
-          break;
         }
-      }
-    }
 
-    if (code === Key.Close) {
-      modalStore.closeModal();
+        break;
+      }
     }
   }
 }
