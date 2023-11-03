@@ -9,6 +9,7 @@ export default defineComponent({
     min: Number,
     label: String,
     hasError: Boolean,
+    autofocus: Boolean,
     placeholder: String,
     modelValue: [String, Number],
     error: {
@@ -55,6 +56,7 @@ export default defineComponent({
         :type="type"
         :value="modelValue"
         class="input__input"
+        :autofocus="autofocus"
         :placeholder="placeholder"
         @input="onInput"
       />
