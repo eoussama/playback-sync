@@ -25,9 +25,10 @@ export function initShortcuts(): void {
   }
 
   window.onkeyup = ({ code }) => {
-    const detectShortcut = document.activeElement?.nodeName.toLocaleLowerCase() !== 'input';
+    const noButtonFocused = document.activeElement?.nodeName.toLocaleLowerCase() !== 'button';
+    const notInputFocused = document.activeElement?.nodeName.toLocaleLowerCase() !== 'input';
 
-    if (detectShortcut) {
+    if (notInputFocused) {
       switch (code) {
         case Key.ToggleFullscreen: {
           appStore.toggleFullscreen();
@@ -54,7 +55,10 @@ export function initShortcuts(): void {
         }
 
         case Key.TogglePlay: {
-          sourceStore.setPlaying(!sourceStore.playing);
+          if (noButtonFocused) {
+            sourceStore.setPlaying(!sourceStore.playing);
+          }
+
           break;
         }
 

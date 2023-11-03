@@ -1,11 +1,43 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { DOMHelper } from '@/utils/helpers/dom.helper';
 
-export default defineComponent({})
+export default defineComponent({
+
+  props: {
+    modalId: String
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Focuses on the close button
+     */
+    setFocus(): void {
+      const { elementRef } = this.$refs;
+      const parent = (elementRef as HTMLElement).closest('.modal__element');
+
+      DOMHelper.focus('button', parent as HTMLElement);
+    }
+  },
+
+  mounted(): void {
+    this.setFocus();
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
+  }
+})
 </script>
 
 <template>
-  <div class="shortcuts">
+  <div
+    ref="elementRef"
+    class="shortcuts"
+  >
     <div class="shortcut">
       <kbd>ESC</kbd> Close Modals
     </div>
