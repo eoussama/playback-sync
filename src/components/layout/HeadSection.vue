@@ -88,6 +88,7 @@ export default defineComponent({
         <ButtonComp
           icon="plus"
           type="primary"
+          id="button-add-modal"
           @click="onAdd"
         />
       </TooltipComp>
