@@ -1,7 +1,9 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import { defineComponent, ref, type PropType } from 'vue';
 
+import { DOMHelper } from '@/utils/helpers/dom.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+
 import type { TToast } from '@/utils/types/composition/toast.type';
 
 export default defineComponent({
@@ -25,15 +27,26 @@ export default defineComponent({
   },
 
   mounted(): void {
+    const { elementRef } = this.$refs;
+    DOMHelper.focus('.toast__action button', elementRef as HTMLElement);
+
     setTimeout(() => {
       this.onClose();
     }, 3000);
+  },
+
+  setup() {
+    const elementRef = ref(null);
+    return { elementRef };
   }
 })
 </script>
 
 <template>
-  <div class="toast">
+  <div
+    class="toast"
+    ref="elementRef"
+  >
     <div class="toast__message">
       {{ params?.message }}
     </div>
