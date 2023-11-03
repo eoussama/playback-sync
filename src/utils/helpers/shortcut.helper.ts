@@ -41,6 +41,13 @@ export function initShortcuts(): void {
         break;
       }
 
+      case Key.Add: {
+        const addButton = document.getElementById('button-add-modal');
+        addButton?.click();
+
+        break;
+      }
+
       case Key.ToggleMute: {
         sourceStore.setMuted(!sourceStore.muted);
         break;

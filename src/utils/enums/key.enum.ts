@@ -1,5 +1,6 @@
 export enum Key {
   Close = 'Escape',
+  Add = 'KeyN',
   Fullscreen = 'F11',
   ToggleFullscreen = 'KeyF',
   TogglePlay = 'Space',
