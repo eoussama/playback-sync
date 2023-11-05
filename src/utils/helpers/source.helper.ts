@@ -190,22 +190,27 @@ export class SourceHelper {
    *
    * @param id The ID of the source to pin
    */
-  static pin(id: string): void {
+  static async pin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
     const container = document.querySelector('#app .view') as HTMLDivElement;
 
-    DragHelper.create(elementId, container);
+    await DragHelper.create(elementId, container);
+    await this.hook(id);
+    await this.sync();
   }
 
   /**
    * @description
    * Unpins a source
-   *
-   * @param id The ID of the source to unpin
-   */
-  static unpin(id: string): void {
+  *
+  * @param id The ID of the source to unpin
+  */
+  static async unpin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
-    DragHelper.destroy(elementId);
+
+    await DragHelper.destroy(elementId);
+    await this.hook(id);
+    await this.sync();
   }
 
   /**
@@ -224,47 +229,56 @@ export class SourceHelper {
    *
    * @param id The ID of the player
    */
-  static hook(id: string): void {
-    const elementId = `#player-${id}`;
+  static async hook(id: string): Promise<void> {
+    return new Promise(resolve => {
+      const elementId = `#player-${id}`;
 
-    DOMHelper
-      .watch(elementId)
-      .then(e => e[0] as HTMLVideoElement)
-      .then(player => {
-        const store = useSourcesStore();
+      DOMHelper
+        .watch(elementId)
+        .then(e => e[0] as HTMLVideoElement)
+        .then(player => {
+          const store = useSourcesStore();
+          const source = store.getSource(id);
 
-        player.onplay = () => {
-          if (!store.bufferPause) {
-            store.updateSourceMetadata(id, { playing: true });
+          player.volume = source.metadata.volume;
+          player.playbackRate = source.metadata.speed;
+          player.currentTime = source.metadata.currentTime;
+
+          player.onplay = () => {
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: true });
+            }
           }
-        }
 
-        player.onpause = () => {
-          if (!store.bufferPause) {
-            store.updateSourceMetadata(id, { playing: false });
+          player.onpause = () => {
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: false });
+            }
           }
-        }
 
-        player.ontimeupdate = () => {
-          store.updateSourceMetadata(id, { currentTime: player.currentTime });
-        }
+          player.ontimeupdate = () => {
+            store.updateSourceMetadata(id, { currentTime: player.currentTime });
+          }
 
-        player.onvolumechange = () => {
-          store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
-        }
+          player.onvolumechange = () => {
+            store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
+          }
 
-        player.onratechange = () => {
-          store.updateSourceMetadata(id, { speed: player.playbackRate });
-        }
+          player.onratechange = () => {
+            store.updateSourceMetadata(id, { speed: player.playbackRate });
+          }
 
-        player.onwaiting = () => {
-          store.updateSourceMetadata(id, { buffering: true });
-        }
+          player.onwaiting = () => {
+            store.updateSourceMetadata(id, { buffering: true });
+          }
 
-        player.oncanplay = () => {
-          store.updateSourceMetadata(id, { buffering: false });
-        }
-      });
+          player.oncanplay = () => {
+            store.updateSourceMetadata(id, { buffering: false });
+          }
+
+          resolve();
+        });
+    });
   }
 
   /**
