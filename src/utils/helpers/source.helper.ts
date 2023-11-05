@@ -240,6 +240,7 @@ export class SourceHelper {
           const store = useSourcesStore();
           const source = store.getSource(id);
 
+          player.muted = source.metadata.muted;
           player.volume = source.metadata.volume;
           player.playbackRate = source.metadata.speed;
           player.currentTime = source.metadata.currentTime;
