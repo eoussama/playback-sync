@@ -130,8 +130,7 @@ export class SourceHelper {
    * @param id The ID of the source
    * @param time The number of seconds to seek to
    */
-  static async seek(id: string, time: number): Promise<void> {
-    await this.sync();
+  static seek(id: string, time: number): void {
     const player = this.getPlayer(id);
 
     if (player) {
@@ -146,8 +145,7 @@ export class SourceHelper {
    * @param id The ID of the source
    * @param time The time to seek to
    */
-  static async setTime(id: string, time: number): Promise<void> {
-    await this.sync();
+  static setTime(id: string, time: number): void {
     const player = this.getPlayer(id);
 
     if (player) {
