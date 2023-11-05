@@ -39,7 +39,7 @@ export default defineComponent({
     class="shortcuts"
   >
     <div class="shortcut">
-      <kbd>ESC</kbd> Close Modals
+      <kbd>Esc</kbd> Close Modals
     </div>
 
     <div class="shortcut">
