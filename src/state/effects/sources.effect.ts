@@ -19,7 +19,7 @@ export function hookSourcesEffect() {
       cachedCurrentTime = store.longestSource.metadata?.currentTime;
     }
 
-    after(() => {
+    after(async () => {
       switch (name) {
         case 'addSource': {
           const [{ id }] = args;
@@ -125,10 +125,18 @@ export function hookSourcesEffect() {
         case 'toggleSourcePin': {
           const [id, pinned] = args;
 
+          if (store.playing) {
+            store.setBufferPause(true);
+          }
+
           if (pinned) {
-            SourceHelper.pin(id);
+            await SourceHelper.pin(id);
           } else {
-            SourceHelper.unpin(id);
+            await SourceHelper.unpin(id);
+          }
+
+          if (store.playing) {
+            store.setBufferPause(false);
           }
 
           break;
