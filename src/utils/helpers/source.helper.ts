@@ -112,6 +112,22 @@ export class SourceHelper {
 
   /**
    * @description
+   * Restarts the source
+   *
+   * @param id The ID of the source
+   */
+  static async restart(id: string): Promise<void> {
+    await this.sync();
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.currentTime = 0;
+      player.play();
+    }
+  }
+
+  /**
+   * @description
    * Toggles the source's muted state
    *
    * @param id The ID of the source
