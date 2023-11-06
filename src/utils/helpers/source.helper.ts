@@ -90,7 +90,9 @@ export class SourceHelper {
     const player = this.getPlayer(id);
 
     if (player) {
-      player.play();
+      if (player.currentTime < player.duration) {
+        player.play();
+      }
     }
   }
 
@@ -243,7 +245,10 @@ export class SourceHelper {
           player.muted = source.metadata.muted;
           player.volume = source.metadata.volume;
           player.playbackRate = source.metadata.speed;
-          player.currentTime = source.metadata.currentTime;
+
+          const currTime = source.metadata.currentTime;
+          const maxTime = MathHelper.sanitize(player.duration) ?? 0 - 0.1;
+          player.currentTime = maxTime > 0 ? Math.min(currTime, maxTime) : currTime;
 
           player.onplay = () => {
             if (!store.bufferPause) {
@@ -326,7 +331,6 @@ export class SourceHelper {
         const listener = () => {
           if (player.readyState === ReadyState.HaveEnoughData) {
             resolve(true);
-
             player.removeEventListener('canplay', listener);
             player.removeEventListener('canplaythrough', listener);
           }

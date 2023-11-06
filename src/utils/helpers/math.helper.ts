@@ -15,4 +15,14 @@ export class MathHelper {
   static clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
   }
+
+  /**
+   * @description
+   * Sanitizes value
+   *
+   * @param value The value to sanitize
+   */
+  static sanitize(value: number): number {
+    return (isNaN(value) ? 0 : value) ?? 0;
+  }
 }
