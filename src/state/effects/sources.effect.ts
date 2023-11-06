@@ -13,12 +13,6 @@ export function hookSourcesEffect() {
   const store = useSourcesStore();
 
   store.$onAction(({ name, store, args, after }) => {
-    let cachedCurrentTime = 0;
-
-    if (name === 'switchSources') {
-      cachedCurrentTime = store.longestSource.metadata?.currentTime;
-    }
-
     after(async () => {
       switch (name) {
         case 'addSource': {
@@ -119,13 +113,7 @@ export function hookSourcesEffect() {
 
         case 'switchSources': {
           const [id1, id2] = args;
-
-          setTimeout(() => {
-            [id1, id2].forEach(id => {
-              SourceHelper.hook(id);
-              SourceHelper.setTime(id, cachedCurrentTime);
-            })
-          });
+          setTimeout(() => [id1, id2].forEach(SourceHelper.hook));
 
           break;
         }
