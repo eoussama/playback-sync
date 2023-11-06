@@ -90,7 +90,9 @@ export class SourceHelper {
     const player = this.getPlayer(id);
 
     if (player) {
-      player.play();
+      if (player.currentTime < player.duration) {
+        player.play();
+      }
     }
   }
 
@@ -105,6 +107,22 @@ export class SourceHelper {
 
     if (player) {
       player.pause();
+    }
+  }
+
+  /**
+   * @description
+   * Restarts the source
+   *
+   * @param id The ID of the source
+   */
+  static async restart(id: string): Promise<void> {
+    await this.sync();
+    const player = this.getPlayer(id);
+
+    if (player) {
+      player.currentTime = 0;
+      player.play();
     }
   }
 
@@ -190,22 +208,27 @@ export class SourceHelper {
    *
    * @param id The ID of the source to pin
    */
-  static pin(id: string): void {
+  static async pin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
     const container = document.querySelector('#app .view') as HTMLDivElement;
 
-    DragHelper.create(elementId, container);
+    await DragHelper.create(elementId, container);
+    await this.hook(id);
+    await this.sync();
   }
 
   /**
    * @description
    * Unpins a source
-   *
-   * @param id The ID of the source to unpin
-   */
-  static unpin(id: string): void {
+  *
+  * @param id The ID of the source to unpin
+  */
+  static async unpin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
-    DragHelper.destroy(elementId);
+
+    await DragHelper.destroy(elementId);
+    await this.hook(id);
+    await this.sync();
   }
 
   /**
@@ -224,47 +247,64 @@ export class SourceHelper {
    *
    * @param id The ID of the player
    */
-  static hook(id: string): void {
-    const elementId = `#player-${id}`;
+  static async hook(id: string): Promise<void> {
+    return new Promise(resolve => {
+      const elementId = `#player-${id}`;
 
-    DOMHelper
-      .watch(elementId)
-      .then(e => e[0] as HTMLVideoElement)
-      .then(player => {
-        const store = useSourcesStore();
+      DOMHelper
+        .watch(elementId)
+        .then(e => e[0] as HTMLVideoElement)
+        .then(player => {
+          const store = useSourcesStore();
+          const source = store.getSource(id);
 
-        player.onplay = () => {
-          if (!store.bufferPause) {
-            store.updateSourceMetadata(id, { playing: true });
+          player.muted = source.metadata.muted;
+          player.volume = source.metadata.volume;
+          player.playbackRate = source.metadata.speed;
+
+          const currTime = source.metadata.currentTime;
+          const maxTime = MathHelper.sanitize(player.duration) ?? 0 - 0.1;
+          player.currentTime = maxTime > 0 ? Math.min(currTime, maxTime) : currTime;
+
+          if (source.metadata.playing) {
+            player.play();
           }
-        }
 
-        player.onpause = () => {
-          if (!store.bufferPause) {
-            store.updateSourceMetadata(id, { playing: false });
+          player.onplay = () => {
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: true });
+            }
           }
-        }
 
-        player.ontimeupdate = () => {
-          store.updateSourceMetadata(id, { currentTime: player.currentTime });
-        }
+          player.onpause = () => {
+            if (!store.bufferPause) {
+              store.updateSourceMetadata(id, { playing: false });
+            }
+          }
 
-        player.onvolumechange = () => {
-          store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
-        }
+          player.ontimeupdate = () => {
+            store.updateSourceMetadata(id, { currentTime: player.currentTime });
+          }
 
-        player.onratechange = () => {
-          store.updateSourceMetadata(id, { speed: player.playbackRate });
-        }
+          player.onvolumechange = () => {
+            store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
+          }
 
-        player.onwaiting = () => {
-          store.updateSourceMetadata(id, { buffering: true });
-        }
+          player.onratechange = () => {
+            store.updateSourceMetadata(id, { speed: player.playbackRate });
+          }
 
-        player.oncanplay = () => {
-          store.updateSourceMetadata(id, { buffering: false });
-        }
-      });
+          player.onwaiting = () => {
+            store.updateSourceMetadata(id, { buffering: true });
+          }
+
+          player.oncanplay = () => {
+            store.updateSourceMetadata(id, { buffering: false });
+          }
+
+          resolve();
+        });
+    });
   }
 
   /**
@@ -311,7 +351,6 @@ export class SourceHelper {
         const listener = () => {
           if (player.readyState === ReadyState.HaveEnoughData) {
             resolve(true);
-
             player.removeEventListener('canplay', listener);
             player.removeEventListener('canplaythrough', listener);
           }

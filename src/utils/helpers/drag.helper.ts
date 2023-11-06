@@ -15,9 +15,15 @@ export class DragHelper {
    * @param id The ID of the element to drag
    * @param bound The parent bound element
    */
-  static create(id: string, bound: HTMLElement): void {
-    const options = { bounds: bound };
-    setTimeout(() => Draggable.create(id, options));
+  static async create(id: string, bound: HTMLElement): Promise<void> {
+    return new Promise(resolve => {
+      const options = { bounds: bound };
+
+      setTimeout(() => {
+        Draggable.create(id, options);
+        resolve();
+      });
+    });
   }
 
   /**
@@ -26,13 +32,17 @@ export class DragHelper {
    *
    * @param id The ID of the element to remove the drag from
    */
-  static destroy(id: string): void {
-    const draggable = Draggable.get(id);
-    const element = document.querySelector(id) as HTMLDivElement;
+  static async destroy(id: string): Promise<void> {
+    return new Promise(resolve => {
+      const draggable = Draggable.get(id);
+      const element = document.querySelector(id) as HTMLDivElement;
 
-    setTimeout(() => {
-      draggable.kill();
-      element.style.transform = 'none';
+      setTimeout(() => {
+        draggable.kill();
+        element.style.transform = 'none';
+
+        resolve();
+      });
     });
   }
 

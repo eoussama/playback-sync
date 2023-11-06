@@ -13,13 +13,7 @@ export function hookSourcesEffect() {
   const store = useSourcesStore();
 
   store.$onAction(({ name, store, args, after }) => {
-    let cachedCurrentTime = 0;
-
-    if (name === 'switchSources') {
-      cachedCurrentTime = store.longestSource.metadata?.currentTime;
-    }
-
-    after(() => {
+    after(async () => {
       switch (name) {
         case 'addSource': {
           const [{ id }] = args;
@@ -94,6 +88,14 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'onRestart': {
+          for (const source of store.sources) {
+            SourceHelper.restart(source.id);
+          }
+
+          break;
+        }
+
         case 'onTimelineSet': {
           for (const source of store.sources) {
             SourceHelper.setTime(source.id, ...args);
@@ -111,13 +113,7 @@ export function hookSourcesEffect() {
 
         case 'switchSources': {
           const [id1, id2] = args;
-
-          setTimeout(() => {
-            [id1, id2].forEach(id => {
-              SourceHelper.hook(id);
-              SourceHelper.setTime(id, cachedCurrentTime);
-            })
-          });
+          setTimeout(() => [id1, id2].forEach(SourceHelper.hook));
 
           break;
         }
@@ -125,10 +121,18 @@ export function hookSourcesEffect() {
         case 'toggleSourcePin': {
           const [id, pinned] = args;
 
+          if (store.playing) {
+            store.setBufferPause(true);
+          }
+
           if (pinned) {
-            SourceHelper.pin(id);
+            await SourceHelper.pin(id);
           } else {
-            SourceHelper.unpin(id);
+            await SourceHelper.unpin(id);
+          }
+
+          if (store.playing) {
+            store.setBufferPause(false);
           }
 
           break;
