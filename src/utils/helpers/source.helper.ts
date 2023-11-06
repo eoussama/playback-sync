@@ -266,6 +266,10 @@ export class SourceHelper {
           const maxTime = MathHelper.sanitize(player.duration) ?? 0 - 0.1;
           player.currentTime = maxTime > 0 ? Math.min(currTime, maxTime) : currTime;
 
+          if (source.metadata.playing) {
+            player.play();
+          }
+
           player.onplay = () => {
             if (!store.bufferPause) {
               store.updateSourceMetadata(id, { playing: true });
