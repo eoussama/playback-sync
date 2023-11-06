@@ -7,7 +7,15 @@ import { useAppStore } from '@/state/stores/app.store';
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover'])
+    ...mapState(useAppStore, ['fullscreen', 'hover']),
+
+    /**
+     * @description
+     * Returns the app's version
+     */
+    version(): string {
+      return config.version;
+    }
   },
 
   methods: {
@@ -52,7 +60,7 @@ export default defineComponent({
       </span>
 
       <span class="foot__text">
-        Playback Sync • v0.2.0
+        Playback Sync • {{ version }}
       </span>
     </a>
   </div>
