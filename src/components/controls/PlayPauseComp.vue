@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 
 
 export default defineComponent({
-  emits: ['toggled'],
+  emits: ['toggled', 'restart'],
 
   props: {
     value: Boolean,
@@ -17,7 +17,7 @@ export default defineComponent({
      * Toggle clicked
      */
     onClick(): void {
-      this.$emit('toggled');
+      this.$emit(this.repeat ? 'restart' : 'toggled');
     }
   },
 

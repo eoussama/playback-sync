@@ -94,6 +94,14 @@ export function hookSourcesEffect() {
           break;
         }
 
+        case 'onRestart': {
+          for (const source of store.sources) {
+            SourceHelper.restart(source.id);
+          }
+
+          break;
+        }
+
         case 'onTimelineSet': {
           for (const source of store.sources) {
             SourceHelper.setTime(source.id, ...args);

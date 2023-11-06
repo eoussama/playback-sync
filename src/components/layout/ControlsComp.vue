@@ -15,6 +15,7 @@ export default defineComponent({
       'setVolume',
       'setSpeed',
       'onSeek',
+      'onRestart',
       'onTimelineSet'
     ]),
 
@@ -24,6 +25,14 @@ export default defineComponent({
      */
     onToggle(): void {
       this.setPlaying(!this.playing);
+    },
+
+    /**
+     * @description
+     * Toggles the playing state of the sources
+     */
+    onRestartSources(): void {
+      this.onRestart();
     },
 
     /**
@@ -187,6 +196,7 @@ export default defineComponent({
               :repeat="ended"
               :value="playing"
               @toggled="onToggle"
+              @restart="onRestartSources"
             />
           </div>
 

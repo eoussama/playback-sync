@@ -114,6 +114,12 @@ export const useSourcesStore = defineStore('sources', {
 
     /**
      * @description
+     * Notifyes the app to start the sources
+     */
+    onRestart(): void { },
+
+    /**
+     * @description
      * Resets all sources
      */
     resetSources(): void {
