@@ -206,8 +206,13 @@ export default defineComponent({
      * @description
      * Toggles fullscreen mode
      */
-    onToggleFullscreen(): void {
-      this.toggleFullscreen();
+    onToggleFullscreen(e: MouseEvent): void {
+      const target = e.target as HTMLElement;
+      const name = target.nodeName.toLowerCase();
+
+      if (name !== 'button' && !target.closest('button')) {
+        this.toggleFullscreen();
+      }
     }
   }
 });
@@ -216,7 +221,7 @@ export default defineComponent({
 <template>
   <div
     class="view"
-    @dblclick="onToggleFullscreen"
+    @dblclick.stop="onToggleFullscreen"
     :class="{
       'view--empty': empty,
       'view--fullscreen': fullscreen
