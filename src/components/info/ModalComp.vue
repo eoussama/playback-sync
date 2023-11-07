@@ -123,6 +123,7 @@ export default defineComponent({
   z-index: 1000;
   pointer-events: none;
 
+
   &__element {
     overflow: hidden;
     pointer-events: all;
@@ -133,7 +134,7 @@ export default defineComponent({
     background-color: white;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 
-    max-width: 100vw;
+    max-width: 95vw;
     height: min-content;
 
     animation-name: fadeIn;
@@ -159,23 +160,25 @@ export default defineComponent({
   }
 
   &--dialog {
-    #{$root}__head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    #{$root}__element {
+      #{$root}__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-      padding: $padding;
-      background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 95%));
+        padding: $padding;
+        background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 95%));
 
-      #{$root}__title {
-        font-size: 20px;
-        font-weight: var(--font-weight-bold);
-        font-family: var(--font-family-primary);
+        #{$root}__title {
+          font-size: 20px;
+          font-weight: var(--font-weight-bold);
+          font-family: var(--font-family-primary);
+        }
       }
-    }
 
-    #{$root}__body {
-      padding: $padding;
+      #{$root}__body {
+        padding: $padding;
+      }
     }
   }
 

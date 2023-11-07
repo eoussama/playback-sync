@@ -191,6 +191,42 @@ export default defineComponent({
             @click="onToggleMute"
           />
         </div>
+
+        <div class="source__control source__control--more">
+          <MoreComp type="secondary">
+            <div class="source__control">
+              <ButtonComp
+                icon="trash"
+                type="secondary"
+                @click="onRemove"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                icon="pen"
+                type="secondary"
+                @click="onEdit"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                icon="thumbtack"
+                type="secondary"
+                @click="onPin"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                type="secondary"
+                :icon="volumeIcon"
+                @click="onToggleMute"
+              />
+            </div>
+          </MoreComp>
+        </div>
       </div>
     </div>
 
@@ -251,6 +287,8 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/utils/responsive' as utils;
+
 .source {
   $root: &;
 
@@ -301,6 +339,8 @@ export default defineComponent({
       #{$root}__link {
         text-decoration: none;
         color: var(--color-text);
+
+        white-space: nowrap;
 
         font-size: 16px;
         font-family: var(--primary-font);
@@ -354,6 +394,11 @@ export default defineComponent({
 
         transition-duration: 0.2s;
         transition-property: opacity;
+      }
+
+      &--more {
+        display: none;
+        margin-left: 10px;
       }
 
       &:not(:last-of-type) {
@@ -413,6 +458,22 @@ export default defineComponent({
   &:hover {
     #{$root}__controls #{$root}__control--contextual {
       opacity: 1;
+    }
+  }
+
+  @include utils.responsive('phone') {
+    &__head {
+      #{$root}__controls> {
+        #{$root}__control {
+          &--more {
+            display: block;
+          }
+
+          &:not(#{$root}__control--more) {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

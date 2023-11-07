@@ -352,7 +352,8 @@ export default defineComponent({
 <style scoped lang="scss">
 .source {
   $root: &;
-  min-width: 620px;
+  width: 620px;
+  max-width: 100%;
 
   &__form {
     margin-bottom: 20px;
@@ -364,9 +365,9 @@ export default defineComponent({
     }
 
     #{$root}__preview {
-      width: 600px;
+      width: 100%;
       height: 100%;
-      margin-bottom: 15px;
+      margin: 0 auto 15px auto;
 
       #{$root}__player {
         display: block;
