@@ -365,9 +365,9 @@ export default defineComponent({
     }
 
     #{$root}__preview {
-      width: 600px;
+      width: 100%;
       height: 100%;
-      margin-bottom: 15px;
+      margin: 0 auto 15px auto;
 
       #{$root}__player {
         display: block;
