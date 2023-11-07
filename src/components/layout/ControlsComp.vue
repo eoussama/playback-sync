@@ -234,6 +234,9 @@ export default defineComponent({
 
   &__top {
     margin-bottom: 24px;
+
+    transition-duration: 0.2s;
+    transition-property: padding-top;
   }
 
   &__bottom {
@@ -258,6 +261,9 @@ export default defineComponent({
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+
+      transition-duration: 0.2s;
+      transition-property: transform;
 
       #{$root}__play-pause {
         margin: 0 10px;
@@ -298,6 +304,32 @@ export default defineComponent({
           top: 0;
           opacity: 1;
         }
+      }
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    &__top {
+      padding-top: 60px;
+    }
+
+    &__bottom {
+      #{$root}__rewind {
+        transform: translate(-50%, calc(-50% - 100px));
+      }
+    }
+  }
+
+  @media screen and (max-width: 290px) {
+    &__bottom {
+      flex-direction: column-reverse;
+
+      #{$root}__rewind {
+        transform: translate(-50%, calc(-50% - 125px));
+      }
+
+      #{$root}__volume {
+        margin-bottom: 15px;
       }
     }
   }
