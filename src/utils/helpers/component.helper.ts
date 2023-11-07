@@ -7,6 +7,7 @@ import BodySection from '@/components/layout/BodySection.vue';
 import FootSection from '@/components/layout/FootSection.vue';
 import ControlsComp from '@/components/layout/ControlsComp.vue';
 
+import MoreComp from '@/components/info/MoreComp.vue';
 import ModalComp from '@/components/info/ModalComp.vue';
 import ToastComp from '@/components/info/ToastComp.vue';
 import TooltipComp from '@/components/info/TooltipComp.vue';
@@ -45,6 +46,7 @@ export function addComponent(app: App<Element>) {
   app.component('FootSection', FootSection);
   app.component('ControlsComp', ControlsComp);
 
+  app.component('MoreComp', MoreComp);
   app.component('ModalComp', ModalComp);
   app.component('ToastComp', ToastComp);
   app.component('TooltipComp', TooltipComp);
