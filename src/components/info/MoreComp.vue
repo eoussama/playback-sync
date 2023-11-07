@@ -8,6 +8,10 @@ export default defineComponent({
   }),
 
   props: {
+    type: {
+      type: String,
+      default: 'plain'
+    },
     icon: {
       type: String,
       default: 'ellipsis-vertical'
@@ -59,8 +63,8 @@ export default defineComponent({
   >
     <div class="more__trigger">
       <ButtonComp
-        type="secondary"
         :icon="icon"
+        :type="type"
         @click="onToggle"
       />
     </div>
@@ -78,8 +82,6 @@ export default defineComponent({
 .more {
   position: relative;
 
-  &__trigger {}
-
   &__elements {
     z-index: 1;
     display: flex;
@@ -91,6 +93,7 @@ export default defineComponent({
 
     width: auto;
     height: auto;
+    padding: 5px;
 
     border-radius: 5px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);

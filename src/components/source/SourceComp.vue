@@ -193,7 +193,7 @@ export default defineComponent({
         </div>
 
         <div class="source__control source__control--more">
-          <MoreComp>
+          <MoreComp type="secondary">
             <div class="source__control">
               <ButtonComp
                 icon="trash"
