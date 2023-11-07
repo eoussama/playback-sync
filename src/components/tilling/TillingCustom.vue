@@ -101,6 +101,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .tilling-custom {
   width: 400px;
+  max-width: 100%;
 
   &__body {
     margin-bottom: 20px;
