@@ -224,6 +224,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @use '@/style/mixins/triggerable';
+@use '@/style/utils/responsive' as utils;
 
 .controls {
   $root: &;
@@ -308,7 +309,8 @@ export default defineComponent({
     }
   }
 
-  @media screen and (max-width: 520px) {
+
+  @include utils.responsive('phone') {
     &__top {
       padding-top: 60px;
     }
@@ -320,7 +322,7 @@ export default defineComponent({
     }
   }
 
-  @media screen and (max-width: 290px) {
+  @include utils.responsive('phone-sm') {
     &__bottom {
       flex-direction: column-reverse;
 

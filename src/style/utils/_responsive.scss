@@ -1,0 +1,16 @@
+@use '../vars/responsive' as vars;
+
+
+
+@mixin responsive($breakpoint) {
+  @if map-has-key(vars.$breakpoints, $breakpoint) {
+    @media (max-width: map-get(vars.$breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+ 
+  @else {
+    @warn "`#{$breakpoint}` is an invalid breakpoint. "
+        + "Available breakpoints are: #{map-keys(vars.$breakpoints)}.";
+  }
+}
