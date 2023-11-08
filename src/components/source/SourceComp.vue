@@ -1,8 +1,13 @@
 <script lang="ts">
 import { defineComponent, ref, type PropType } from 'vue';
-import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
+import { mapState } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
+
+import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+
+import { Theme } from '@/utils/enums/theme.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
@@ -13,6 +18,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAppStore, ['theme']),
 
     /**
      * @description
@@ -47,6 +53,22 @@ export default defineComponent({
       const muted = this.source?.metadata?.muted ?? false;
 
       return getVolumeIcon(volume * 100, muted);
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
+
+    /**
+     * @description
+     * The button type
+     */
+    buttonType(): string {
+      return this.isDark ? 'plain' : 'secondary';
     }
   },
 
@@ -141,7 +163,10 @@ export default defineComponent({
     class="source"
     :id="sourceId"
     :key="source.id"
-    :class="{ 'source--pinned': source.pinned }"
+    :class="{
+      'source--dark': isDark,
+      'source--pinned': source.pinned
+    }"
     @mousemove="onMouseMove"
   >
     <div class="source__head">
@@ -163,7 +188,7 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="trash"
-            type="secondary"
+            :type="buttonType"
             @click="onRemove"
           />
         </div>
@@ -171,7 +196,7 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="pen"
-            type="secondary"
+            :type="buttonType"
             @click="onEdit"
           />
         </div>
@@ -179,25 +204,25 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="thumbtack"
-            type="secondary"
+            :type="buttonType"
             @click="onPin"
           />
         </div>
 
         <div class="source__control">
           <ButtonComp
-            type="secondary"
+            :type="buttonType"
             :icon="volumeIcon"
             @click="onToggleMute"
           />
         </div>
 
         <div class="source__control source__control--more">
-          <MoreComp type="secondary">
+          <MoreComp :type="buttonType">
             <div class="source__control">
               <ButtonComp
                 icon="trash"
-                type="secondary"
+                :type="buttonType"
                 @click="onRemove"
               />
             </div>
@@ -205,7 +230,7 @@ export default defineComponent({
             <div class="source__control">
               <ButtonComp
                 icon="pen"
-                type="secondary"
+                :type="buttonType"
                 @click="onEdit"
               />
             </div>
@@ -213,14 +238,14 @@ export default defineComponent({
             <div class="source__control">
               <ButtonComp
                 icon="thumbtack"
-                type="secondary"
+                :type="buttonType"
                 @click="onPin"
               />
             </div>
 
             <div class="source__control">
               <ButtonComp
-                type="secondary"
+                :type="buttonType"
                 :icon="volumeIcon"
                 @click="onToggleMute"
               />
@@ -235,7 +260,7 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="trash"
-            type="secondary"
+            :type="buttonType"
             @click="onRemove"
           />
         </div>
@@ -243,14 +268,14 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="pen"
-            type="secondary"
+            :type="buttonType"
             @click="onEdit"
           />
         </div>
 
         <div class="source__control">
           <ButtonComp
-            type="secondary"
+            :type="buttonType"
             :icon="volumeIcon"
             @click="onToggleMute"
           />
@@ -259,7 +284,7 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="xmark"
-            type="secondary"
+            :type="buttonType"
             @click="onUnpin"
           />
         </div>
@@ -452,6 +477,15 @@ export default defineComponent({
       #{$root}__controls {
         opacity: 1;
       }
+    }
+  }
+
+  &--dark {
+    border-color: hsl(var(--color-secondary-hsl), 30%);
+    background-color: hsl(var(--color-secondary-hsl), 55%);
+
+    #{$root}__head {
+      background-color: hsl(var(--color-secondary-hsl), 50%);
     }
   }
 
