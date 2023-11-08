@@ -5,6 +5,7 @@ import { mapState, mapActions } from 'pinia';
 import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
 
 export default defineComponent({
@@ -107,7 +108,12 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAppStore, ['seekStep', 'fullscreen', 'hover']),
+    ...mapState(useAppStore, [
+      'hover',
+      'theme',
+      'seekStep',
+      'fullscreen'
+    ]),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',
@@ -158,6 +164,14 @@ export default defineComponent({
      */
     disabled(): boolean {
       return this.sources.length === 0;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   }
 });
@@ -167,6 +181,7 @@ export default defineComponent({
   <div
     class="controls-wrapper"
     :class="{
+      'controls-wrapper--dark': isDark,
       'controls-wrapper--show': hover.controls,
       'controls-wrapper--fullscreen': fullscreen
     }"
@@ -334,8 +349,13 @@ export default defineComponent({
         }
       }
     }
-  }
 
+    &--dark {
+      #{$root} {
+        background-color: hsl(var(--color-secondary-hsl), 50%);
+      }
+    }
+  }
 
   @include utils.responsive('phone') {
     &__top {
@@ -356,4 +376,5 @@ export default defineComponent({
       }
     }
   }
-}</style>
+}
+</style>

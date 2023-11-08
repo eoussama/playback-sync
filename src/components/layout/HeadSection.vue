@@ -8,6 +8,7 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { PageType } from '@/utils/enums/pageType.enum';
 
 import { ModalHelper } from '@/utils/helpers/modal.helper';
@@ -15,7 +16,7 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover']),
+    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
 
     /**
      * @description
@@ -23,11 +24,39 @@ export default defineComponent({
      */
     fullscreenIcon(): string {
       return this.fullscreen ? 'compress' : 'expand';
+    },
+
+    /**
+     * @description
+     * Returns the approprite theme icon
+     */
+    themeIcon(): string {
+      return this.isDark ? 'sun' : 'moon';
+    },
+
+    /**
+     * @description
+     * >Returns the appropriate tooltip text for the app's theme
+     */
+    themeTooltip(): string {
+      return this.isDark ? 'Turn Light Mode On' : 'Turn Dark Mode On';
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
   methods: {
-    ...mapActions(useAppStore, ['toggleFullscreen', 'updateHeadHover']),
+    ...mapActions(useAppStore, [
+      'toggleTheme',
+      'updateHeadHover',
+      'toggleFullscreen',
+    ]),
     ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
 
     /**
@@ -61,6 +90,14 @@ export default defineComponent({
     },
 
     /**
+     * @descripion
+     * Toggles the app's theme
+     */
+    onTheme(): void {
+      this.toggleTheme();
+    },
+
+    /**
      * @description
      * Handles mouse enter
      */
@@ -87,8 +124,9 @@ export default defineComponent({
   <div
     class="head"
     :class="{
+      'head--dark': isDark,
       'head--show': hover.head,
-      'head--fullscreen': fullscreen
+      'head--fullscreen': fullscreen,
     }"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
@@ -115,6 +153,15 @@ export default defineComponent({
           icon="question"
           id="button-shortcuts"
           @click="onShortcuts"
+        />
+      </TooltipComp>
+
+      <TooltipComp :text="themeTooltip">
+        <ButtonComp
+          type="primary"
+          :icon="themeIcon"
+          id="button-theme"
+          @click="onTheme"
         />
       </TooltipComp>
 
@@ -181,6 +228,10 @@ export default defineComponent({
     &#{$root}--show {
       transform: translateY(0);
     }
+  }
+
+  &--dark {
+    background-color: hsl(var(--color-secondary-hsl), 50%);
   }
 }
 </style>

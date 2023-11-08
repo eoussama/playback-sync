@@ -3,13 +3,29 @@
 
 
 :root {
-  --color-primary: #{color.$color-primary};
-  --color-primary-rgb: #{color.$color-primary-rgb};
-  --color-primary-hsl: #{color.$color-primary-hsl};
+  --color-primary-light: #{color.$color-primary-light};
+  --color-primary-rgb-light: #{color.$color-primary-rgb-light};
+  --color-primary-hsl-light: #{color.$color-primary-hsl-light};
 
-  --color-secondary: #{color.$color-secondary};
-  --color-secondary-rgb: #{color.$color-secondary-rgb};
-  --color-secondary-hsl: #{color.$color-secondary-hsl};
+  --color-secondary-light: #{color.$color-secondary-light};
+  --color-secondary-rgb-light: #{color.$color-secondary-rgb-light};
+  --color-secondary-hsl-light: #{color.$color-secondary-hsl-light};
+
+  --color-primary-dark: #{color.$color-primary-dark};
+  --color-primary-rgb-dark: #{color.$color-primary-rgb-dark};
+  --color-primary-hsl-dark: #{color.$color-primary-hsl-dark};
+
+  --color-secondary-dark: #{color.$color-secondary-dark};
+  --color-secondary-rgb-dark: #{color.$color-secondary-rgb-dark};
+  --color-secondary-hsl-dark: #{color.$color-secondary-hsl-dark};
+
+  --color-primary: var(--color-primary-light);
+  --color-primary-rgb: var(--color-primary-rgb-light);
+  --color-primary-hsl: var(--color-primary-hsl-light);
+
+  --color-secondary: var(--color-secondary-light);
+  --color-secondary-rgb: var(--color-secondary-rgb-light);
+  --color-secondary-hsl: var(--color-secondary-hsl-light);
 
   --color-error: #{color.$color-error};
   --color-error-rgb: #{color.$color-error-rgb};
@@ -18,4 +34,14 @@
   --color-text: var(--color-primary);
   --color-text-rgb: var(--color-primary-rgb);
   --color-text-hsl: var(--color-primary-hsl);
+
+  &.dark {
+    --color-primary: var(--color-primary-dark);
+    --color-primary-rgb: var(--color-primary-rgb-dark);
+    --color-primary-hsl: var(--color-primary-hsl-dark);
+
+    --color-secondary: var(--color-secondary-dark);
+    --color-secondary-rgb: var(--color-secondary-rgb-dark);
+    --color-secondary-hsl: var(--color-secondary-hsl-dark);
+  }
 }

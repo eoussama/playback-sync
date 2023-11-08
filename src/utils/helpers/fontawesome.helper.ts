@@ -2,9 +2,9 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faCircleNotch, faHourglassHalf, faExpand,
-  faCompress, faQuestion, faEllipsisVertical,
-  faThumbTack, faTrash, faChevronDown, faVideo,
   faPlay, faPause, faRepeat, faBackward, faForward,
+  faCompress, faQuestion, faEllipsisVertical, faMoon,
+  faThumbTack, faTrash, faChevronDown, faVideo, faSun,
   faVolumeOff, faVolumeLow, faVolumeHigh, faVolumeXmark,
   faPlus, faXmark, faCheck, faPen, faTriangleExclamation
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +17,7 @@ import {
  */
 export function initIcons(): void {
   library.add(
-    faEllipsisVertical,
+    faEllipsisVertical, faMoon, faSun,
     faExpand, faCompress, faQuestion,
     faVideo, faCircleNotch, faHourglassHalf,
     faThumbTack, faTrash, faGithub, faChevronDown,

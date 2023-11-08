@@ -66,6 +66,14 @@ export function initShortcuts(): void {
         break;
       }
 
+      case Key.Theme: {
+        if (notInputFocused) {
+          appStore.toggleTheme();
+        }
+
+        break;
+      }
+
       case Key.ToggleMute: {
         if (notInputFocused) {
           sourceStore.setMuted(!sourceStore.muted);

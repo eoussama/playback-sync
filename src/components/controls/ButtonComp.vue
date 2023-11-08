@@ -1,6 +1,11 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
 import type { TButtonType } from '@/utils/types/composition/buttonType.type';
+
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
 
@@ -13,14 +18,24 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAppStore, ['theme']),
 
     /**
      * @description
-     * The class type of the button
+     * The type class of the button
      */
     typeClass(): string {
       const type = this.type ?? 'plain';
       return `button--${type}`;
+    },
+
+    /**
+     * @description
+     * The theme class of the button
+     */
+    themeClass(): string {
+      const theme = this.theme === Theme.Light ? 'light' : 'dark';
+      return `button--${theme}`;
     }
   }
 });
@@ -30,8 +45,8 @@ export default defineComponent({
   <button
     :id="id"
     class="button"
-    :class="[typeClass]"
     :autofocus="autofocus"
+    :class="[typeClass, themeClass]"
   >
     <div
       v-if="icon"
@@ -123,6 +138,19 @@ export default defineComponent({
   &--radial,
   &--primary {
     background-color: hsl(var(--color-secondary-hsl), 85%);
+
+    &#{$root}--dark {
+      background-color: hsl(var(--color-secondary-hsl), 40%);
+    }
+  }
+
+  &--outline,
+  &--plain {
+    &#{$root}--dark {
+      #{$root}__label {
+        color: hsl(var(--color-secondary-hsl), 60%);
+      }
+    }
   }
 
   &:hover {
@@ -132,6 +160,18 @@ export default defineComponent({
       background-color: hsl(var(--color-secondary-hsl), 83%);
     }
 
+    &#{$root}--plain {
+      &#{$root}--dark {
+        background-color: hsl(var(--color-secondary-hsl), 55%);
+      }
+    }
+
+    &#{$root}--outline {
+      &#{$root}--dark {
+        background-color: hsl(var(--color-secondary-hsl), 30%);
+      }
+    }
+
     &#{$root}--secondary {
       background-color: hsl(var(--color-primary-hsl), 87%);
     }
@@ -139,6 +179,10 @@ export default defineComponent({
     &#{$root}--radial,
     &#{$root}--primary {
       background-color: hsl(var(--color-secondary-hsl), 80%);
+
+      &#{$root}--dark {
+        background-color: hsl(var(--color-secondary-hsl), 35%);
+      }
     }
   }
 }

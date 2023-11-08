@@ -1,11 +1,28 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
+
+import { useAppStore } from '@/state/stores/app.store';
 import { DOMHelper } from '@/utils/helpers/dom.helper';
 
 export default defineComponent({
 
   props: {
     modalId: String
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    }
   },
 
   methods: {
@@ -37,6 +54,7 @@ export default defineComponent({
   <div
     ref="elementRef"
     class="shortcuts"
+    :class="{ 'shortcuts--dark': isDark }"
   >
     <div class="shortcut">
       <kbd>Esc</kbd> Close Modals
@@ -85,6 +103,10 @@ export default defineComponent({
     <div class="shortcut">
       <kbd>-</kbd> Speed Down
     </div>
+
+    <div class="shortcut">
+      <kbd>T</kbd> Toggle Theme
+    </div>
   </div>
 </template>
 
@@ -110,6 +132,13 @@ export default defineComponent({
 
       border-radius: 4px;
       border-bottom: 2px solid hsl(var(--color-secondary-hsl), 80%);
+    }
+  }
+  
+  &--dark {
+    .shortcut kbd {
+      background-color: hsl(var(--color-secondary-hsl), 20%);
+      border-bottom: 2px solid hsl(var(--color-secondary-hsl), 15%);
     }
   }
 }

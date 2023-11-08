@@ -1,5 +1,10 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { mapState } from 'pinia';
+
+
+import { Theme } from '@/utils/enums/theme.enum';
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
 
@@ -15,6 +20,18 @@ export default defineComponent({
     icon: {
       type: String,
       default: 'ellipsis-vertical'
+    }
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -60,6 +77,7 @@ export default defineComponent({
   <div
     class="more"
     ref="elementRef"
+    :class="{ 'more--dark': isDark }"
   >
     <div class="more__trigger">
       <ButtonComp
@@ -80,6 +98,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .more {
+  $root: &;
+
   position: relative;
 
   &__elements {
@@ -114,6 +134,12 @@ export default defineComponent({
         opacity: 1;
         transform: translateY(0);
       }
+    }
+  }
+
+  &--dark {
+    #{$root}__elements {
+      background-color: hsl(var(--color-secondary-hsl), 50%);
     }
   }
 }

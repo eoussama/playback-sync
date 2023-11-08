@@ -1,5 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
+import { useAppStore } from '@/state/stores/app.store';
 
 
 export default defineComponent({
@@ -19,6 +23,18 @@ export default defineComponent({
     type: {
       type: String,
       default: 'text'
+    }
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -43,7 +59,10 @@ export default defineComponent({
 <template>
   <div
     class="input"
-    :class="{ 'input--error': hasError }"
+    :class="{
+      'input--dark': isDark,
+      'input--error': hasError
+    }"
   >
     <label class="input__wrapper">
       <div
@@ -159,6 +178,13 @@ export default defineComponent({
         opacity: 1;
         transform: translateY(0);
       }
+    }
+  }
+
+  &--dark {
+    #{$root}__input {
+      // color: var(--color-primary);
+      background-color: hsl(var(--color-secondary-hsl), 35%);
     }
   }
 
