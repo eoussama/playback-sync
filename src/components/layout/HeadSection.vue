@@ -31,7 +31,7 @@ export default defineComponent({
      * Returns the approprite theme icon
      */
     themeIcon(): string {
-      return this.theme === Theme.Light ? 'moon' : 'sun'
+      return this.theme === Theme.Light ? 'moon' : 'sun';
     },
 
     /**

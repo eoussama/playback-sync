@@ -85,6 +85,10 @@ export default defineComponent({
     <div class="shortcut">
       <kbd>-</kbd> Speed Down
     </div>
+
+    <div class="shortcut">
+      <kbd>T</kbd> Toggle Theme
+    </div>
   </div>
 </template>
 

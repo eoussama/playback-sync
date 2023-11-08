@@ -1,6 +1,9 @@
-import { Theme } from '@/utils/enums/theme.enum';
 import { useAppStore } from '../stores/app.store';
+
+import { Theme } from '@/utils/enums/theme.enum';
+
 import { ToastHelper } from '@/utils/helpers/toast.helper';
+import { ThemeHelper } from '@/utils/helpers/theme.helper';
 
 
 
@@ -32,6 +35,8 @@ export function hookAppEffect() {
         case 'updateTheme': {
           const [theme] = args;
           const message = theme === Theme.Light ? 'Light Theme On' : 'Dark Theme On';
+
+          ThemeHelper.updateTheme(theme);
           ToastHelper.show({ message });
 
           break;
