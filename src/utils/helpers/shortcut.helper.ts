@@ -66,6 +66,15 @@ export function initShortcuts(): void {
         break;
       }
 
+      case Key.Theme: {
+        if (notInputFocused) {
+          const addButton = document.getElementById('button-theme');
+          addButton?.click();
+        }
+
+        break;
+      }
+
       case Key.ToggleMute: {
         if (notInputFocused) {
           sourceStore.setMuted(!sourceStore.muted);
