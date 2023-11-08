@@ -1,5 +1,10 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+import { mapState } from 'pinia';
+
+import { useAppStore } from '@/state/stores/app.store';
+
+import { Theme } from '@/utils/enums/theme.enum';
 import type { TOption } from '@/utils/types/composition/option.type';
 
 export default defineComponent({
@@ -11,6 +16,18 @@ export default defineComponent({
     options: {
       default: () => [],
       type: Array as PropType<Array<TOption>>
+    }
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -34,7 +51,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="select-wrapper">
+  <div
+    class="select-wrapper"
+    :class="{ 'select-wrapper--dark': isDark }"
+  >
     <select
       class="select"
       :value="modelValue"
@@ -107,6 +127,12 @@ export default defineComponent({
     transform: translateY(-50%);
 
     font-size: 12px;
+  }
+
+  &--dark {
+    .select {
+      background-color: hsl(var(--color-secondary-hsl), 40%);
+    }
   }
 }
 </style>
