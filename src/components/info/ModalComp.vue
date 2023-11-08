@@ -2,10 +2,8 @@
 import { defineComponent, type PropType } from 'vue';
 import { mapState } from 'pinia';
 
-import { ModalHelper } from '@/utils/helpers/modal.helper';
-
 import { useAppStore } from '@/state/stores/app.store';
-import { useModalStore } from '@/state/stores/modal.store';
+import { ModalHelper } from '@/utils/helpers/modal.helper';
 
 import { Theme } from '@/utils/enums/theme.enum';
 import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
@@ -69,18 +67,6 @@ export default defineComponent({
         ModalHelper.close(this.modal.id);
       }
     }
-  },
-
-  mounted(): void {
-    useModalStore().$onAction(({ name, after }) => {
-      after(() => {
-        if (name === 'addModal') {
-          if (this.modal) {
-            ModalHelper.close(this.modal.id);
-          }
-        }
-      });
-    });
   }
 });
 </script>
