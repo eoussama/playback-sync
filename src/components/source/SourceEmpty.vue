@@ -1,11 +1,27 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
   emits: ['add'],
 
   props: {
     isEmpty: Boolean
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    }
   },
 
   methods: {
@@ -22,7 +38,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="empty">
+  <div
+    class="empty"
+    :class="{ 'empty--dark': isDark }"
+  >
     <div
       v-if="isEmpty"
       class="empty__positive"
@@ -55,6 +74,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .empty {
+  $root: &;
+
   display: grid;
 
   width: 100%;
@@ -88,6 +109,14 @@ export default defineComponent({
       &__actions {
         margin-top: 20px;
         text-align: center;
+      }
+    }
+  }
+
+  &--dark {
+    #{$root}__positive {
+      .dialog {
+        background-color: hsl(var(--color-secondary-hsl), 50%);
       }
     }
   }

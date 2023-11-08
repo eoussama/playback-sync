@@ -10,13 +10,14 @@ import SourceDetail from '@/components/source/SourceDetail.vue';
 import { DragHelper } from '@/utils/helpers/drag.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { PageType } from '@/utils/enums/pageType.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen']),
+    ...mapState(useAppStore, ['fullscreen', 'theme']),
     ...mapState(useSourcesStore, ['sources', 'tilling']),
 
     /**
@@ -47,8 +48,16 @@ export default defineComponent({
      * @description
      * If not sources are available
      */
-    empty() {
+    empty(): boolean {
       return this.sources.length === 0;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -223,6 +232,7 @@ export default defineComponent({
     class="view"
     @dblclick.stop="onToggleFullscreen"
     :class="{
+      'view--dark': isDark,
       'view--empty': empty,
       'view--fullscreen': fullscreen
     }"
@@ -326,6 +336,11 @@ export default defineComponent({
 
   &--fullscreen {
     max-height: 100%;
+  }
+
+  &--dark {
+    --dot-bg: var(--color-secondary);
+    --dot-color: hsl(var(--color-secondary-hsl), 35%);
   }
 }
 </style>
