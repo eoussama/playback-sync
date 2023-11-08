@@ -1,10 +1,15 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+import { mapState } from 'pinia';
 
 import { ModalHelper } from '@/utils/helpers/modal.helper';
+
+import { useAppStore } from '@/state/stores/app.store';
 import { useModalStore } from '@/state/stores/modal.store';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
+
 import type { TModal } from '@/utils/types/composition/modal.type';
 import type { TComponent } from '@/utils/types/composition/component.type';
 
@@ -15,6 +20,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAppStore, ['theme']),
 
     /**
      * @description
@@ -22,6 +28,22 @@ export default defineComponent({
      */
     ModalAlignment(): typeof ModalAlignment {
       return ModalAlignment;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
+
+    /**
+     * @description
+     * Close button type
+     */
+    closeType(): string {
+      return this.isDark ? 'plain' : 'secondary';
     }
   },
 
@@ -69,6 +91,7 @@ export default defineComponent({
     class="modal"
     :id="`modal-${modal.id}`"
     :class="{
+      'modal--dark': isDark,
       'modal--dialog': modal.params.dialog,
       'modal--overlay': modal.params.overlay,
       'modal--top': isAlignment(modal.params.alignment, ModalAlignment.Top),
@@ -197,6 +220,18 @@ export default defineComponent({
 
   &--bottom {
     align-items: end;
+  }
+
+  &--dark {
+    &#{$root}--dialog {
+      #{$root}__element {
+        background-color: hsl(var(--color-secondary-hsl), 25%);
+
+        #{$root}__head {
+          background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 55%));
+        }
+      }
+    }
   }
 }
 </style>
