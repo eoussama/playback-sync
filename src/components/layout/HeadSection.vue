@@ -31,7 +31,7 @@ export default defineComponent({
      * Returns the approprite theme icon
      */
     themeIcon(): string {
-      return this.theme === Theme.Light ? 'moon' : 'sun';
+      return this.isDark ? 'sun' : 'moon';
     },
 
     /**
@@ -39,7 +39,15 @@ export default defineComponent({
      * >Returns the appropriate tooltip text for the app's theme
      */
     themeTooltip(): string {
-      return this.theme === Theme.Light ? 'Turn Dark Mode On' : 'Turn Light Mode On';
+      return this.isDark ? 'Turn Light Mode On' : 'Turn Dark Mode On';
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -116,8 +124,9 @@ export default defineComponent({
   <div
     class="head"
     :class="{
+      'head--dark': isDark,
       'head--show': hover.head,
-      'head--fullscreen': fullscreen
+      'head--fullscreen': fullscreen,
     }"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
@@ -219,6 +228,10 @@ export default defineComponent({
     &#{$root}--show {
       transform: translateY(0);
     }
+  }
+
+  &--dark {
+    background-color: hsl(var(--color-secondary-hsl), 50%);
   }
 }
 </style>
