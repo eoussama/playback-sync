@@ -21,7 +21,12 @@ export class ToastHelper {
   static show(props: Partial<TToast>): Promise<boolean> {
     return new Promise(resolve => {
       const message = props.message ?? '';
-      const params = { dialog: false, overlay: false, alignment: ModalAlignment.Top };
+      const params = {
+        dialog: false,
+        overlay: false,
+        dismissive: false,
+        alignment: ModalAlignment.Top
+      };
 
       ModalHelper
         .open('', params, ToastComp, { message })

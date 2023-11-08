@@ -72,15 +72,14 @@ export default defineComponent({
   },
 
   mounted(): void {
-    useModalStore().$onAction(({ name, after }) => {
-      after(() => {
-        if (name === 'addModal') {
-          if (this.modal) {
-            ModalHelper.close(this.modal.id);
-          }
-        }
-      });
-    });
+    if (this.modal?.params?.dismissive) {
+      const store = useModalStore();
+      const modals = store.modals.filter(e => e.id !== this.modal?.id);
+
+      for (const modal of modals) {
+        ModalHelper.close(modal.id);
+      }
+    }
   }
 });
 </script>

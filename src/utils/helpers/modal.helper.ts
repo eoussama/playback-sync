@@ -27,7 +27,12 @@ export class ModalHelper {
    */
   private static create<T extends TComponent, U = any>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    const modalParams = params ?? { dialog: true, overlay: true, alignment: ModalAlignment.Center };
+    const modalParams = params ?? {
+      dialog: true,
+      overlay: true,
+      dismissive: true,
+      alignment: ModalAlignment.Center
+    };
 
     return { id, title, component, props, params: modalParams };
   }
