@@ -8,6 +8,7 @@ import { useSourcesStore } from '@/state/stores/sources.store';
 import SourceDetail from '@/components/source/SourceDetail.vue';
 import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { PageType } from '@/utils/enums/pageType.enum';
 
 import { ModalHelper } from '@/utils/helpers/modal.helper';
@@ -15,7 +16,7 @@ import { ModalHelper } from '@/utils/helpers/modal.helper';
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover']),
+    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
 
     /**
      * @description
@@ -23,11 +24,31 @@ export default defineComponent({
      */
     fullscreenIcon(): string {
       return this.fullscreen ? 'compress' : 'expand';
+    },
+
+    /**
+     * @description
+     * Returns the approprite theme icon
+     */
+    themeIcon(): string {
+      return this.theme === Theme.Light ? 'moon' : 'sun'
+    },
+
+    /**
+     * @description
+     * >Returns the appropriate tooltip text for the app's theme
+     */
+    themeTooltip(): string {
+      return this.theme === Theme.Light ? 'Turn Dark Mode On' : 'Turn Light Mode On';
     }
   },
 
   methods: {
-    ...mapActions(useAppStore, ['toggleFullscreen', 'updateHeadHover']),
+    ...mapActions(useAppStore, [
+      'toggleTheme',
+      'updateHeadHover',
+      'toggleFullscreen',
+    ]),
     ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
 
     /**
@@ -58,6 +79,14 @@ export default defineComponent({
      */
     onShortcuts(): void {
       ModalHelper.open('Shortcuts', null, ShortcutsComp);
+    },
+
+    /**
+     * @descripion
+     * Toggles the app's theme
+     */
+    onTheme(): void {
+      this.toggleTheme();
     },
 
     /**
@@ -115,6 +144,15 @@ export default defineComponent({
           icon="question"
           id="button-shortcuts"
           @click="onShortcuts"
+        />
+      </TooltipComp>
+
+      <TooltipComp :text="themeTooltip">
+        <ButtonComp
+          type="primary"
+          :icon="themeIcon"
+          id="button-theme"
+          @click="onTheme"
         />
       </TooltipComp>
 
