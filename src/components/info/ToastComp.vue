@@ -1,16 +1,40 @@
 <script lang="ts">
 import { defineComponent, ref, type PropType } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
+import type { TToast } from '@/utils/types/composition/toast.type';
 
 import { DOMHelper } from '@/utils/helpers/dom.helper';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
 
-import type { TToast } from '@/utils/types/composition/toast.type';
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
 
   props: {
     modalId: String,
     params: Object as PropType<TToast>
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
+
+    /**
+     * @description
+     * Close button type
+     */
+    closeType(): string {
+      return this.isDark ? 'plain' : 'secondary';
+    }
   },
 
   methods: {
@@ -46,6 +70,7 @@ export default defineComponent({
   <div
     class="toast"
     ref="elementRef"
+    :class="{ 'toast--dark': isDark }"
   >
     <div class="toast__message">
       {{ params?.message }}
@@ -55,7 +80,7 @@ export default defineComponent({
       <div class="toast__close">
         <ButtonComp
           icon="xmark"
-          type="secondary"
+          :type="closeType"
           @click="onClose"
         />
       </div>
@@ -85,6 +110,10 @@ export default defineComponent({
 
   &__action {
     margin-left: auto;
+  }
+
+  &--dark {
+    background: linear-gradient(to right, hsl(var(--color-secondary-hsl), 50%), hsl(var(--color-secondary-hsl), 55%));
   }
 }
 </style>

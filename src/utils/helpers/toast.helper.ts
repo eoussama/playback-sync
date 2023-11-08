@@ -1,5 +1,6 @@
 import { ModalHelper } from './modal.helper';
 import ToastComp from '@/components/info/ToastComp.vue';
+
 import type { TToast } from '../types/composition/toast.type';
 import { ModalAlignment } from '../enums/modalAlignment.enum';
 
