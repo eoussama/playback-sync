@@ -68,8 +68,7 @@ export function initShortcuts(): void {
 
       case Key.Theme: {
         if (notInputFocused) {
-          const addButton = document.getElementById('button-theme');
-          addButton?.click();
+          appStore.toggleTheme();
         }
 
         break;
