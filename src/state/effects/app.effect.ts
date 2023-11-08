@@ -1,4 +1,6 @@
+import { Theme } from '@/utils/enums/theme.enum';
 import { useAppStore } from '../stores/app.store';
+import { ToastHelper } from '@/utils/helpers/toast.helper';
 
 
 
@@ -14,7 +16,7 @@ export function hookAppEffect() {
     appStore.updateFullscreen(fullscreen);
   }
 
-  appStore.$onAction(({ name, store, after }) => {
+  appStore.$onAction(({ name, store, after, args }) => {
     after(() => {
       switch (name) {
         case 'updateFullscreen': {
@@ -23,6 +25,14 @@ export function hookAppEffect() {
           } else if (!store.fullscreen && document.fullscreenElement) {
             document.exitFullscreen();
           }
+
+          break;
+        }
+
+        case 'updateTheme': {
+          const [theme] = args;
+          const message = theme === Theme.Light ? 'Light Theme On' : 'Dark Theme On';
+          ToastHelper.show({ message });
 
           break;
         }
