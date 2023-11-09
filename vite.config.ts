@@ -1,8 +1,8 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import vue from '@vitejs/plugin-vue';
-import config from './package.json';
+import pkg from './package.json';
 import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   base: '/playback-sync',
@@ -11,7 +11,7 @@ export default defineConfig({
   ],
   define: {
     __CONFIG__: {
-      version: config.version
+      version: pkg.version
     }
   },
   resolve: {
