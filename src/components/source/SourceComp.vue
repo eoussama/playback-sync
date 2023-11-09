@@ -404,10 +404,6 @@ export default defineComponent({
 
       transition-duration: 0.2s;
       transition-property: opacity;
-
-      padding: 5px;
-      border-radius: 5px;
-      background-color: rgba(var(--color-primary-rgb), 0.4);
     }
   }
 
@@ -480,6 +476,13 @@ export default defineComponent({
     &:hover {
       #{$root}__controls {
         opacity: 1;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: rgba(var(--color-primary-rgb), 0.4);
+
+        #{$root}--dark {
+          background-color: rgba(var(--color-secondary-rgb), 0.4);
+        }
       }
     }
   }
@@ -490,10 +493,6 @@ export default defineComponent({
 
     #{$root}__head {
       background-color: hsl(var(--color-secondary-hsl), 50%);
-    }
-
-    #{$root}__controls {
-      background-color: rgba(var(--color-secondary-rgb), 0.4);
     }
   }
 
