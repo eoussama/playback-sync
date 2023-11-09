@@ -1,13 +1,16 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import pkg from './package.json';
+import pwa from './src/utils/const/pwa.const';
+
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/playback-sync',
   plugins: [
     vue(),
+    VitePWA(pwa as any)
   ],
   define: {
     __CONFIG__: {
