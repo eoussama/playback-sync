@@ -1,8 +1,13 @@
 <script lang="ts">
 import { defineComponent, ref, type PropType } from 'vue';
-import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
+import { mapState } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
+
+import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
 import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+
+import { Theme } from '@/utils/enums/theme.enum';
 import type { TSource } from '@/utils/types/composition/source.type';
 
 export default defineComponent({
@@ -13,6 +18,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAppStore, ['theme']),
 
     /**
      * @description
@@ -47,6 +53,22 @@ export default defineComponent({
       const muted = this.source?.metadata?.muted ?? false;
 
       return getVolumeIcon(volume * 100, muted);
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
+
+    /**
+     * @description
+     * The button type
+     */
+    buttonType(): string {
+      return this.isDark ? 'plain' : 'secondary';
     }
   },
 
@@ -141,7 +163,10 @@ export default defineComponent({
     class="source"
     :id="sourceId"
     :key="source.id"
-    :class="{ 'source--pinned': source.pinned }"
+    :class="{
+      'source--dark': isDark,
+      'source--pinned': source.pinned
+    }"
     @mousemove="onMouseMove"
   >
     <div class="source__head">
@@ -163,7 +188,7 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="trash"
-            type="secondary"
+            :type="buttonType"
             @click="onRemove"
           />
         </div>
@@ -171,7 +196,7 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="pen"
-            type="secondary"
+            :type="buttonType"
             @click="onEdit"
           />
         </div>
@@ -179,17 +204,53 @@ export default defineComponent({
         <div class="source__control source__control--contextual">
           <ButtonComp
             icon="thumbtack"
-            type="secondary"
+            :type="buttonType"
             @click="onPin"
           />
         </div>
 
         <div class="source__control">
           <ButtonComp
-            type="secondary"
+            :type="buttonType"
             :icon="volumeIcon"
             @click="onToggleMute"
           />
+        </div>
+
+        <div class="source__control source__control--more">
+          <MoreComp :type="buttonType">
+            <div class="source__control">
+              <ButtonComp
+                icon="trash"
+                :type="buttonType"
+                @click="onRemove"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                icon="pen"
+                :type="buttonType"
+                @click="onEdit"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                icon="thumbtack"
+                :type="buttonType"
+                @click="onPin"
+              />
+            </div>
+
+            <div class="source__control">
+              <ButtonComp
+                :type="buttonType"
+                :icon="volumeIcon"
+                @click="onToggleMute"
+              />
+            </div>
+          </MoreComp>
         </div>
       </div>
     </div>
@@ -199,7 +260,7 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="trash"
-            type="secondary"
+            :type="buttonType"
             @click="onRemove"
           />
         </div>
@@ -207,14 +268,14 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="pen"
-            type="secondary"
+            :type="buttonType"
             @click="onEdit"
           />
         </div>
 
         <div class="source__control">
           <ButtonComp
-            type="secondary"
+            :type="buttonType"
             :icon="volumeIcon"
             @click="onToggleMute"
           />
@@ -223,7 +284,7 @@ export default defineComponent({
         <div class="source__control">
           <ButtonComp
             icon="xmark"
-            type="secondary"
+            :type="buttonType"
             @click="onUnpin"
           />
         </div>
@@ -251,6 +312,8 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+@use '@/style/utils/responsive' as utils;
+
 .source {
   $root: &;
 
@@ -302,6 +365,8 @@ export default defineComponent({
         text-decoration: none;
         color: var(--color-text);
 
+        white-space: nowrap;
+
         font-size: 16px;
         font-family: var(--primary-font);
         font-weight: var(--font-weight-regular);
@@ -332,13 +397,17 @@ export default defineComponent({
       opacity: 0;
       display: none;
 
-      width: 100%;
+      width: auto;
       flex-direction: row;
       align-items: center;
       justify-content: flex-end;
 
       transition-duration: 0.2s;
       transition-property: opacity;
+
+      padding: 5px;
+      border-radius: 5px;
+      background-color: rgba(var(--color-primary-rgb), 0.4);
     }
   }
 
@@ -354,6 +423,11 @@ export default defineComponent({
 
         transition-duration: 0.2s;
         transition-property: opacity;
+      }
+
+      &--more {
+        display: none;
+        margin-left: 10px;
       }
 
       &:not(:last-of-type) {
@@ -410,9 +484,38 @@ export default defineComponent({
     }
   }
 
+  &--dark {
+    border-color: hsl(var(--color-secondary-hsl), 30%);
+    background-color: hsl(var(--color-secondary-hsl), 55%);
+
+    #{$root}__head {
+      background-color: hsl(var(--color-secondary-hsl), 50%);
+    }
+
+    #{$root}__controls {
+      background-color: rgba(var(--color-secondary-rgb), 0.4);
+    }
+  }
+
   &:hover {
     #{$root}__controls #{$root}__control--contextual {
       opacity: 1;
+    }
+  }
+
+  @include utils.responsive('phone') {
+    &__head {
+      #{$root}__controls> {
+        #{$root}__control {
+          &--more {
+            display: block;
+          }
+
+          &:not(#{$root}__control--more) {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

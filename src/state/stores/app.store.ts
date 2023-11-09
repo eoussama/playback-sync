@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
 import type { TAppStore } from '@/utils/types/store/appStore.type';
 
 
@@ -8,6 +10,7 @@ export const useAppStore = defineStore('app', {
     seekStep: 10,
     volumeStep: 0.1,
     fullscreen: false,
+    theme: Theme.Light,
     hover: {
       head: false,
       foot: false,
@@ -63,6 +66,28 @@ export const useAppStore = defineStore('app', {
      */
     updateControlsHover(hover: boolean): void {
       this.hover.controls = hover;
+    },
+
+    /**
+     * @description
+     * Updates app's theme
+     *
+     * @param theme The theme to update to
+     */
+    updateTheme(theme: Theme): void {
+      this.theme = theme;
+    },
+
+    /**
+     * @description
+     * Toggles the app's theme
+     */
+    toggleTheme(): void {
+      const theme = this.theme === Theme.Light
+        ? Theme.Dark
+        : Theme.Light;
+
+      this.updateTheme(theme);
     },
 
     /**

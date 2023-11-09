@@ -2,19 +2,28 @@
 import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover']),
+    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
 
     /**
      * @description
      * Returns the app's version
      */
     version(): string {
-      return config.version;
+      return __CONFIG__.version;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   },
 
@@ -44,6 +53,7 @@ export default defineComponent({
   <div
     class="foot"
     :class="{
+      'foot--dark': isDark,
       'foot--show': hover.foot,
       'foot--fullscreen': fullscreen
     }"
@@ -137,6 +147,15 @@ export default defineComponent({
 
     &#{$root}--show {
       transform: translateY(0);
+    }
+  }
+
+  &--dark {
+    background-color: hsl(var(--color-secondary-hsl), 54%);
+
+    #{$root}__text,
+    #{$root}__github {
+      color: hsl(var(--color-secondary-hsl), 85%);
     }
   }
 }

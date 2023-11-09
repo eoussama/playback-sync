@@ -27,7 +27,12 @@ export class ModalHelper {
    */
   private static create<T extends TComponent, U = any>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    const modalParams = params ?? { dialog: true, overlay: true, alignment: ModalAlignment.Center };
+    const modalParams = params ?? {
+      dialog: true,
+      overlay: true,
+      dismissive: true,
+      alignment: ModalAlignment.Center
+    };
 
     return { id, title, component, props, params: modalParams };
   }
@@ -46,8 +51,13 @@ export class ModalHelper {
       const store = useModalStore();
       const modal = this.create(title, params, component, props);
 
-      store.addModal(modal);
+      if (modal.params?.dismissive) {
+        for (const modal of store.modals) {
+          ModalHelper.close(modal.id);
+        }
+      }
 
+      store.addModal(modal);
       const unsubscribe = store.$onAction(({ name, args, after }) => {
         after(() => {
           if (name === 'removeModal') {

@@ -2,13 +2,21 @@
 
 
 
-$color-primary: #383f51;
-$color-primary-rgb: color.colorToRgb($color-primary);
-$color-primary-hsl: color.colorToHsl($color-primary);
+$color-primary-light: #383f51;
+$color-primary-rgb-light: color.colorToRgb($color-primary-light);
+$color-primary-hsl-light: color.colorToHsl($color-primary-light);
 
-$color-secondary: #dddbf1;
-$color-secondary-rgb: color.colorToRgb($color-secondary);
-$color-secondary-hsl: color.colorToHsl($color-secondary);
+$color-secondary-light: #dddbf1;
+$color-secondary-rgb-light: color.colorToRgb($color-secondary-light);
+$color-secondary-hsl-light: color.colorToHsl($color-secondary-light);
+
+$color-primary-dark: #dddbf1;
+$color-primary-rgb-dark: color.colorToRgb($color-primary-dark);
+$color-primary-hsl-dark: color.colorToHsl($color-primary-dark);
+
+$color-secondary-dark: #383f51;
+$color-secondary-rgb-dark: color.colorToRgb($color-secondary-dark);
+$color-secondary-hsl-dark: color.colorToHsl($color-secondary-dark);
 
 $color-error: #e43922;
 $color-error-rgb: color.colorToRgb($color-error);

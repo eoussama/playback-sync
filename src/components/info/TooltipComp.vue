@@ -121,7 +121,6 @@ export default defineComponent({
     font-weight: var(--font-weight-regular);
 
     border-radius: 5px;
-    backdrop-filter: blur(5px);
     background-color: rgba(var(--color-primary-rgb), 0.6);
 
     animation-name: fadeIn;

@@ -1,10 +1,13 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
+import { mapState } from 'pinia';
 
+import { useAppStore } from '@/state/stores/app.store';
 import { ModalHelper } from '@/utils/helpers/modal.helper';
-import { useModalStore } from '@/state/stores/modal.store';
 
+import { Theme } from '@/utils/enums/theme.enum';
 import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
+
 import type { TModal } from '@/utils/types/composition/modal.type';
 import type { TComponent } from '@/utils/types/composition/component.type';
 
@@ -15,6 +18,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAppStore, ['theme']),
 
     /**
      * @description
@@ -22,6 +26,22 @@ export default defineComponent({
      */
     ModalAlignment(): typeof ModalAlignment {
       return ModalAlignment;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
+
+    /**
+     * @description
+     * Close button type
+     */
+    closeType(): string {
+      return this.isDark ? 'plain' : 'secondary';
     }
   },
 
@@ -47,18 +67,6 @@ export default defineComponent({
         ModalHelper.close(this.modal.id);
       }
     }
-  },
-
-  mounted(): void {
-    useModalStore().$onAction(({ name, after }) => {
-      after(() => {
-        if (name === 'addModal') {
-          if (this.modal) {
-            ModalHelper.close(this.modal.id);
-          }
-        }
-      });
-    });
   }
 });
 </script>
@@ -69,6 +77,7 @@ export default defineComponent({
     class="modal"
     :id="`modal-${modal.id}`"
     :class="{
+      'modal--dark': isDark,
       'modal--dialog': modal.params.dialog,
       'modal--overlay': modal.params.overlay,
       'modal--top': isAlignment(modal.params.alignment, ModalAlignment.Top),
@@ -123,6 +132,7 @@ export default defineComponent({
   z-index: 1000;
   pointer-events: none;
 
+
   &__element {
     overflow: hidden;
     pointer-events: all;
@@ -133,7 +143,7 @@ export default defineComponent({
     background-color: white;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 
-    max-width: 100vw;
+    max-width: 95vw;
     height: min-content;
 
     animation-name: fadeIn;
@@ -159,23 +169,25 @@ export default defineComponent({
   }
 
   &--dialog {
-    #{$root}__head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    #{$root}__element {
+      #{$root}__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-      padding: $padding;
-      background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 95%));
+        padding: $padding;
+        background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 95%));
 
-      #{$root}__title {
-        font-size: 20px;
-        font-weight: var(--font-weight-bold);
-        font-family: var(--font-family-primary);
+        #{$root}__title {
+          font-size: 20px;
+          font-weight: var(--font-weight-bold);
+          font-family: var(--font-family-primary);
+        }
       }
-    }
 
-    #{$root}__body {
-      padding: $padding;
+      #{$root}__body {
+        padding: $padding;
+      }
     }
   }
 
@@ -194,6 +206,18 @@ export default defineComponent({
 
   &--bottom {
     align-items: end;
+  }
+
+  &--dark {
+    &#{$root}--dialog {
+      #{$root}__element {
+        background-color: hsl(var(--color-secondary-hsl), 25%);
+
+        #{$root}__head {
+          background: linear-gradient(to right, var(--color-secondary), hsl(var(--color-secondary-hsl), 55%));
+        }
+      }
+    }
   }
 }
 </style>

@@ -1,5 +1,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { mapState } from 'pinia';
+
+import { Theme } from '@/utils/enums/theme.enum';
+import { useAppStore } from '@/state/stores/app.store';
 
 export default defineComponent({
   emits: ['startChanged', 'endChanged'],
@@ -35,6 +39,18 @@ export default defineComponent({
       default: 100,
       type: Number
     }
+  },
+
+  computed: {
+    ...mapState(useAppStore, ['theme']),
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
+    },
   },
 
   watch: {
@@ -150,7 +166,10 @@ export default defineComponent({
   <div
     class="range"
     ref="elementRef"
-    :class="{ 'range--disabled': disabled }"
+    :class="{
+      'range--dark': isDark,
+      'range--disabled': disabled
+    }"
   >
     <div class="range__label range__label--start">
       {{ valueFormater(min) }}
@@ -314,6 +333,27 @@ export default defineComponent({
     }
   }
 
+  &--dark {
+
+    #{$root}__end,
+    #{$root}__start {
+      accent-color: var(--color-secondary);
+    }
+
+    #{$root}__value {
+      color: var(--color-primary) !important;
+      background-color: hsl(var(--color-secondary-hsl), 15%) !important;
+    }
+
+    #{$root}__track {
+      background-color: hsl(var(--color-secondary-hsl), 30%);
+    }
+
+    #{$root}__thumb {
+      background-color: hsl(var(--color-secondary-hsl), 15%) !important;
+    }
+  }
+
   &--disabled {
     #{$root}__wrapper {
       pointer-events: none;
@@ -325,7 +365,7 @@ export default defineComponent({
     }
 
     #{$root}__thumb {
-      background-color: rgb(204, 204, 204);
+      background-color: rgb(204, 204, 204) !important;
     }
   }
 

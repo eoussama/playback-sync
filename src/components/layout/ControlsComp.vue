@@ -5,6 +5,9 @@ import { mapState, mapActions } from 'pinia';
 import { useAppStore } from '@/state/stores/app.store';
 import { useSourcesStore } from '@/state/stores/sources.store';
 
+import { Theme } from '@/utils/enums/theme.enum';
+import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+
 export default defineComponent({
 
   methods: {
@@ -105,7 +108,12 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAppStore, ['seekStep', 'fullscreen', 'hover']),
+    ...mapState(useAppStore, [
+      'hover',
+      'theme',
+      'seekStep',
+      'fullscreen'
+    ]),
     ...mapState(useSourcesStore, [
       'sources',
       'volume',
@@ -117,10 +125,18 @@ export default defineComponent({
 
     /**
      * @description
+     * The icon to show on the button
+     */
+    icon(): string {
+      return getVolumeIcon(this.volume, this.muted);
+    },
+
+    /**
+     * @description
      * The universal duration,
      * generally the duration of the longest source
      */
-    duration() {
+    duration(): number {
       return Math.max(...this.sources.map(e => e.metadata.duration));
     },
 
@@ -129,7 +145,7 @@ export default defineComponent({
      * Returns the current time of the longest loaded source
      * to use a a reference for universal time
      */
-    timelineValue() {
+    timelineValue(): number {
       return this.longestSource?.metadata?.currentTime ?? 0;
     },
 
@@ -137,7 +153,7 @@ export default defineComponent({
      * @description
      * Whether or not the sources are finished playing
      */
-    ended() {
+    ended(): boolean {
       return this.timelineValue === this.duration
     },
 
@@ -146,8 +162,16 @@ export default defineComponent({
      * If the controls are disabled, mainly due
      * to the absense of any loaded sources.
      */
-    disabled() {
+    disabled(): boolean {
       return this.sources.length === 0;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     */
+    isDark(): boolean {
+      return this.theme === Theme.Dark;
     }
   }
 });
@@ -157,6 +181,7 @@ export default defineComponent({
   <div
     class="controls-wrapper"
     :class="{
+      'controls-wrapper--dark': isDark,
       'controls-wrapper--show': hover.controls,
       'controls-wrapper--fullscreen': fullscreen
     }"
@@ -217,6 +242,19 @@ export default defineComponent({
           />
         </div>
 
+        <div class="controls__volume controls__volume--more">
+          <MoreComp
+            :icon="icon"
+            type="primary"
+          >
+            <VolumeComp
+              :muted="muted"
+              :value="volume"
+              @volumeUpdated="onVolume"
+              @muteToggled="onMuteToggled"
+            />
+          </MoreComp>
+        </div>
       </div>
     </div>
   </div>
@@ -224,6 +262,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @use '@/style/mixins/triggerable';
+@use '@/style/utils/responsive' as utils;
 
 .controls {
   $root: &;
@@ -234,6 +273,9 @@ export default defineComponent({
 
   &__top {
     margin-bottom: 24px;
+
+    transition-duration: 0.2s;
+    transition-property: padding-top;
   }
 
   &__bottom {
@@ -259,9 +301,16 @@ export default defineComponent({
       left: 50%;
       transform: translate(-50%, -50%);
 
+      transition-duration: 0.2s;
+      transition-property: transform;
+
       #{$root}__play-pause {
         margin: 0 10px;
       }
+    }
+
+    #{$root}__volume--more {
+      display: none;
     }
   }
 
@@ -297,6 +346,32 @@ export default defineComponent({
         #{$root} {
           top: 0;
           opacity: 1;
+        }
+      }
+    }
+
+    &--dark {
+      #{$root} {
+        background-color: hsl(var(--color-secondary-hsl), 50%);
+      }
+    }
+  }
+
+  @include utils.responsive('phone') {
+    &__top {
+      padding-top: 60px;
+    }
+
+    &__bottom {
+      #{$root}__rewind {
+        transform: translate(-50%, calc(-50% - 100px));
+      }
+
+      #{$root}__volume {
+        display: none;
+
+        &--more {
+          display: block;
         }
       }
     }

@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="./public/imgs/logo/dark.png" width="60" />
-  <img src="./public/imgs/logo/light.png" width="60" />
-  <img src="./public/imgs/logo/dark.png" width="60" />
-  <img src="./public/imgs/logo/light.png" width="60" />
-  <img src="./public/imgs/logo/dark.png" width="60" />
+  <img src="./public/img/logo/dark.png" width="60" />
+  <img src="./public/img/logo/light.png" width="60" />
+  <img src="./public/img/logo/dark.png" width="60" />
+  <img src="./public/img/logo/light.png" width="60" />
+  <img src="./public/img/logo/dark.png" width="60" />
 </p>
 <h1 align="center">Playback Sync</h1>
 
