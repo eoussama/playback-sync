@@ -8,6 +8,7 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  base: `/${pkg.name}`,
   plugins: [
     vue(),
     VitePWA(pwa as any)
