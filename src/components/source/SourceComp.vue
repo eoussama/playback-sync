@@ -397,13 +397,17 @@ export default defineComponent({
       opacity: 0;
       display: none;
 
-      width: 100%;
+      width: auto;
       flex-direction: row;
       align-items: center;
       justify-content: flex-end;
 
       transition-duration: 0.2s;
       transition-property: opacity;
+
+      padding: 5px;
+      border-radius: 5px;
+      background-color: rgba(var(--color-primary-rgb), 0.4);
     }
   }
 
@@ -486,6 +490,10 @@ export default defineComponent({
 
     #{$root}__head {
       background-color: hsl(var(--color-secondary-hsl), 50%);
+    }
+
+    #{$root}__controls {
+      background-color: rgba(var(--color-secondary-rgb), 0.4);
     }
   }
 
