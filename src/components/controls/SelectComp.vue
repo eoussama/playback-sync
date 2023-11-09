@@ -56,6 +56,8 @@ export default defineComponent({
     :class="{ 'select-wrapper--dark': isDark }"
   >
     <select
+      name="_"
+      title="_"
       class="select"
       :value="modelValue"
       @change="onChanged"
