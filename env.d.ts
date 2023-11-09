@@ -1,2 +1,2 @@
 /// <reference types="vite/client" />
-declare const config: { version: string };
+declare const __CONFIG__: { version: string };

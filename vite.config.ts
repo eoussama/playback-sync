@@ -10,7 +10,7 @@ export default defineConfig({
     vue(),
   ],
   define: {
-    config: {
+    __CONFIG__: {
       version: config.version
     }
   },

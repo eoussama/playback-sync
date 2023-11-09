@@ -15,7 +15,7 @@ export default defineComponent({
      * Returns the app's version
      */
     version(): string {
-      return config.version;
+      return __CONFIG__.version;
     },
 
     /**
