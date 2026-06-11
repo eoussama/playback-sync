@@ -1,6 +1,5 @@
+@use 'sass:list';
 @use '../vars/font';
-
-
 
 @mixin loadFont {
   $font-weight-filenames: (
@@ -16,9 +15,9 @@
   );
 
   @each $weight in $font-weights {
-    $index: index($font-weights, $weight);
-    $font-weight: nth($font-weights, $index);
-    $filename: nth($font-weight-filenames, $index);
+    $index: list.index($font-weights, $weight);
+    $font-weight: list.nth($font-weights, $index);
+    $filename: list.nth($font-weight-filenames, $index);
 
     @font-face {
       font-style: normal;
