@@ -1,4 +1,4 @@
-import type { TNullable } from '../generic/nullable.type';
+import type { TNullable } from '@eoussama/core';
 import type { TSource } from '../composition/source.type';
 
 

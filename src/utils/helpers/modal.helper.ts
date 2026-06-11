@@ -4,7 +4,7 @@ import { useModalStore } from '@/state/stores/modal.store';
 import { ModalAlignment } from '../enums/modalAlignment.enum';
 
 import type { TModal } from '../types/composition/modal.type';
-import type { TNullable } from '../types/generic/nullable.type';
+import type { TNullable } from '@eoussama/core';
 import type { TComponent } from '../types/composition/component.type';
 import type { TModalParams } from '../types/composition/modalParams.type';
 

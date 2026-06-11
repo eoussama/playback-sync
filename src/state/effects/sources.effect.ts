@@ -1,3 +1,5 @@
+import { wait } from '@eoussama/core';
+
 import { useSourcesStore } from '../stores/sources.store';
 
 import { ToastHelper } from '@/utils/helpers/toast.helper';
@@ -113,7 +115,7 @@ export function hookSourcesEffect() {
 
         case 'switchSources': {
           const [id1, id2] = args;
-          setTimeout(() => [id1, id2].forEach(SourceHelper.hook));
+          wait(0).then(() => [id1, id2].forEach(SourceHelper.hook));
 
           break;
         }

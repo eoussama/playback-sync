@@ -1,4 +1,4 @@
-import type { TUnsafe } from '../types/generic/unsafe.type';
+import type { TUnsafe } from '@eoussama/core';
 
 
 
