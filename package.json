@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "0.3.1",
+  "version": "0.4.0",
   "name": "playback-sync",
   "packageManager": "pnpm@11.4.0",
   "description": "Syncs multiple sources together for playback and rewind with ease.",
