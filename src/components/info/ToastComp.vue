@@ -22,8 +22,9 @@ export default defineComponent({
 
   setup() {
     const elementRef = ref(null);
+    const timer = ref<ReturnType<typeof setTimeout> | null>(null);
 
-    return { elementRef };
+    return { elementRef, timer };
   },
 
   computed: {
@@ -55,9 +56,15 @@ export default defineComponent({
 
     DOMHelper.focus(".toast__action button", elementRef as HTMLElement);
 
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.onClose();
     }, 3000);
+  },
+
+  beforeUnmount(): void {
+    if (this.timer !== null) {
+      clearTimeout(this.timer);
+    }
   },
 
   methods: {

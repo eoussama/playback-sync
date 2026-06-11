@@ -112,7 +112,7 @@ export default defineComponent({
 
       <div class="modal__body">
         <component
-          :is="{ ...modal.component }"
+          :is="modal.component"
           :modal-id="modal.id"
           :params="modal.props"
         />
