@@ -1,25 +1,41 @@
 <script lang="ts">
-import { defineComponent, ref, type PropType } from 'vue';
+import type { PropType } from "vue";
 
-import { TillingValue } from '@/utils/enums/tillingValue.enum';
-import type { TillingCustomType } from '@/utils/types/components/tillingCustom.type';
+import type { TillingCustomType } from "@/utils/types/components/tillingCustom.type";
+import { defineComponent, ref } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
 
-import { DOMHelper } from '@/utils/helpers/dom.helper';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
-import { useAppStore } from '@/state/stores/app.store';
+import { TillingValue } from "@/utils/enums/tillingValue.enum";
+import { DOMHelper } from "@/utils/helpers/dom.helper";
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
-
-  data: (): TillingCustomType => ({
-    tilling: TillingValue.Custom
-  }),
 
   props: {
     modalId: String,
     params: {
-      default: () => { TillingValue.Custom },
-      type: Object as PropType<TillingCustomType>
-    }
+      default: () => ({ tilling: TillingValue.Custom }),
+      type: Object as PropType<TillingCustomType>,
+    },
+  },
+
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
+  data: (): TillingCustomType => ({
+    tilling: TillingValue.Custom,
+  }),
+
+  mounted(): void {
+    this.setFocus();
+    this.detectValidation();
+
+    this.tilling = this.params.tilling ?? TillingValue.Custom;
   },
 
   methods: {
@@ -30,7 +46,8 @@ export default defineComponent({
      */
     setFocus(): void {
       const { elementRef } = this.$refs;
-      DOMHelper.focus('input', elementRef as HTMLElement);
+
+      DOMHelper.focus("input", elementRef as HTMLElement);
     },
 
     /**
@@ -40,7 +57,7 @@ export default defineComponent({
     detectValidation(): void {
       useAppStore().$onAction(({ name, after }) => {
         after(() => {
-          if (name === 'onValidate') {
+          if (name === "onValidate") {
             this.onValidate();
           }
         });
@@ -55,20 +72,8 @@ export default defineComponent({
       if (this.modalId && this.tilling > 0) {
         ModalHelper.close(this.modalId, { value: this.tilling });
       }
-    }
+    },
   },
-
-  mounted(): void {
-    this.setFocus();
-    this.detectValidation();
-
-    this.tilling = this.params.tilling ?? TillingValue.Custom;
-  },
-
-  setup() {
-    const elementRef = ref(null);
-    return { elementRef };
-  }
 });
 </script>
 
@@ -81,9 +86,9 @@ export default defineComponent({
       Tilling Custom
 
       <InputComp
+        v-model="tilling"
         :min="1"
         type="number"
-        v-model="tilling"
       />
     </div>
 

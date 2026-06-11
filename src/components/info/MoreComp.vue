@@ -1,30 +1,32 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent, ref } from "vue";
 
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
+
+
 
 export default defineComponent({
-
-  data: () => ({
-    toggled: false
-  }),
 
   props: {
     type: {
       type: String,
-      default: 'plain'
+      default: "plain",
     },
     icon: {
       type: String,
-      default: 'ellipsis-vertical'
-    }
+      default: "ellipsis-vertical",
+    },
   },
 
+  data: () => ({
+    toggled: false,
+  }),
+
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -32,7 +34,17 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
+  },
+
+  mounted(): void {
+    document.addEventListener("click", (e) => {
+      const { elementRef } = this.$refs;
+
+      if (!(elementRef as HTMLDivElement)?.contains(e.target as HTMLElement)) {
+        this.close();
+      }
+    });
   },
 
   methods: {
@@ -53,30 +65,21 @@ export default defineComponent({
      */
     onToggle(): void {
       this.toggled = !this.toggled;
-    }
-  },
-
-  mounted(): void {
-    document.addEventListener('click', e => {
-      const { elementRef } = this.$refs;
-
-      if (!(elementRef as HTMLDivElement)?.contains(e.target as HTMLElement)) {
-        this.close();
-      }
-    });
+    },
   },
 
   setup() {
     const elementRef = ref(null);
+
     return { elementRef };
-  }
-})
+  },
+});
 </script>
 
 <template>
   <div
-    class="more"
     ref="elementRef"
+    class="more"
     :class="{ 'more--dark': isDark }"
   >
     <div class="more__trigger">
@@ -91,7 +94,7 @@ export default defineComponent({
       v-if="toggled"
       class="more__elements"
     >
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

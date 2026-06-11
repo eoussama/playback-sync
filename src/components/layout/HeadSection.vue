@@ -1,29 +1,32 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import type { TSource } from "@/utils/types/composition/source.type";
+import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import ShortcutsComp from "@/components/info/ShortcutsComp.vue";
+import SourceDetail from "@/components/source/SourceDetail.vue";
 
-import SourceDetail from '@/components/source/SourceDetail.vue';
-import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
+import { useAppStore } from "@/state/stores/app.store";
+import { useSourcesStore } from "@/state/stores/sources.store";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { PageType } from '@/utils/enums/pageType.enum';
+import { PageType } from "@/utils/enums/pageType.enum";
+import { Theme } from "@/utils/enums/theme.enum";
 
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
+    ...mapState(useAppStore, ["fullscreen", "hover", "theme"]),
 
     /**
      * @description
      * The contextual fullscreen icon
      */
     fullscreenIcon(): string {
-      return this.fullscreen ? 'compress' : 'expand';
+      return this.fullscreen ? "compress" : "expand";
     },
 
     /**
@@ -31,7 +34,7 @@ export default defineComponent({
      * Returns the approprite theme icon
      */
     themeIcon(): string {
-      return this.isDark ? 'sun' : 'moon';
+      return this.isDark ? "sun" : "moon";
     },
 
     /**
@@ -39,7 +42,7 @@ export default defineComponent({
      * >Returns the appropriate tooltip text for the app's theme
      */
     themeTooltip(): string {
-      return this.isDark ? 'Turn Light Mode On' : 'Turn Dark Mode On';
+      return this.isDark ? "Turn Light Mode On" : "Turn Dark Mode On";
     },
 
     /**
@@ -48,16 +51,16 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
     ...mapActions(useAppStore, [
-      'toggleTheme',
-      'updateHeadHover',
-      'toggleFullscreen',
+      "toggleTheme",
+      "updateHeadHover",
+      "toggleFullscreen",
     ]),
-    ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
+    ...mapActions(useSourcesStore, ["addSource", "resetSources"]),
 
     /**
      * @description
@@ -65,10 +68,10 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', null, SourceDetail, { type: PageType.Creation })
-        .then(modal => {
+        .open("Add Source", null, SourceDetail, { type: PageType.Creation })
+        .then((modal) => {
           if (modal.payload) {
-            this.addSource(modal.payload);
+            this.addSource(modal.payload as TSource);
           }
         });
     },
@@ -86,7 +89,7 @@ export default defineComponent({
      * Opens the shortcuts modal
      */
     onShortcuts(): void {
-      ModalHelper.open('Shortcuts', null, ShortcutsComp);
+      ModalHelper.open("Shortcuts", null, ShortcutsComp);
     },
 
     /**
@@ -111,12 +114,12 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.updateHeadHover(false);
-    }
+    },
   },
 
   created() {
     this.resetSources();
-  }
+  },
 });
 </script>
 
@@ -134,9 +137,9 @@ export default defineComponent({
     <div class="head__left">
       <TooltipComp text="Add a new source">
         <ButtonComp
+          id="button-add-modal"
           icon="plus"
           type="primary"
-          id="button-add-modal"
           @click="onAdd"
         />
       </TooltipComp>
@@ -149,18 +152,18 @@ export default defineComponent({
     <div class="head__right">
       <TooltipComp text="Shortcuts">
         <ButtonComp
+          id="button-shortcuts"
           type="primary"
           icon="question"
-          id="button-shortcuts"
           @click="onShortcuts"
         />
       </TooltipComp>
 
       <TooltipComp :text="themeTooltip">
         <ButtonComp
+          id="button-theme"
           type="primary"
           :icon="themeIcon"
-          id="button-theme"
           @click="onTheme"
         />
       </TooltipComp>

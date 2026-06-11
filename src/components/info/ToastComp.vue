@@ -1,24 +1,27 @@
 <script lang="ts">
-import { defineComponent, ref, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { TToast } from "@/utils/types/composition/toast.type";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TToast } from '@/utils/types/composition/toast.type';
+import { mapState } from "pinia";
+import { defineComponent, ref } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
 
-import { DOMHelper } from '@/utils/helpers/dom.helper';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { Theme } from "@/utils/enums/theme.enum";
+import { DOMHelper } from "@/utils/helpers/dom.helper";
 
-import { useAppStore } from '@/state/stores/app.store';
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
 
   props: {
     modalId: String,
-    params: Object as PropType<TToast>
+    params: Object as PropType<TToast>,
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -33,8 +36,18 @@ export default defineComponent({
      * Close button type
      */
     closeType(): string {
-      return this.isDark ? 'plain' : 'secondary';
-    }
+      return this.isDark ? "plain" : "secondary";
+    },
+  },
+
+  mounted(): void {
+    const { elementRef } = this.$refs;
+
+    DOMHelper.focus(".toast__action button", elementRef as HTMLElement);
+
+    setTimeout(() => {
+      this.onClose();
+    }, 3000);
   },
 
   methods: {
@@ -47,29 +60,21 @@ export default defineComponent({
       if (this.modalId) {
         ModalHelper.close(this.modalId, false);
       }
-    }
-  },
-
-  mounted(): void {
-    const { elementRef } = this.$refs;
-    DOMHelper.focus('.toast__action button', elementRef as HTMLElement);
-
-    setTimeout(() => {
-      this.onClose();
-    }, 3000);
+    },
   },
 
   setup() {
     const elementRef = ref(null);
+
     return { elementRef };
-  }
-})
+  },
+});
 </script>
 
 <template>
   <div
-    class="toast"
     ref="elementRef"
+    class="toast"
     :class="{ 'toast--dark': isDark }"
   >
     <div class="toast__message">

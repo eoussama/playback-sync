@@ -1,4 +1,4 @@
 export enum PageType {
   Creation,
-  Edition
+  Edition,
 }

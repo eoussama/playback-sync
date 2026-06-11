@@ -1,4 +1,4 @@
-import { NodeType } from '@/utils/enums/nodeType.enum';
+import { NodeType } from "@/utils/enums/nodeType.enum";
 
 
 
@@ -7,7 +7,6 @@ import { NodeType } from '@/utils/enums/nodeType.enum';
  * Helps with DOM manipulations
  */
 export class DOMHelper {
-
   /**
    * @description
    * Fetches the matching elements inside of a select group of containers
@@ -31,8 +30,8 @@ export class DOMHelper {
    * @param container The container to watch the children of
    */
   static async watch<T extends Array<HTMLElement>>(selector: string, container?: HTMLElement): Promise<T> {
-    return new Promise(resolve => {
-      const root = container ?? document.getElementById('app') as HTMLElement;
+    return new Promise((resolve) => {
+      const root = container ?? document.getElementById("app") as HTMLElement;
       const targets = this.get(selector, [root]);
 
       if (targets.length > 0) {
@@ -63,7 +62,7 @@ export class DOMHelper {
    * @param container The parent container to look for the element in
    */
   static focus(selector: string, container?: HTMLElement): void {
-    const parent = container ?? document.getElementById('app') as HTMLElement;
+    const parent = container ?? document.getElementById("app") as HTMLElement;
     const firstInput = parent.querySelector(selector) as HTMLElement;
 
     if (firstInput) {

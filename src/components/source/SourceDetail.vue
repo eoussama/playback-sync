@@ -1,34 +1,148 @@
 <script lang="ts">
-import { defineComponent, ref, type PropType } from 'vue';
+import type { PropType } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
+import type { TSourceDetailType } from "@/utils/types/components/sourceDetail.type";
 
-import { PageType } from '@/utils/enums/pageType.enum';
-import { Validation } from '@/utils/enums/validation.enum';
-import { ReadyState } from '@/utils/enums/readyState.enum';
+import type { TSource } from "@/utils/types/composition/source.type";
+import { defineComponent, ref } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
+import { PageType } from "@/utils/enums/pageType.enum";
 
-import { DOMHelper } from '@/utils/helpers/dom.helper';
-import { TimeHelper } from '@/utils/helpers/time.helper';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
-import { SourceHelper } from '@/utils/helpers/source.helper';
-import { ValidationHelper } from '@/utils/helpers/validation.helper';
+import { ReadyState } from "@/utils/enums/readyState.enum";
+import { Validation } from "@/utils/enums/validation.enum";
+import { DOMHelper } from "@/utils/helpers/dom.helper";
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+import { SourceHelper } from "@/utils/helpers/source.helper";
 
-import type { TSource } from '@/utils/types/composition/source.type';
-import type { TSourceDetailType } from '@/utils/types/components/sourceDetail.type';
+import { TimeHelper } from "@/utils/helpers/time.helper";
+import { ValidationHelper } from "@/utils/helpers/validation.helper";
+
+
 
 export default defineComponent({
+
+  props: {
+    modalId: String,
+    params: Object as PropType<{ type: PageType; source: TSource }>,
+  },
+
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
 
   data: (): TSourceDetailType => ({
     source: null,
     loading: false,
     submitted: false,
     initialized: false,
-    previewLoaded: false
+    previewLoaded: false,
   }),
 
-  props: {
-    modalId: String,
-    params: Object as PropType<{ type: PageType, source: TSource }>
+  computed: {
+
+    /**
+     * @description
+     * The label to display on the validation button
+     */
+    validateLabel(): string {
+      return this.params?.type === PageType.Creation ? "Add" : "Edit";
+    },
+
+    /**
+     * @description
+     * The preview player's ID on the DOM
+     */
+    previewPlayerId(): string {
+      return `preview-player-${this.source?.id}`;
+    },
+
+    /**
+     * @description
+     * The view source link
+     */
+    previewUrl(): string {
+      return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
+    },
+
+    /**
+     * @description
+     * Checks if the loader should be forced into activation
+     */
+    forceLoad(): boolean {
+      return Boolean(!this.previewLoaded && this.source && this.source.url.length > 0);
+    },
+
+    /**
+     * @description
+     * The placeholder of the title input
+     */
+    titleError(): string {
+      const source = (this.source ?? {}) as Partial<TSource>;
+      const error = ValidationHelper.isInvalid("title", source.title);
+
+      return ValidationHelper.getErrorMessage(error);
+    },
+
+    /**
+     * @description
+     * The placeholder of the URL input
+     */
+    urlError(): string {
+      const source = (this.source ?? {}) as Partial<TSource>;
+      const error = ValidationHelper.isInvalid("url", source.url);
+
+      return error !== false
+        ? ValidationHelper.getErrorMessage(error)
+        : !this.previewLoaded
+            ? ValidationHelper.getErrorMessage(Validation.URLInvalid)
+            : "";
+    },
+  },
+
+  watch: {
+    source(): void {
+      setTimeout(() => {
+        const { elementRef } = this.$refs;
+
+        DOMHelper.focus("input", elementRef as HTMLElement);
+      });
+    },
+
+    "source.url": function (): void {
+      const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
+
+      if (player) {
+        player.onloadedmetadata = () => {
+          if (this.source && !this.previewLoaded && !this.initialized) {
+            if (this.params?.type === PageType.Creation) {
+              this.source.metadata.start = 0;
+              this.source.metadata.end = player.duration;
+            }
+
+            this.source.metadata.duration = player.duration;
+          }
+
+          this.initialized = true;
+          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
+        };
+
+        this.previewLoaded = false;
+        player.load();
+      }
+    },
+  },
+
+  created() {
+    this.initForm();
+    useAppStore().$onAction(({ name, after }) => {
+      after(() => {
+        if (name === "onValidate") {
+          this.onValidate();
+        }
+      });
+    });
   },
 
   methods: {
@@ -41,7 +155,8 @@ export default defineComponent({
       if (this.params) {
         if (this.params.type === PageType.Creation) {
           this.source = await SourceHelper.init();
-        } else {
+        }
+        else {
           this.source = this.params.source;
         }
       }
@@ -62,7 +177,7 @@ export default defineComponent({
      * Checks if the form is valid
      */
     isFormValid(): boolean {
-      return this.isInputValid('title') && this.isInputValid('url') && (this.previewLoaded && !this.forceLoad);
+      return this.isInputValid("title") && this.isInputValid("url") && (this.previewLoaded && !this.forceLoad);
     },
 
     /**
@@ -72,7 +187,8 @@ export default defineComponent({
      * @param input The name of the input
      */
     isInputValid(input: keyof TSource): boolean {
-      const source: any = this.source ?? {};
+      const source = (this.source ?? {}) as Partial<TSource>;
+
       return !ValidationHelper.isInvalid(input, source[input]);
     },
 
@@ -83,9 +199,10 @@ export default defineComponent({
      * @param input The name if the input to show the error for
      */
     canShowError(input: keyof TSource): boolean {
-      if (input === 'url') {
+      if (input === "url") {
         return (!this.isInputValid(input) || !this.previewLoaded) && this.submitted;
-      } else {
+      }
+      else {
         return !this.isInputValid(input) && this.submitted;
       }
     },
@@ -96,7 +213,7 @@ export default defineComponent({
      */
     async onClear(): Promise<void> {
       this.submitted = false;
-      this.source = await SourceHelper.reset(this.source?.id ?? '');
+      this.source = await SourceHelper.reset(this.source?.id ?? "");
     },
 
     /**
@@ -145,157 +262,48 @@ export default defineComponent({
      */
     onLoad(loading: boolean): void {
       this.loading = loading;
-    }
+    },
   },
-
-  watch: {
-    source(): void {
-      setTimeout(() => {
-        const { elementRef } = this.$refs;
-        DOMHelper.focus('input', elementRef as HTMLElement);
-      });
-    },
-
-    'source.url'(): void {
-      const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
-
-      if (player) {
-        player.onloadedmetadata = () => {
-          if (this.source && !this.previewLoaded && !this.initialized) {
-            if (this.params?.type === PageType.Creation) {
-              this.source.metadata.start = 0;
-              this.source.metadata.end = player.duration;
-            }
-
-            this.source.metadata.duration = player.duration;
-          }
-
-          this.initialized = true;
-          this.previewLoaded = player.readyState > ReadyState.HaveNothing;
-        }
-
-        this.previewLoaded = false;
-        player.load();
-      }
-    }
-  },
-
-  computed: {
-
-    /**
-     * @description
-     * The label to display on the validation button
-     */
-    validateLabel(): string {
-      return this.params?.type === PageType.Creation ? 'Add' : 'Edit';
-    },
-
-    /**
-     * @description
-     * The preview player's ID on the DOM
-     */
-    previewPlayerId(): string {
-      return `preview-player-${this.source?.id}`;
-    },
-
-    /**
-     * @description
-     * The view source link
-     */
-    previewUrl(): string {
-      return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
-    },
-
-    /**
-     * @description
-     * Checks if the loader should be forced into activation
-     */
-    forceLoad(): boolean {
-      return Boolean(!this.previewLoaded && this.source && this.source.url.length > 0);
-    },
-
-    /**
-     * @description
-     * The placeholder of the title input
-     */
-    titleError(): string {
-      const source: any = this.source ?? {};
-      const error = ValidationHelper.isInvalid('title', source.title);
-
-      return ValidationHelper.getErrorMessage(error);
-    },
-
-    /**
-     * @description
-     * The placeholder of the URL input
-     */
-    urlError(): string {
-      const source: any = this.source ?? {};
-      const error = ValidationHelper.isInvalid('url', source.url);
-
-      return error !== false
-        ? ValidationHelper.getErrorMessage(error)
-        : !this.previewLoaded
-          ? ValidationHelper.getErrorMessage(Validation.URLInvalid)
-          : '';
-    }
-  },
-
-  created() {
-    this.initForm();
-    useAppStore().$onAction(({ name, after }) => {
-      after(() => {
-        if (name === 'onValidate') {
-          this.onValidate();
-        }
-      });
-    });
-  },
-
-  setup() {
-    const elementRef = ref(null);
-    return { elementRef };
-  }
 });
 </script>
 
 <template>
   <div
     v-if="source"
-    class="source"
     ref="elementRef"
+    class="source"
   >
     <div class="source__form">
       <div class="source__input">
         <InputComp
+          v-model="source.title"
           type="text"
           label="Source Title"
-          v-model="source.title"
           :autofocus="true"
           :error="titleError"
-          :hasError="canShowError('title')"
+          :has-error="canShowError('title')"
           placeholder="Enter a title for the source"
         />
       </div>
 
       <div class="source__input">
         <InputComp
+          v-model="source.url"
           type="text"
           label="Source URL"
-          v-model="source.url"
           :error="urlError"
-          :hasError="canShowError('url')"
+          :has-error="canShowError('url')"
           placeholder="Enter the URL of the source"
         />
       </div>
 
       <div
-        class="source__preview"
         v-show="source.url.length > 0"
+        class="source__preview"
       >
         <SourceLoader
+          :force-load="forceLoad"
           @load="onLoad"
-          :forceLoad="forceLoad"
         >
           <video
             :id="previewPlayerId"
@@ -311,8 +319,8 @@ export default defineComponent({
       </div>
 
       <div
-        class="source__crop"
         v-show="source.url.length > 0"
+        class="source__crop"
       >
         <RangeComp
           :min="0"
@@ -320,12 +328,11 @@ export default defineComponent({
           :end="source.metadata?.end"
           :max="source.metadata?.duration"
           :disabled="!previewLoaded"
-          :valueFormater="valueFormater"
-          @endChanged="onEndChanged"
-          @startChanged="onStartChanged"
+          :value-formater="valueFormater"
+          @end-changed="onEndChanged"
+          @start-changed="onStartChanged"
         />
       </div>
-
     </div>
 
     <div class="source__controls">

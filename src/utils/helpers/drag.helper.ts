@@ -1,5 +1,5 @@
-import { wait } from '@eoussama/core';
-import { Draggable } from 'gsap/Draggable';
+import { wait } from "@eoussama/core";
+import { Draggable } from "gsap/Draggable";
 
 
 
@@ -8,7 +8,6 @@ import { Draggable } from 'gsap/Draggable';
  * Helps with drag and drop
  */
 export class DragHelper {
-
   /**
    * @description
    * Makes a DOM element draggable.
@@ -35,7 +34,7 @@ export class DragHelper {
 
     await wait(0);
     draggable.kill();
-    element.style.transform = 'none';
+    element.style.transform = "none";
   }
 
   /**

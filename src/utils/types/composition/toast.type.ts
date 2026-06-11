@@ -8,5 +8,5 @@ export type TToast = {
    * @description
    * The message of the toast
    */
-  message: string
-}
+  message: string;
+};

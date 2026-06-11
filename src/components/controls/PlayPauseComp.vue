@@ -1,25 +1,15 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
+
 
 
 export default defineComponent({
-  emits: ['toggled', 'restart'],
 
   props: {
     value: Boolean,
-    repeat: Boolean
+    repeat: Boolean,
   },
-
-  methods: {
-
-    /**
-     * @description
-     * Toggle clicked
-     */
-    onClick(): void {
-      this.$emit(this.repeat ? 'restart' : 'toggled');
-    }
-  },
+  emits: ["toggled", "restart"],
 
   computed: {
 
@@ -29,14 +19,27 @@ export default defineComponent({
      */
     icon(): string {
       if (this.repeat) {
-        return 'repeat';
-      } else if (this.value) {
-        return 'pause';
-      } else {
-        return 'play'
+        return "repeat";
       }
-    }
-  }
+      else if (this.value) {
+        return "pause";
+      }
+      else {
+        return "play";
+      }
+    },
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Toggle clicked
+     */
+    onClick(): void {
+      this.$emit(this.repeat ? "restart" : "toggled");
+    },
+  },
 });
 </script>
 

@@ -1,5 +1,5 @@
-import type { TModal } from '../composition/modal.type';
-import type { TComponent } from '../composition/component.type';
+import type { TComponent } from "../composition/component.type";
+import type { TModal } from "../composition/modal.type";
 
 
 
@@ -14,4 +14,4 @@ export type TModalsStore = {
    * The list of modals
    */
   modals: Array<TModal<TComponent>>;
-}
+};

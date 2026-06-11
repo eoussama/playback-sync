@@ -1,25 +1,27 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { useAppStore } from "@/state/stores/app.store";
+import { useSourcesStore } from "@/state/stores/sources.store";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+import { Theme } from "@/utils/enums/theme.enum";
+import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
+
+
 
 export default defineComponent({
 
   methods: {
-    ...mapActions(useAppStore, ['updateControlsHover']),
+    ...mapActions(useAppStore, ["updateControlsHover"]),
     ...mapActions(useSourcesStore, [
-      'setPlaying',
-      'setMuted',
-      'setVolume',
-      'setSpeed',
-      'onSeek',
-      'onRestart',
-      'onTimelineSet'
+      "setPlaying",
+      "setMuted",
+      "setVolume",
+      "setSpeed",
+      "onSeek",
+      "onRestart",
+      "onTimelineSet",
     ]),
 
     /**
@@ -56,6 +58,7 @@ export default defineComponent({
 
     /**
      * @description
+     * @param volume
      * Changes the volume
      *
      * @param e The volume value
@@ -83,6 +86,7 @@ export default defineComponent({
     },
 
     /**
+     * @param time
      * @description
      * Updates the sources timelines
      */
@@ -104,23 +108,23 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.updateControlsHover(false);
-    }
+    },
   },
 
   computed: {
     ...mapState(useAppStore, [
-      'hover',
-      'theme',
-      'seekStep',
-      'fullscreen'
+      "hover",
+      "theme",
+      "seekStep",
+      "fullscreen",
     ]),
     ...mapState(useSourcesStore, [
-      'sources',
-      'volume',
-      'speed',
-      'playing',
-      'muted',
-      'longestSource'
+      "sources",
+      "volume",
+      "speed",
+      "playing",
+      "muted",
+      "longestSource",
     ]),
 
     /**
@@ -154,7 +158,7 @@ export default defineComponent({
      * Whether or not the sources are finished playing
      */
     ended(): boolean {
-      return this.timelineValue === this.duration
+      return this.timelineValue === this.duration;
     },
 
     /**
@@ -172,8 +176,8 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -183,7 +187,7 @@ export default defineComponent({
     :class="{
       'controls-wrapper--dark': isDark,
       'controls-wrapper--show': hover.controls,
-      'controls-wrapper--fullscreen': fullscreen
+      'controls-wrapper--fullscreen': fullscreen,
     }"
   >
     <div
@@ -204,7 +208,7 @@ export default defineComponent({
         <div class="controls__speed">
           <SpeedComp
             :value="speed"
-            @speedChanged="onSpeed"
+            @speed-changed="onSpeed"
           />
         </div>
 
@@ -237,8 +241,8 @@ export default defineComponent({
           <VolumeComp
             :muted="muted"
             :value="volume"
-            @volumeUpdated="onVolume"
-            @muteToggled="onMuteToggled"
+            @volume-updated="onVolume"
+            @mute-toggled="onMuteToggled"
           />
         </div>
 
@@ -250,8 +254,8 @@ export default defineComponent({
             <VolumeComp
               :muted="muted"
               :value="volume"
-              @volumeUpdated="onVolume"
-              @muteToggled="onMuteToggled"
+              @volume-updated="onVolume"
+              @mute-toggled="onMuteToggled"
             />
           </MoreComp>
         </div>

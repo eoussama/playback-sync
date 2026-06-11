@@ -1,11 +1,11 @@
-import ToastComp from '@/components/info/ToastComp.vue';
+import type { TComponent } from "../types/composition/component.type";
 
-import { ModalHelper } from './modal.helper';
-import { useModalStore } from '@/state/stores/modal.store';
+import type { TToast } from "../types/composition/toast.type";
+import ToastComp from "@/components/info/ToastComp.vue";
 
-import type { TToast } from '../types/composition/toast.type';
-import { ModalAlignment } from '../enums/modalAlignment.enum';
-import type { TComponent } from '../types/composition/component.type';
+import { useModalStore } from "@/state/stores/modal.store";
+import { ModalAlignment } from "../enums/modalAlignment.enum";
+import { ModalHelper } from "./modal.helper";
 
 
 
@@ -14,7 +14,6 @@ import type { TComponent } from '../types/composition/component.type';
  * Helps with toast modals
  */
 export class ToastHelper {
-
   /**
    * @description
    * Shows a toast
@@ -22,15 +21,15 @@ export class ToastHelper {
    * @param props The properties of the toast
    */
   static show(props: Partial<TToast>): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const store = useModalStore();
       const toasts = store.modals.filter(e => this.isToast(e.component));
-      const message = props.message ?? '';
+      const message = props.message ?? "";
       const params = {
         dialog: false,
         overlay: false,
         dismissive: false,
-        alignment: ModalAlignment.Top
+        alignment: ModalAlignment.Top,
       };
 
       for (const toast of toasts) {
@@ -38,8 +37,8 @@ export class ToastHelper {
       }
 
       ModalHelper
-        .open('', params, ToastComp, { message })
-        .then(modal => resolve(modal.payload));
+        .open("", params, ToastComp, { message })
+        .then(modal => resolve(modal.payload as boolean));
     });
   }
 
@@ -50,10 +49,10 @@ export class ToastHelper {
    * @param component The component to check
    */
   private static isToast(component: TComponent): boolean {
-    const path: string = (component as any).__file;
-    const file = path.split('/').reverse()[0];
-    const name = file.split('.')[0];
+    const path: string = (component as unknown as { __file: string }).__file;
+    const file = path.split("/").reverse()[0];
+    const name = file.split(".")[0];
 
-    return name === 'ToastComp';
+    return name === "ToastComp";
   }
 }

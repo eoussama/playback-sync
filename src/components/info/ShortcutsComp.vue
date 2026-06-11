@@ -1,20 +1,22 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent, ref } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
+import { useAppStore } from "@/state/stores/app.store";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { DOMHelper } from '@/utils/helpers/dom.helper';
+import { Theme } from "@/utils/enums/theme.enum";
+import { DOMHelper } from "@/utils/helpers/dom.helper";
+
+
 
 export default defineComponent({
 
   props: {
-    modalId: String
+    modalId: String,
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -22,7 +24,11 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
+  },
+
+  mounted(): void {
+    this.setFocus();
   },
 
   methods: {
@@ -33,21 +39,18 @@ export default defineComponent({
      */
     setFocus(): void {
       const { elementRef } = this.$refs;
-      const parent = (elementRef as HTMLElement).closest('.modal__element');
+      const parent = (elementRef as HTMLElement).closest(".modal__element");
 
-      DOMHelper.focus('button', parent as HTMLElement);
-    }
-  },
-
-  mounted(): void {
-    this.setFocus();
+      DOMHelper.focus("button", parent as HTMLElement);
+    },
   },
 
   setup() {
     const elementRef = ref(null);
+
     return { elementRef };
-  }
-})
+  },
+});
 </script>
 
 <template>
@@ -134,7 +137,7 @@ export default defineComponent({
       border-bottom: 2px solid hsl(var(--color-secondary-hsl), 80%);
     }
   }
-  
+
   &--dark {
     .shortcut kbd {
       background-color: hsl(var(--color-secondary-hsl), 20%);

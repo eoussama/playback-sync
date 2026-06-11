@@ -1,31 +1,33 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent, ref } from "vue";
 
-import { DOMHelper } from '@/utils/helpers/dom.helper';
-import { ReadyState } from '@/utils/enums/readyState.enum';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { useSourcesStore } from "@/state/stores/sources.store";
+import { ReadyState } from "@/utils/enums/readyState.enum";
+import { DOMHelper } from "@/utils/helpers/dom.helper";
+
+
 
 export default defineComponent({
-  emits: ['load'],
-
-  data: () => ({
-    loading: false
-  }),
 
   props: {
     buffering: Boolean,
-    forceLoad: Boolean
+    forceLoad: Boolean,
   },
+  emits: ["load"],
+
+  data: () => ({
+    loading: false,
+  }),
 
   watch: {
     loading() {
-      this.$emit('load', this.loading);
-    }
+      this.$emit("load", this.loading);
+    },
   },
 
   computed: {
-    ...mapState(useSourcesStore, ['bufferPause']),
+    ...mapState(useSourcesStore, ["bufferPause"]),
 
     /**
      * @description
@@ -33,43 +35,44 @@ export default defineComponent({
      */
     isLoading(): boolean {
       return this.loading || this.buffering || this.bufferPause || this.forceLoad;
-    }
+    },
   },
 
   mounted(): void {
     const container = this.$refs.elementRef as HTMLElement;
 
     DOMHelper
-      .watch('.source__player', container)
+      .watch(".source__player", container)
       .then(players => players[0] as HTMLVideoElement)
-      .then(player => {
+      .then((player) => {
         const listener = () => {
           this.loading = player.readyState < ReadyState.HaveEnoughData;
         };
 
-        player.addEventListener('load', listener);
-        player.addEventListener('stalled', listener);
-        player.addEventListener('canplay', listener);
-        player.addEventListener('waiting', listener);
-        player.addEventListener('suspend', listener);
-        player.addEventListener('loadstart', listener);
-        player.addEventListener('loadeddata', listener);
-        player.addEventListener('loadedmetadata', listener);
-        player.addEventListener('canplaythrough', listener);
+        player.addEventListener("load", listener);
+        player.addEventListener("stalled", listener);
+        player.addEventListener("canplay", listener);
+        player.addEventListener("waiting", listener);
+        player.addEventListener("suspend", listener);
+        player.addEventListener("loadstart", listener);
+        player.addEventListener("loadeddata", listener);
+        player.addEventListener("loadedmetadata", listener);
+        player.addEventListener("canplaythrough", listener);
       });
   },
 
   setup() {
     const elementRef = ref(null);
+
     return { sourceRef: elementRef };
-  }
-})
+  },
+});
 </script>
 
 <template>
   <div
-    class="loader"
     ref="elementRef"
+    class="loader"
     :class="{ 'loader--loading': isLoading }"
   >
     <div
@@ -109,7 +112,7 @@ export default defineComponent({
       </div>
     </div>
 
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

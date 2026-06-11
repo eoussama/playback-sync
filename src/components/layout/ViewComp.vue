@@ -1,24 +1,27 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import type { TSource } from "@/utils/types/composition/source.type";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { mapActions, mapState } from "pinia";
 
-import SourceDetail from '@/components/source/SourceDetail.vue';
+import { defineComponent } from "vue";
+import SourceDetail from "@/components/source/SourceDetail.vue";
 
-import { DragHelper } from '@/utils/helpers/drag.helper';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { useAppStore } from "@/state/stores/app.store";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { PageType } from '@/utils/enums/pageType.enum';
-import type { TSource } from '@/utils/types/composition/source.type';
+import { useSourcesStore } from "@/state/stores/sources.store";
+import { PageType } from "@/utils/enums/pageType.enum";
+
+import { Theme } from "@/utils/enums/theme.enum";
+import { DragHelper } from "@/utils/helpers/drag.helper";
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'theme']),
-    ...mapState(useSourcesStore, ['sources', 'tilling']),
+    ...mapState(useAppStore, ["fullscreen", "theme"]),
+    ...mapState(useSourcesStore, ["sources", "tilling"]),
 
     /**
      * @description
@@ -58,20 +61,20 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
-    ...mapActions(useAppStore, ['toggleFullscreen']),
+    ...mapActions(useAppStore, ["toggleFullscreen"]),
     ...mapActions(useSourcesStore, [
-      'getSource',
-      'addSource',
-      'setPlaying',
-      'updateSource',
-      'removeSource',
-      'switchSources',
-      'toggleSourcePin',
-      'updateSourceMetadata'
+      "getSource",
+      "addSource",
+      "setPlaying",
+      "updateSource",
+      "removeSource",
+      "switchSources",
+      "toggleSourcePin",
+      "updateSourceMetadata",
     ]),
 
     /**
@@ -90,10 +93,10 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', null, SourceDetail, { type: PageType.Creation })
-        .then(modal => {
+        .open("Add Source", null, SourceDetail, { type: PageType.Creation })
+        .then((modal) => {
           if (modal.payload) {
-            this.addSource(modal.payload);
+            this.addSource(modal.payload as TSource);
           }
         });
     },
@@ -108,10 +111,10 @@ export default defineComponent({
       const source = this.getSource(id);
 
       ModalHelper
-        .open('Edit Source', null, SourceDetail, { type: PageType.Edition, source: { ...source } })
-        .then(modal => {
+        .open("Edit Source", null, SourceDetail, { type: PageType.Edition, source: { ...source } })
+        .then((modal) => {
           if (modal.payload) {
-            this.updateSource(modal.payload);
+            this.updateSource(modal.payload as TSource);
           }
         });
     },
@@ -155,7 +158,7 @@ export default defineComponent({
      * @param e The drag event object
      */
     onDrag(id: string, e: DragEvent): void {
-      e.dataTransfer?.setData('sourceId', id);
+      e.dataTransfer?.setData("sourceId", id);
     },
 
     /**
@@ -166,7 +169,7 @@ export default defineComponent({
      * @param e The Drop event object
      */
     onDrop(id: string, e: DragEvent): void {
-      const sourceId = e.dataTransfer?.getData('sourceId');
+      const sourceId = e.dataTransfer?.getData("sourceId");
 
       if (sourceId && id !== sourceId) {
         this.switchSources(sourceId, id);
@@ -212,6 +215,7 @@ export default defineComponent({
     },
 
     /**
+     * @param e
      * @description
      * Toggles fullscreen mode
      */
@@ -219,42 +223,42 @@ export default defineComponent({
       const target = e.target as HTMLElement;
       const name = target.nodeName.toLowerCase();
 
-      if (name !== 'button' && !target.closest('button')) {
+      if (name !== "button" && !target.closest("button")) {
         this.toggleFullscreen();
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
 <template>
   <div
     class="view"
-    @dblclick.stop="onToggleFullscreen"
     :class="{
       'view--dark': isDark,
       'view--empty': empty,
-      'view--fullscreen': fullscreen
+      'view--fullscreen': fullscreen,
     }"
+    @dblclick.stop="onToggleFullscreen"
   >
     <SourceEmpty
-      :isEmpty="empty"
+      :is-empty="empty"
       @add="onAdd"
     >
       <div class="sources sources--pinned">
         <div
           v-for="source in pinnedSources"
-          class="source"
           :key="source.id"
+          class="source"
         >
           <SourceComp
             :source="source"
             @edit="onEdit"
             @unpin="onUnpin"
             @remove="onRemove"
-            @toggleMute="onToggleMute"
-            @enableDrag="onDragEnable"
-            @disableDrag="onDragDisable"
+            @toggle-mute="onToggleMute"
+            @enable-drag="onDragEnable"
+            @disable-drag="onDragDisable"
           />
         </div>
       </div>
@@ -265,8 +269,8 @@ export default defineComponent({
       >
         <div
           v-for="source in unpinnedSources"
-          class="source"
           :key="source.id"
+          class="source"
           :draggable="!source.pinned"
           @drop="e => onDrop(source.id, e)"
           @dragstart="e => onDrag(source.id, e)"
@@ -277,7 +281,7 @@ export default defineComponent({
             @pin="onPin"
             @edit="onEdit"
             @remove="onRemove"
-            @toggleMute="onToggleMute"
+            @toggle-mute="onToggleMute"
           />
         </div>
       </div>

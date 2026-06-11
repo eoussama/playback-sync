@@ -3,7 +3,6 @@
  * Helps with math
  */
 export class MathHelper {
-
   /**
    * @description
    * Clamps a value between two values
@@ -23,6 +22,6 @@ export class MathHelper {
    * @param value The value to sanitize
    */
   static sanitize(value: number): number {
-    return (isNaN(value) ? 0 : value) ?? 0;
+    return (Number.isNaN(value) ? 0 : value) ?? 0;
   }
 }

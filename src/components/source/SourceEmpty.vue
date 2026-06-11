@@ -1,19 +1,21 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
+
+
 
 export default defineComponent({
-  emits: ['add'],
 
   props: {
-    isEmpty: Boolean
+    isEmpty: Boolean,
   },
+  emits: ["add"],
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -21,7 +23,7 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
@@ -31,10 +33,10 @@ export default defineComponent({
      * Emits the addition event
      */
     onAdd(): void {
-      this.$emit('add');
-    }
-  }
-})
+      this.$emit("add");
+    },
+  },
+});
 </script>
 
 <template>
@@ -67,7 +69,7 @@ export default defineComponent({
       v-else
       class="empty__negative"
     >
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

@@ -1,24 +1,27 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { TComponent } from "@/utils/types/composition/component.type";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import type { TModal } from "@/utils/types/composition/modal.type";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
+import { useAppStore } from "@/state/stores/app.store";
+import { ModalAlignment } from "@/utils/enums/modalAlignment.enum";
 
-import type { TModal } from '@/utils/types/composition/modal.type';
-import type { TComponent } from '@/utils/types/composition/component.type';
+import { Theme } from "@/utils/enums/theme.enum";
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
 
   props: {
-    modal: Object as PropType<TModal<TComponent>>
+    modal: Object as PropType<TModal<TComponent>>,
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -41,8 +44,8 @@ export default defineComponent({
      * Close button type
      */
     closeType(): string {
-      return this.isDark ? 'plain' : 'secondary';
-    }
+      return this.isDark ? "plain" : "secondary";
+    },
   },
 
   methods: {
@@ -66,28 +69,30 @@ export default defineComponent({
       if (this.modal) {
         ModalHelper.close(this.modal.id);
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
 <template>
   <div
     v-if="modal"
-    class="modal"
     :id="`modal-${modal.id}`"
+    class="modal"
     :class="{
       'modal--dark': isDark,
       'modal--dialog': modal.params.dialog,
       'modal--overlay': modal.params.overlay,
       'modal--top': isAlignment(modal.params.alignment, ModalAlignment.Top),
       'modal--center': isAlignment(modal.params.alignment, ModalAlignment.Center),
-      'modal--bottom': isAlignment(modal.params.alignment, ModalAlignment.Bottom)
+      'modal--bottom': isAlignment(modal.params.alignment, ModalAlignment.Bottom),
     }"
   >
     <div class="modal__element">
       <div class="modal__head">
-        <div class="modal__title">{{ modal.title }}</div>
+        <div class="modal__title">
+          {{ modal.title }}
+        </div>
 
         <div class="modal__close">
           <ButtonComp
@@ -100,9 +105,9 @@ export default defineComponent({
 
       <div class="modal__body">
         <component
-          :modalId="modal.id"
+          :is="{ ...modal.component }"
+          :modal-id="modal.id"
           :params="modal.props"
-          :is="{...modal.component}"
         />
       </div>
     </div>

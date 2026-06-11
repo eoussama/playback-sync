@@ -1,26 +1,29 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { TOption } from "@/utils/types/composition/option.type";
 
-import { useAppStore } from '@/state/stores/app.store';
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TOption } from '@/utils/types/composition/option.type';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
+
+
 
 export default defineComponent({
-  emits: ['update:modelValue', 'changed'],
 
   props: {
     placeholder: String,
     modelValue: [String, Number],
     options: {
       default: () => [],
-      type: Array as PropType<Array<TOption>>
-    }
+      type: Array as PropType<Array<TOption>>,
+    },
   },
+  emits: ["update:modelValue", "changed"],
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
@@ -28,7 +31,7 @@ export default defineComponent({
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
@@ -41,12 +44,12 @@ export default defineComponent({
      */
     onChanged(e: Event): void {
       const target = e.target as HTMLSelectElement;
-      const value = target.value ?? '';
+      const value = target.value ?? "";
 
-      this.$emit('changed', value);
-      this.$emit('update:modelValue', value);
-    }
-  }
+      this.$emit("changed", value);
+      this.$emit("update:modelValue", value);
+    },
+  },
 });
 </script>
 
@@ -63,18 +66,18 @@ export default defineComponent({
       @change="onChanged"
     >
       <option
-        value=""
         v-if="placeholder"
+        value=""
         class="select__option select__option--default"
       >
         {{ placeholder }}
       </option>
 
       <option
+        v-for="(option, index) in options"
         :key="index"
         :value="option.value"
         class="select__option"
-        v-for="(option, index) in options"
       >
         {{ option.label }}
       </option>

@@ -1,4 +1,4 @@
-import type { TMetadata } from './metadata.type';
+import type { TMetadata } from "./metadata.type";
 
 
 
@@ -37,4 +37,4 @@ export type TSource = {
    * Source metadata
    */
   metadata: TMetadata;
-}
+};

@@ -1,5 +1,5 @@
-import type { TSource } from '../composition/source.type';
-import type { TillingValue } from '@/utils/enums/tillingValue.enum';
+import type { TSource } from "../composition/source.type";
+import type { TillingValue } from "@/utils/enums/tillingValue.enum";
 
 
 
@@ -50,4 +50,4 @@ export type TSourcesStore = {
    * The list of sources
    */
   sources: Array<TSource>;
-}
+};

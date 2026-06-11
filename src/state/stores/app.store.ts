@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia';
+import type { TAppStore } from "@/utils/types/store/appStore.type";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TAppStore } from '@/utils/types/store/appStore.type';
+import { defineStore } from "pinia";
+import { Theme } from "@/utils/enums/theme.enum";
 
 
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore("app", {
   state: (): TAppStore => ({
     seekStep: 10,
     volumeStep: 0.1,
@@ -14,8 +14,8 @@ export const useAppStore = defineStore('app', {
     hover: {
       head: false,
       foot: false,
-      controls: false
-    }
+      controls: false,
+    },
   }),
 
   actions: {
@@ -94,6 +94,6 @@ export const useAppStore = defineStore('app', {
      * @description
      * Form validation notification
      */
-    onValidate(): void { }
-  }
+    onValidate(): void { },
+  },
 });

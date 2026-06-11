@@ -1,31 +1,16 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { TimeHelper } from '@/utils/helpers/time.helper';
+import { defineComponent } from "vue";
+import { TimeHelper } from "@/utils/helpers/time.helper";
+
 
 
 export default defineComponent({
-  emits: ['timelineUpdated'],
 
   props: {
     value: Number,
-    duration: Number
+    duration: Number,
   },
-
-  methods: {
-
-    /**
-     * @description
-     * Emits timeline change
-     *
-     * @param e The change event
-     */
-    onChanged(e: Event) {
-      const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value) ?? 0;
-
-      this.$emit('timelineUpdated', value);
-    }
-  },
+  emits: ["timelineUpdated"],
 
   computed: {
 
@@ -43,8 +28,24 @@ export default defineComponent({
      */
     displayTime() {
       return TimeHelper.secondsToTime(this.value);
-    }
-  }
+    },
+  },
+
+  methods: {
+
+    /**
+     * @description
+     * Emits timeline change
+     *
+     * @param e The change event
+     */
+    onChanged(e: Event) {
+      const target = e.target as HTMLInputElement;
+      const value = Number.parseFloat(target.value) ?? 0;
+
+      this.$emit("timelineUpdated", value);
+    },
+  },
 });
 </script>
 

@@ -1,24 +1,26 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapActions, mapState } from 'pinia';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
+import TillingCustom from "@/components/tilling/TillingCustom.vue";
 
-import { ModalHelper } from '@/utils/helpers/modal.helper';
-import { TillingValue } from '@/utils/enums/tillingValue.enum';
-import TillingCustom from '@/components/tilling/TillingCustom.vue';
+import { useSourcesStore } from "@/state/stores/sources.store";
+import { TillingValue } from "@/utils/enums/tillingValue.enum";
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+
 
 export default defineComponent({
 
   data: () => ({
     options: [
-      { label: 'Fill', value: TillingValue.Fill },
-      { label: 'Split', value: TillingValue.Split },
-      { label: 'Custom', value: TillingValue.Custom }
-    ]
+      { label: "Fill", value: TillingValue.Fill },
+      { label: "Split", value: TillingValue.Split },
+      { label: "Custom", value: TillingValue.Custom },
+    ],
   }),
 
   computed: {
-    ...mapState(useSourcesStore, ['tilling']),
+    ...mapState(useSourcesStore, ["tilling"]),
 
     /**
      * @description
@@ -26,11 +28,11 @@ export default defineComponent({
      */
     value(): TillingValue {
       return Math.min(this.tilling, TillingValue.Custom);
-    }
+    },
   },
 
   methods: {
-    ...mapActions(useSourcesStore, ['setTilling']),
+    ...mapActions(useSourcesStore, ["setTilling"]),
 
     /**
      * @description
@@ -39,16 +41,17 @@ export default defineComponent({
      * @param e The changed value
      */
     async onChanged(e: number): Promise<void> {
-      let changedValue = parseInt(e?.toString());
+      let changedValue = Number.parseInt(e?.toString());
 
-      if (changedValue == TillingValue.Custom) {
-        const customValue = await ModalHelper.open('Custom Tilling', null, TillingCustom, { tilling: this.tilling });
-        changedValue = customValue.payload?.value ?? this.value;
+      if (changedValue === TillingValue.Custom) {
+        const customValue = await ModalHelper.open("Custom Tilling", null, TillingCustom, { tilling: this.tilling });
+
+        changedValue = (customValue.payload as { value: number } | undefined)?.value ?? this.value;
       }
 
       this.setTilling(changedValue);
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -56,7 +59,7 @@ export default defineComponent({
   <div class="tilling">
     <SelectComp
       :options="options"
-      :modelValue="value"
+      :model-value="value"
       @changed="onChanged"
     />
   </div>

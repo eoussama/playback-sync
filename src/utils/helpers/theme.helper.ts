@@ -1,4 +1,4 @@
-import type { Theme } from '../enums/theme.enum';
+import type { Theme } from "../enums/theme.enum";
 
 
 
@@ -7,8 +7,6 @@ import type { Theme } from '../enums/theme.enum';
  * Helps with theming
  */
 export class ThemeHelper {
-
-
   /**
    * @description
    * Updates app theme
@@ -16,12 +14,13 @@ export class ThemeHelper {
    * @param theme The theme to update to
    */
   static updateTheme(theme: Theme): void {
-    const root = document.querySelector(':root') as HTMLElement;
+    const root = document.querySelector(":root") as HTMLElement;
 
     if (theme) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+      root.classList.add("dark");
+    }
+    else {
+      root.classList.remove("dark");
     }
   }
 }
