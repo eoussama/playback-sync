@@ -37,5 +37,5 @@ export enum ReadyState {
    * Enough data is available, and the download rate is high enough
    * that the media can be played through to the end without interruption.
    */
-  HaveEnoughData
+  HaveEnoughData,
 }

@@ -1,6 +1,6 @@
-import { hookAppEffect } from './app.effect';
-import { hookModalEffect } from './modal.effect';
-import { hookSourcesEffect } from './sources.effect';
+import { hookAppEffect } from "./app.effect";
+import { hookModalEffect } from "./modal.effect";
+import { hookSourcesEffect } from "./sources.effect";
 
 
 

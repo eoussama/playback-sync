@@ -1,4 +1,5 @@
-import { Draggable } from 'gsap/Draggable';
+import { wait } from "@eoussama/core";
+import { Draggable } from "gsap/Draggable";
 
 
 
@@ -7,23 +8,19 @@ import { Draggable } from 'gsap/Draggable';
  * Helps with drag and drop
  */
 export class DragHelper {
-
   /**
    * @description
    * Makes a DOM element draggable.
    *
    * @param id The ID of the element to drag
    * @param bound The parent bound element
+   * @returns A promise that resolves when the element is made draggable
    */
   static async create(id: string, bound: HTMLElement): Promise<void> {
-    return new Promise(resolve => {
-      const options = { bounds: bound };
+    const options = { bounds: bound };
 
-      setTimeout(() => {
-        Draggable.create(id, options);
-        resolve();
-      });
-    });
+    await wait(0);
+    Draggable.create(id, options);
   }
 
   /**
@@ -31,19 +28,15 @@ export class DragHelper {
    * Removes dragging functionality from a DOM element
    *
    * @param id The ID of the element to remove the drag from
+   * @returns A promise that resolves when dragging is removed
    */
   static async destroy(id: string): Promise<void> {
-    return new Promise(resolve => {
-      const draggable = Draggable.get(id);
-      const element = document.querySelector(id) as HTMLDivElement;
+    const draggable = Draggable.get(id);
+    const element = document.querySelector(id) as HTMLDivElement;
 
-      setTimeout(() => {
-        draggable.kill();
-        element.style.transform = 'none';
-
-        resolve();
-      });
-    });
+    await wait(0);
+    draggable.kill();
+    element.style.transform = "none";
   }
 
   /**

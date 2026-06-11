@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia';
-import type { TModal } from '@/utils/types/composition/modal.type';
-import type { TModalsStore } from '@/utils/types/store/modalsStore.type';
-import type { TComponent } from '@/utils/types/composition/component.type';
+import type { TComponent } from "@/utils/types/composition/component.type";
+import type { TModal } from "@/utils/types/composition/modal.type";
+import type { TModalsStore } from "@/utils/types/store/modalsStore.type";
+import { defineStore } from "pinia";
 
 
 
-export const useModalStore = defineStore('modals', {
+export const useModalStore = defineStore("modals", {
   state: (): TModalsStore => ({
-    modals: []
+    modals: [],
   }),
 
   actions: {
@@ -27,10 +27,9 @@ export const useModalStore = defineStore('modals', {
      * Removes a modal
      *
      * @param id The ID of the modal to remove
-     * @param data Optional payload emited when the modal is removed,
-     * This param is used by the effect exclusively.
+     * @param _data Optional payload emitted when the modal is removed, used by the effect exclusively
      */
-    removeModal<T = any>(id: string, data?: T): void { // eslint-disable-line
+    removeModal<T = unknown>(id: string, _data?: T): void {
       const index = this.modals.findIndex(e => e.id === id);
 
       if (index >= 0) {
@@ -48,6 +47,6 @@ export const useModalStore = defineStore('modals', {
       if (modal) {
         this.removeModal(modal.id, { id: modal.id });
       }
-    }
-  }
+    },
+  },
 });

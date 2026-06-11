@@ -1,28 +1,39 @@
 <script lang="ts">
-import { defineComponent, ref, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { TSource } from "@/utils/types/composition/source.type";
 
-import { useAppStore } from '@/state/stores/app.store';
+import { mapState } from "pinia";
+import { defineComponent, ref } from "vue";
 
-import { ConfirmHelper } from '@/utils/helpers/confirm.helper';
-import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TSource } from '@/utils/types/composition/source.type';
+import { ConfirmHelper } from "@/utils/helpers/confirm.helper";
+import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
+
+
 
 export default defineComponent({
-  emits: ['remove', 'edit', 'pin', 'unpin', 'toggleMute', 'disableDrag', 'enableDrag'],
 
   props: {
-    source: Object as PropType<TSource>
+    source: Object as PropType<TSource>,
+  },
+  emits: ["remove", "edit", "pin", "unpin", "toggleMute", "disableDrag", "enableDrag"],
+
+  setup() {
+    const resizerRef = ref(null);
+
+    return { resizerRef };
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * The ID of the source's element on the DOM
+     *
+     * @returns The source element ID string
      */
     sourceId(): string {
       return `source-${this.source?.id}`;
@@ -31,6 +42,8 @@ export default defineComponent({
     /**
      * @description
      * The ID of the source's player on the DOM
+     *
+     * @returns The player element ID string
      */
     playerId(): string {
       return `player-${this.source?.id}`;
@@ -39,6 +52,8 @@ export default defineComponent({
     /**
      * @description
      * The cropped source URL
+     *
+     * @returns The cropped source URL string
      */
     sourceUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
@@ -47,6 +62,8 @@ export default defineComponent({
     /**
      * @description
      * The icon to show on the button
+     *
+     * @returns The volume icon name string
      */
     volumeIcon(): string {
       const volume = this.source?.metadata?.volume ?? 1;
@@ -58,6 +75,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -66,10 +85,12 @@ export default defineComponent({
     /**
      * @description
      * The button type
+     *
+     * @returns The button type string
      */
     buttonType(): string {
-      return this.isDark ? 'plain' : 'secondary';
-    }
+      return this.isDark ? "plain" : "secondary";
+    },
   },
 
   methods: {
@@ -81,14 +102,14 @@ export default defineComponent({
     onRemove(): void {
       ConfirmHelper
         .open({
-          title: 'Delete Source',
-          resolveLabel: 'Delete',
-          icon: 'triangle-exclamation',
-          message: 'Do you really want to delete this source?'
+          title: "Delete Source",
+          resolveLabel: "Delete",
+          icon: "triangle-exclamation",
+          message: "Do you really want to delete this source?",
         })
-        .then(confirm => {
+        .then((confirm) => {
           if (confirm) {
-            this.$emit('remove', this.source?.id);
+            this.$emit("remove", this.source?.id);
           }
         });
     },
@@ -98,7 +119,7 @@ export default defineComponent({
      * Emits the mute toggle event
      */
     onToggleMute(): void {
-      this.$emit('toggleMute', this.source?.id, !this.source?.metadata.muted);
+      this.$emit("toggleMute", this.source?.id, !this.source?.metadata.muted);
     },
 
     /**
@@ -106,7 +127,7 @@ export default defineComponent({
      * Emits edit event
      */
     onEdit(): void {
-      this.$emit('edit', this.source?.id);
+      this.$emit("edit", this.source?.id);
     },
 
     /**
@@ -114,7 +135,7 @@ export default defineComponent({
      * Emits the pin event
      */
     onPin(): void {
-      this.$emit('pin', this.source?.id);
+      this.$emit("pin", this.source?.id);
     },
 
     /**
@@ -122,7 +143,7 @@ export default defineComponent({
      * Emits the unpin event
      */
     onUnpin(): void {
-      this.$emit('unpin', this.source?.id);
+      this.$emit("unpin", this.source?.id);
     },
 
     /**
@@ -142,30 +163,27 @@ export default defineComponent({
         const endY = startY + (resizerRect?.height ?? 0);
 
         if (e.x >= startX && e.x <= endX && e.y >= startY && e.y <= endY) {
-          this.$emit('disableDrag', this.source.id);
-        } else {
-          this.$emit('enableDrag', this.source.id);
+          this.$emit("disableDrag", this.source.id);
+        }
+        else {
+          this.$emit("enableDrag", this.source.id);
         }
       }
-    }
+    },
   },
 
-  setup() {
-    const resizerRef = ref(null);
-    return { resizerRef };
-  }
 });
 </script>
 
 <template>
   <div
     v-if="source"
-    class="source"
     :id="sourceId"
     :key="source.id"
+    class="source"
     :class="{
       'source--dark': isDark,
-      'source--pinned': source.pinned
+      'source--pinned': source.pinned,
     }"
     @mousemove="onMouseMove"
   >
@@ -292,8 +310,8 @@ export default defineComponent({
 
       <SourceLoader :buffering="source.metadata.buffering">
         <video
-          preload="auto"
           :id="playerId"
+          preload="auto"
           class="source__player"
         >
           <source
@@ -307,7 +325,7 @@ export default defineComponent({
     <div
       ref="resizerRef"
       class="source__resizer"
-    ></div>
+    />
   </div>
 </template>
 

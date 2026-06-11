@@ -1,4 +1,4 @@
-import { NodeType } from '@/utils/enums/nodeType.enum';
+import { NodeType } from "@/utils/enums/nodeType.enum";
 
 
 
@@ -7,13 +7,13 @@ import { NodeType } from '@/utils/enums/nodeType.enum';
  * Helps with DOM manipulations
  */
 export class DOMHelper {
-
   /**
    * @description
    * Fetches the matching elements inside of a select group of containers
    *
    * @param selector The selector to check for
    * @param parents The parent elements to check inside
+   * @returns The matching elements
    */
   static get<T extends Array<HTMLElement>>(selector: string, parents: Array<HTMLElement>): T {
     const containers = parents.filter(e => e.nodeType === NodeType.ElementNode);
@@ -29,10 +29,11 @@ export class DOMHelper {
    *
    * @param selector The selector of the elemnt to watch for
    * @param container The container to watch the children of
+   * @returns A promise that resolves with the matched elements
    */
   static async watch<T extends Array<HTMLElement>>(selector: string, container?: HTMLElement): Promise<T> {
-    return new Promise(resolve => {
-      const root = container ?? document.getElementById('app') as HTMLElement;
+    return new Promise((resolve) => {
+      const root = container ?? document.getElementById("app") as HTMLElement;
       const targets = this.get(selector, [root]);
 
       if (targets.length > 0) {
@@ -63,7 +64,7 @@ export class DOMHelper {
    * @param container The parent container to look for the element in
    */
   static focus(selector: string, container?: HTMLElement): void {
-    const parent = container ?? document.getElementById('app') as HTMLElement;
+    const parent = container ?? document.getElementById("app") as HTMLElement;
     const firstInput = parent.querySelector(selector) as HTMLElement;
 
     if (firstInput) {

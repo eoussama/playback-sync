@@ -1,24 +1,29 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import type { TOption } from "@/utils/types/composition/option.type";
 
-import { speed } from '@/utils/const/speed.const';
-import type { TOption } from '@/utils/types/composition/option.type';
+import { defineComponent } from "vue";
+import { speed } from "@/utils/const/speed.const";
+
+
 
 export default defineComponent({
 
   props: {
-    value: Number
+    value: Number,
   },
+  emits: ["speedChanged"],
 
   computed: {
 
     /**
      * @description
      * Playback rate options
+     *
+     * @returns The array of playback rate options
      */
     playbackRateOptions(): Array<TOption> {
       return speed.map(rate => ({ value: rate, label: `x${rate}` }));
-    }
+    },
   },
 
   methods: {
@@ -26,21 +31,23 @@ export default defineComponent({
     /**
      * @description
      * Emits the speed change
+     *
+     * @param e The change event
      */
     onPlaybackRateChanged(e: Event) {
       const target = e.target as HTMLSelectElement;
-      const value = parseFloat(target.value ?? 0);
+      const value = Number.parseFloat(target.value ?? 0);
 
-      this.$emit('speedChanged', value);
-    }
-  }
+      this.$emit("speedChanged", value);
+    },
+  },
 });
 </script>
 
 <template>
   <div class="speed">
     <SelectComp
-      :modelValue="value"
+      :model-value="value"
       :options="playbackRateOptions"
       @change="onPlaybackRateChanged"
     />

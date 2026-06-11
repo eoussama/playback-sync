@@ -1,13 +1,13 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
+
 
 
 export default defineComponent({
-  emits: ['update:modelValue'],
 
   props: {
     min: Number,
@@ -18,24 +18,27 @@ export default defineComponent({
     modelValue: [String, Number],
     error: {
       type: String,
-      default: 'Invalid value'
+      default: "Invalid value",
     },
     type: {
       type: String,
-      default: 'text'
-    }
+      default: "text",
+    },
   },
+  emits: ["update:modelValue"],
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
@@ -48,11 +51,11 @@ export default defineComponent({
      */
     onInput(e: Event): void {
       const target = e.target as HTMLInputElement;
-      const value = target.value ?? '';
+      const value = target.value ?? "";
 
-      this.$emit('update:modelValue', value);
-    }
-  }
+      this.$emit("update:modelValue", value);
+    },
+  },
 });
 </script>
 
@@ -61,7 +64,7 @@ export default defineComponent({
     class="input"
     :class="{
       'input--dark': isDark,
-      'input--error': hasError
+      'input--error': hasError,
     }"
   >
     <label class="input__wrapper">
@@ -78,7 +81,7 @@ export default defineComponent({
         :autofocus="autofocus"
         :placeholder="placeholder"
         @input="onInput"
-      />
+      >
     </label>
 
     <div

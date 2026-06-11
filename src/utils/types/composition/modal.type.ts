@@ -1,5 +1,5 @@
-import type { TComponent } from './component.type';
-import type { TModalParams } from './modalParams.type';
+import type { TComponent } from "./component.type";
+import type { TModalParams } from "./modalParams.type";
 
 
 
@@ -7,7 +7,7 @@ import type { TModalParams } from './modalParams.type';
  * @description
  * A source to stream
  */
-export type TModal<T extends TComponent, U = any> = {
+export type TModal<T extends TComponent, U = unknown> = {
 
   /**
    * @description
@@ -38,4 +38,4 @@ export type TModal<T extends TComponent, U = any> = {
    * Modal-related paraleters
    */
   params: TModalParams;
-}
+};

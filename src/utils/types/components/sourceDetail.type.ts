@@ -1,5 +1,5 @@
-import type { TNullable } from '../generic/nullable.type';
-import type { TSource } from '../composition/source.type';
+import type { TNullable } from "@eoussama/core";
+import type { TSource } from "../composition/source.type";
 
 
 
@@ -13,19 +13,19 @@ export type TSourceDetailType = {
    * @description
    * The source's loading state
    */
-  loading: boolean
+  loading: boolean;
 
   /**
    * @description
    * If the form has been initialized
    */
-  initialized: boolean
+  initialized: boolean;
 
   /**
    * @description
    * The source to display
    */
-  source: TNullable<TSource>
+  source: TNullable<TSource>;
 
   /**
    * @description
@@ -37,5 +37,5 @@ export type TSourceDetailType = {
    * @description
    * If the preview is loaded
    */
-  previewLoaded: boolean
+  previewLoaded: boolean;
 };

@@ -2,4 +2,5 @@
  * @description
  * Vue component type
  */
-export type TComponent = abstract new (...args: any) => any;
+// eslint-disable-next-line ts/no-explicit-any
+export type TComponent = abstract new (...args: any[]) => any;

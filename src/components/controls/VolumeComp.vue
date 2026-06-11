@@ -1,13 +1,50 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+import { defineComponent } from "vue";
+import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
+
+
 
 export default defineComponent({
-  emits: ['volumeUpdated', 'muteToggled'],
 
   props: {
     value: Number,
-    muted: Boolean
+    muted: Boolean,
+  },
+  emits: ["volumeUpdated", "muteToggled"],
+
+  computed: {
+
+    /**
+     * @description
+     * Returns a human readable volume value
+     *
+     * @returns The volume as a percentage integer
+     */
+    volume(): number {
+      const volume = this.value ?? 0;
+
+      return Math.floor(volume * 100);
+    },
+
+    /**
+     * @description
+     * The volume label
+     *
+     * @returns The volume label string
+     */
+    label(): string {
+      return `${this.volume}%`;
+    },
+
+    /**
+     * @description
+     * The icon to show on the button
+     *
+     * @returns The icon name string
+     */
+    icon(): string {
+      return getVolumeIcon(this.volume, this.muted);
+    },
   },
 
   methods: {
@@ -20,9 +57,9 @@ export default defineComponent({
      */
     onVolume(e: Event): void {
       const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value ?? 0);
+      const value = Number.parseFloat(target.value ?? 0);
 
-      this.$emit('volumeUpdated', value);
+      this.$emit("volumeUpdated", value);
     },
 
     /**
@@ -30,37 +67,9 @@ export default defineComponent({
      * Toggles the muted state
      */
     onMuteToggled(): void {
-      this.$emit('muteToggled');
-    }
+      this.$emit("muteToggled");
+    },
   },
-
-  computed: {
-
-    /**
-     * @description
-     * Returns a human readable volume value
-     */
-    volume(): number {
-      const volume = this.value ?? 0;
-      return Math.floor(volume * 100);
-    },
-
-    /**
-     * @description
-     * The volume label
-     */
-    label(): string {
-      return `${this.volume}%`;
-    },
-
-    /**
-     * @description
-     * The icon to show on the button
-     */
-    icon(): string {
-      return getVolumeIcon(this.volume, this.muted);
-    }
-  }
 });
 </script>
 

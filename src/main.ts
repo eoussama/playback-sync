@@ -1,15 +1,15 @@
-import './style/main.scss';
+import { createPinia } from "pinia";
 
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import { createApp } from "vue";
+import App from "./App.vue";
 
-import App from './App.vue';
+import { initEffects } from "./state/effects";
 
-import { initEffects } from './state/effects';
-import { initGSAP } from './utils/helpers/gsap.helper';
-import { initIcons } from './utils/helpers/fontawesome.helper';
-import { addComponent } from './utils/helpers/component.helper';
-import { initShortcuts } from './utils/helpers/shortcut.helper';
+import { addComponent } from "./utils/helpers/component.helper";
+import { initIcons } from "./utils/helpers/fontawesome.helper";
+import { initGSAP } from "./utils/helpers/gsap.helper";
+import { initShortcuts } from "./utils/helpers/shortcut.helper";
+import "./style/main.scss";
 
 
 
@@ -24,4 +24,4 @@ initEffects();
 initShortcuts();
 addComponent(app);
 
-app.mount('#app');
+app.mount("#app");

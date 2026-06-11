@@ -1,11 +1,11 @@
-import { Key } from '../enums/key.enum';
-import { speed } from '../const/speed.const';
+import { useAppStore } from "@/state/stores/app.store";
+import { useModalStore } from "@/state/stores/modal.store";
 
-import { MathHelper } from './math.helper';
+import { useSourcesStore } from "@/state/stores/sources.store";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useModalStore } from '@/state/stores/modal.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { speed } from "../const/speed.const";
+import { Key } from "../enums/key.enum";
+import { MathHelper } from "./math.helper";
 
 
 
@@ -22,12 +22,12 @@ export function initShortcuts(): void {
     if (code === Key.Fullscreen) {
       return false;
     }
-  }
+  };
 
   window.onkeyup = ({ code }) => {
     const focusedElementName = document.activeElement?.nodeName.toLocaleLowerCase();
-    const noButtonFocused = focusedElementName !== 'button';
-    const notInputFocused = focusedElementName !== 'input';
+    const noButtonFocused = focusedElementName !== "button";
+    const notInputFocused = focusedElementName !== "input";
 
     switch (code) {
       case Key.Close: {
@@ -50,7 +50,8 @@ export function initShortcuts(): void {
 
       case Key.Add: {
         if (notInputFocused) {
-          const addButton = document.getElementById('button-add-modal');
+          const addButton = document.getElementById("button-add-modal");
+
           addButton?.click();
         }
 
@@ -59,7 +60,8 @@ export function initShortcuts(): void {
 
       case Key.Shortcuts: {
         if (notInputFocused) {
-          const addButton = document.getElementById('button-shortcuts');
+          const addButton = document.getElementById("button-shortcuts");
+
           addButton?.click();
         }
 
@@ -144,5 +146,5 @@ export function initShortcuts(): void {
         break;
       }
     }
-  }
+  };
 }

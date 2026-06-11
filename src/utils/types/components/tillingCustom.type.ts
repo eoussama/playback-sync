@@ -1,4 +1,4 @@
-import type { TillingValue } from '@/utils/enums/tillingValue.enum';
+import type { TillingValue } from "@/utils/enums/tillingValue.enum";
 
 
 
@@ -12,5 +12,5 @@ export type TillingCustomType = {
    * @description
    * The tilling mode
    */
-  tilling: TillingValue
-}
+  tilling: TillingValue;
+};

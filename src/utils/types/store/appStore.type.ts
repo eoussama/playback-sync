@@ -1,4 +1,4 @@
-import type { Theme } from '@/utils/enums/theme.enum';
+import type { Theme } from "@/utils/enums/theme.enum";
 
 
 
@@ -12,25 +12,25 @@ export type TAppStore = {
    * @description
    * The app's theme
    */
-  theme: Theme
+  theme: Theme;
 
   /**
    * @description
    * The the number of seconds to seek by
    */
-  seekStep: number
+  seekStep: number;
 
   /**
    * @description
    * The the step to update the volume by
    */
-  volumeStep: number
+  volumeStep: number;
 
   /**
    * @description
    * The state of the fullscreen mode
    */
-  fullscreen: boolean
+  fullscreen: boolean;
 
   /**
    * @description
@@ -42,18 +42,18 @@ export type TAppStore = {
      * @description
      * The head hover
      */
-    head: boolean
+    head: boolean;
 
     /**
      * @description
      * The controls hover
      */
-    controls: boolean
+    controls: boolean;
 
     /**
      * @description
      * The foot hover
      */
-    foot: boolean
-  }
-}
+    foot: boolean;
+  };
+};

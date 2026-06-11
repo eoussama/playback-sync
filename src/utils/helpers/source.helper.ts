@@ -1,14 +1,14 @@
-import { v4 } from 'uuid';
+import type { TMetadata } from "../types/composition/metadata.type";
 
-import { ReadyState } from '../enums/readyState.enum';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import type { TSource } from "@/utils/types/composition/source.type";
+import { v4 } from "uuid";
 
-import { DOMHelper } from './dom.helper';
-import { DragHelper } from './drag.helper';
-import { MathHelper } from './math.helper';
+import { useSourcesStore } from "@/state/stores/sources.store";
+import { ReadyState } from "../enums/readyState.enum";
+import { DOMHelper } from "./dom.helper";
 
-import type { TMetadata } from '../types/composition/metadata.type';
-import type { TSource } from '@/utils/types/composition/source.type';
+import { DragHelper } from "./drag.helper";
+import { MathHelper } from "./math.helper";
 
 
 
@@ -17,19 +17,26 @@ import type { TSource } from '@/utils/types/composition/source.type';
  * Helps with sources
  */
 export class SourceHelper {
-
   /**
    * @description
    * Initializes a new source
+   *
+   * @returns A promise that resolves with the initialized source
    */
   static async init(): Promise<TSource> {
     const metadata: TMetadata = {
-      duration: 0, currentTime: 0,
-      speed: 1, end: 0, start: 0, volume: 1,
-      muted: false, playing: false, buffering: false
+      duration: 0,
+      currentTime: 0,
+      speed: 1,
+      end: 0,
+      start: 0,
+      volume: 1,
+      muted: false,
+      playing: false,
+      buffering: false,
     };
 
-    return this.create('', '', metadata);
+    return this.create("", "", metadata);
   }
 
   /**
@@ -37,9 +44,11 @@ export class SourceHelper {
    * Resets an existing source
    *
    * @param id The ID of the source to reset
+   * @returns A promise that resolves with the reset source
    */
   static async reset(id: string): Promise<TSource> {
     const source = await this.init();
+
     return { ...source, id };
   }
 
@@ -47,7 +56,10 @@ export class SourceHelper {
    * @description
    * Creates a new source
    *
+   * @param title The title of the source
    * @param url The URL of the source
+   * @param metadata The metadata of the source
+   * @returns A promise that resolves with the created source
    */
   static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
@@ -60,14 +72,14 @@ export class SourceHelper {
       pinned: false,
       metadata: {
         ...sourceMetadata,
-        ...metadata
-      }
+        ...metadata,
+      },
     };
   }
 
-  /**k
+  /**
    * @description
-   * refreshes the source's player
+   * Refreshes the source's player
    *
    * @param id The ID of the source to refresh
    */
@@ -84,6 +96,7 @@ export class SourceHelper {
    * Plays the source
    *
    * @param id The ID of the source
+   * @returns A promise that resolves when the source starts playing
    */
   static async play(id: string): Promise<void> {
     await this.sync();
@@ -115,6 +128,7 @@ export class SourceHelper {
    * Restarts the source
    *
    * @param id The ID of the source
+   * @returns A promise that resolves when the source restarts
    */
   static async restart(id: string): Promise<void> {
     await this.sync();
@@ -207,10 +221,11 @@ export class SourceHelper {
    * Pins a source
    *
    * @param id The ID of the source to pin
+   * @returns A promise that resolves when the source is pinned
    */
   static async pin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
-    const container = document.querySelector('#app .view') as HTMLDivElement;
+    const container = document.querySelector("#app .view") as HTMLDivElement;
 
     await DragHelper.create(elementId, container);
     await this.hook(id);
@@ -220,9 +235,10 @@ export class SourceHelper {
   /**
    * @description
    * Unpins a source
-  *
-  * @param id The ID of the source to unpin
-  */
+   *
+   * @param id The ID of the source to unpin
+   * @returns A promise that resolves when the source is unpinned
+   */
   static async unpin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
 
@@ -236,6 +252,7 @@ export class SourceHelper {
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element
+   * @returns The video player element
    */
   static getPlayer(id: string): HTMLVideoElement {
     return document.getElementById(`player-${id}`) as HTMLVideoElement;
@@ -246,15 +263,16 @@ export class SourceHelper {
    * Hooks in to a player element
    *
    * @param id The ID of the player
+   * @returns A promise that resolves when the hook is set up
    */
   static async hook(id: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const elementId = `#player-${id}`;
 
       DOMHelper
         .watch(elementId)
         .then(e => e[0] as HTMLVideoElement)
-        .then(player => {
+        .then((player) => {
           const store = useSourcesStore();
           const source = store.getSource(id);
 
@@ -264,6 +282,7 @@ export class SourceHelper {
 
           const currTime = source.metadata.currentTime;
           const maxTime = MathHelper.sanitize(player.duration) ?? 0 - 0.1;
+
           player.currentTime = maxTime > 0 ? Math.min(currTime, maxTime) : currTime;
 
           if (source.metadata.playing) {
@@ -274,33 +293,33 @@ export class SourceHelper {
             if (!store.bufferPause) {
               store.updateSourceMetadata(id, { playing: true });
             }
-          }
+          };
 
           player.onpause = () => {
             if (!store.bufferPause) {
               store.updateSourceMetadata(id, { playing: false });
             }
-          }
+          };
 
           player.ontimeupdate = () => {
             store.updateSourceMetadata(id, { currentTime: player.currentTime });
-          }
+          };
 
           player.onvolumechange = () => {
             store.updateSourceMetadata(id, { muted: player.muted, volume: player.volume });
-          }
+          };
 
           player.onratechange = () => {
             store.updateSourceMetadata(id, { speed: player.playbackRate });
-          }
+          };
 
           player.onwaiting = () => {
             store.updateSourceMetadata(id, { buffering: true });
-          }
+          };
 
           player.oncanplay = () => {
             store.updateSourceMetadata(id, { buffering: false });
-          }
+          };
 
           resolve();
         });
@@ -312,11 +331,13 @@ export class SourceHelper {
    * Loads metadata for video
    *
    * @param url The URL to load
+   * @returns A promise that resolves with the loaded metadata
    */
   private static load(url: string): Promise<TMetadata> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const store = useSourcesStore();
-      const video = document.createElement('video');
+      const video = document.createElement("video");
+
       video.src = url;
 
       video.onerror = video.onloadedmetadata = () => {
@@ -329,11 +350,11 @@ export class SourceHelper {
           end: video.duration ?? 0,
           duration: video.duration,
           buffering: video.readyState < ReadyState.HaveEnoughData,
-          currentTime: store.longestSource.metadata?.currentTime ?? 0
+          currentTime: store.longestSource.metadata?.currentTime ?? 0,
         });
 
         video.remove();
-      }
+      };
     });
   }
 
@@ -342,22 +363,24 @@ export class SourceHelper {
    * Checks if a player is fully loaded with no buffering
    *
    * @param player The player element to check
+   * @returns A promise that resolves with the loaded state
    */
   private static isLoaded(player: HTMLVideoElement): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (player.readyState === ReadyState.HaveEnoughData) {
         resolve(true);
-      } else {
+      }
+      else {
         const listener = () => {
           if (player.readyState === ReadyState.HaveEnoughData) {
             resolve(true);
-            player.removeEventListener('canplay', listener);
-            player.removeEventListener('canplaythrough', listener);
+            player.removeEventListener("canplay", listener);
+            player.removeEventListener("canplaythrough", listener);
           }
         };
 
-        player.addEventListener('canplay', listener);
-        player.addEventListener('canplaythrough', listener);
+        player.addEventListener("canplay", listener);
+        player.addEventListener("canplaythrough", listener);
       }
     });
   }
@@ -365,6 +388,8 @@ export class SourceHelper {
   /**
    * @description
    * Makes sure all sources are loaded
+   *
+   * @returns A promise that resolves when all sources are loaded
    */
   private static async sync(): Promise<void> {
     const store = useSourcesStore();
@@ -373,7 +398,7 @@ export class SourceHelper {
     const promises = sources.map(source => DOMHelper
       .watch(`#player-${source.id}`)
       .then(e => e[0] as HTMLVideoElement)
-      .then(this.isLoaded)
+      .then(this.isLoaded),
     );
 
     await Promise.all(promises);

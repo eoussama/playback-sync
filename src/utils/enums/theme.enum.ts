@@ -10,5 +10,5 @@ export enum Theme {
    * @description
    * Dark mode
    */
-  Dark
+  Dark,
 }

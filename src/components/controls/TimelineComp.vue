@@ -1,14 +1,38 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { TimeHelper } from '@/utils/helpers/time.helper';
+import { defineComponent } from "vue";
+import { TimeHelper } from "@/utils/helpers/time.helper";
+
 
 
 export default defineComponent({
-  emits: ['timelineUpdated'],
 
   props: {
     value: Number,
-    duration: Number
+    duration: Number,
+  },
+  emits: ["timelineUpdated"],
+
+  computed: {
+
+    /**
+     * @description
+     * Returns readable duration value
+     *
+     * @returns The formatted duration string
+     */
+    displayDuration() {
+      return TimeHelper.secondsToTime(this.duration);
+    },
+
+    /**
+     * @description
+     * Returns readable time value
+     *
+     * @returns The formatted time string
+     */
+    displayTime() {
+      return TimeHelper.secondsToTime(this.value);
+    },
   },
 
   methods: {
@@ -21,30 +45,11 @@ export default defineComponent({
      */
     onChanged(e: Event) {
       const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value) ?? 0;
+      const value = Number.parseFloat(target.value) ?? 0;
 
-      this.$emit('timelineUpdated', value);
-    }
-  },
-
-  computed: {
-
-    /**
-     * @description
-     * Returns readable duration value
-     */
-    displayDuration() {
-      return TimeHelper.secondsToTime(this.duration);
+      this.$emit("timelineUpdated", value);
     },
-
-    /**
-     * @description
-     * Returns readable time value
-     */
-    displayTime() {
-      return TimeHelper.secondsToTime(this.value);
-    }
-  }
+  },
 });
 </script>
 

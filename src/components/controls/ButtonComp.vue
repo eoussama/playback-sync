@@ -1,11 +1,14 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { TButtonType } from "@/utils/types/composition/buttonType.type";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TButtonType } from '@/utils/types/composition/buttonType.type';
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
 
-import { useAppStore } from '@/state/stores/app.store';
+import { Theme } from "@/utils/enums/theme.enum";
+
+
 
 export default defineComponent({
 
@@ -14,30 +17,36 @@ export default defineComponent({
     icon: String,
     label: String,
     autofocus: Boolean,
-    type: String as PropType<TButtonType>
+    type: String as PropType<TButtonType>,
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * The type class of the button
+     *
+     * @returns The type CSS class string
      */
     typeClass(): string {
-      const type = this.type ?? 'plain';
+      const type = this.type ?? "plain";
+
       return `button--${type}`;
     },
 
     /**
      * @description
      * The theme class of the button
+     *
+     * @returns The theme CSS class string
      */
     themeClass(): string {
-      const theme = this.theme === Theme.Light ? 'light' : 'dark';
+      const theme = this.theme === Theme.Light ? "light" : "dark";
+
       return `button--${theme}`;
-    }
-  }
+    },
+  },
 });
 </script>
 

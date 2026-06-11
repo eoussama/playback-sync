@@ -1,18 +1,22 @@
 <script lang="ts">
-import { mapState, mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { useAppStore } from "@/state/stores/app.store";
+import { Theme } from "@/utils/enums/theme.enum";
+
+
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
+    ...mapState(useAppStore, ["fullscreen", "hover", "theme"]),
 
     /**
      * @description
      * Returns the app's version
+     *
+     * @returns The app version string
      */
     version(): string {
       return __CONFIG__.version;
@@ -21,14 +25,16 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
-    }
+    },
   },
 
   methods: {
-    ...mapActions(useAppStore, ['updateFootHover']),
+    ...mapActions(useAppStore, ["updateFootHover"]),
 
     /**
      * @description
@@ -44,8 +50,8 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.updateFootHover(false);
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -55,7 +61,7 @@ export default defineComponent({
     :class="{
       'foot--dark': isDark,
       'foot--show': hover.foot,
-      'foot--fullscreen': fullscreen
+      'foot--fullscreen': fullscreen,
     }"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
