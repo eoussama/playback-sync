@@ -24,6 +24,8 @@ export default defineComponent({
     /**
      * @description
      * The contextual fullscreen icon
+     *
+     * @returns The fullscreen icon name string
      */
     fullscreenIcon(): string {
       return this.fullscreen ? "compress" : "expand";
@@ -32,6 +34,8 @@ export default defineComponent({
     /**
      * @description
      * Returns the approprite theme icon
+     *
+     * @returns The theme icon name string
      */
     themeIcon(): string {
       return this.isDark ? "sun" : "moon";
@@ -39,7 +43,9 @@ export default defineComponent({
 
     /**
      * @description
-     * >Returns the appropriate tooltip text for the app's theme
+     * Returns the appropriate tooltip text for the app's theme
+     *
+     * @returns The theme tooltip text string
      */
     themeTooltip(): string {
       return this.isDark ? "Turn Light Mode On" : "Turn Dark Mode On";
@@ -48,10 +54,16 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
     },
+  },
+
+  created() {
+    this.resetSources();
   },
 
   methods: {
@@ -77,7 +89,7 @@ export default defineComponent({
     },
 
     /**
-     * @descripion
+     * @description
      * Toggles fullscreen mode
      */
     onFullscreen(): void {
@@ -85,7 +97,7 @@ export default defineComponent({
     },
 
     /**
-     * @descripion
+     * @description
      * Opens the shortcuts modal
      */
     onShortcuts(): void {
@@ -93,7 +105,7 @@ export default defineComponent({
     },
 
     /**
-     * @descripion
+     * @description
      * Toggles the app's theme
      */
     onTheme(): void {
@@ -117,9 +129,6 @@ export default defineComponent({
     },
   },
 
-  created() {
-    this.resetSources();
-  },
 });
 </script>
 

@@ -25,6 +25,8 @@ export default defineComponent({
     /**
      * @description
      * The value of the dropdown
+     *
+     * @returns The current tilling value
      */
     value(): TillingValue {
       return Math.min(this.tilling, TillingValue.Custom);
@@ -39,6 +41,7 @@ export default defineComponent({
      * Handles value change
      *
      * @param e The changed value
+     * @returns A promise that resolves when the tilling value is updated
      */
     async onChanged(e: number): Promise<void> {
       let changedValue = Number.parseInt(e?.toString());

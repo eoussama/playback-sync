@@ -15,12 +15,20 @@ export default defineComponent({
     modalId: String,
   },
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
   computed: {
     ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -45,11 +53,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const elementRef = ref(null);
-
-    return { elementRef };
-  },
 });
 </script>
 

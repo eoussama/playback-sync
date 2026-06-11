@@ -16,15 +16,15 @@ export default defineComponent({
   },
   emits: ["load"],
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { sourceRef: elementRef };
+  },
+
   data: () => ({
     loading: false,
   }),
-
-  watch: {
-    loading() {
-      this.$emit("load", this.loading);
-    },
-  },
 
   computed: {
     ...mapState(useSourcesStore, ["bufferPause"]),
@@ -32,9 +32,17 @@ export default defineComponent({
     /**
      * @description
      * Checks if source is loading
+     *
+     * @returns Whether the source is currently loading
      */
     isLoading(): boolean {
       return this.loading || this.buffering || this.bufferPause || this.forceLoad;
+    },
+  },
+
+  watch: {
+    loading() {
+      this.$emit("load", this.loading);
     },
   },
 
@@ -59,12 +67,6 @@ export default defineComponent({
         player.addEventListener("loadedmetadata", listener);
         player.addEventListener("canplaythrough", listener);
       });
-  },
-
-  setup() {
-    const elementRef = ref(null);
-
-    return { sourceRef: elementRef };
   },
 });
 </script>

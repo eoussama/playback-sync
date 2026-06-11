@@ -23,6 +23,7 @@ export class ModalHelper {
    * @param params Modal parameters
    * @param component The component to show in the body of the modal
    * @param props The properties to pass to the modal
+   * @returns The created modal object
    */
   private static create<T extends TComponent, U = unknown>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
@@ -44,6 +45,7 @@ export class ModalHelper {
    * @param params Modal parameters
    * @param component The component to show in the body of the modal
    * @param props Optional props to pass to the component
+   * @returns A promise that resolves with the modal result
    */
   static open<T extends TComponent, U = { id: string; payload: unknown }, V = unknown>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props?: V): Promise<U> {
     return new Promise((resolve) => {

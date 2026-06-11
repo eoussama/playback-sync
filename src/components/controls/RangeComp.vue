@@ -38,6 +38,12 @@ export default defineComponent({
   },
   emits: ["startChanged", "endChanged"],
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
   data: () => ({
     endValue: 0,
     startValue: 0,
@@ -49,6 +55,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -157,11 +165,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const elementRef = ref(null);
-
-    return { elementRef };
-  },
 });
 </script>
 

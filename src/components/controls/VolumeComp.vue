@@ -17,6 +17,8 @@ export default defineComponent({
     /**
      * @description
      * Returns a human readable volume value
+     *
+     * @returns The volume as a percentage integer
      */
     volume(): number {
       const volume = this.value ?? 0;
@@ -27,6 +29,8 @@ export default defineComponent({
     /**
      * @description
      * The volume label
+     *
+     * @returns The volume label string
      */
     label(): string {
       return `${this.volume}%`;
@@ -35,6 +39,8 @@ export default defineComponent({
     /**
      * @description
      * The icon to show on the button
+     *
+     * @returns The icon name string
      */
     icon(): string {
       return getVolumeIcon(this.volume, this.muted);

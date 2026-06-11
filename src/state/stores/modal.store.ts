@@ -26,10 +26,8 @@ export const useModalStore = defineStore("modals", {
      * @description
      * Removes a modal
      *
-     * @param _data
      * @param id The ID of the modal to remove
-     * @param data Optional payload emited when the modal is removed,
-     * This param is used by the effect exclusively.
+     * @param _data Optional payload emitted when the modal is removed, used by the effect exclusively
      */
     removeModal<T = unknown>(id: string, _data?: T): void {
       const index = this.modals.findIndex(e => e.id === id);

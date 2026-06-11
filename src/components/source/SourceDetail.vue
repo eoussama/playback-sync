@@ -45,6 +45,8 @@ export default defineComponent({
     /**
      * @description
      * The label to display on the validation button
+     *
+     * @returns The validation button label string
      */
     validateLabel(): string {
       return this.params?.type === PageType.Creation ? "Add" : "Edit";
@@ -53,6 +55,8 @@ export default defineComponent({
     /**
      * @description
      * The preview player's ID on the DOM
+     *
+     * @returns The preview player element ID string
      */
     previewPlayerId(): string {
       return `preview-player-${this.source?.id}`;
@@ -61,6 +65,8 @@ export default defineComponent({
     /**
      * @description
      * The view source link
+     *
+     * @returns The preview URL string
      */
     previewUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
@@ -69,6 +75,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if the loader should be forced into activation
+     *
+     * @returns Whether the loader should be forced active
      */
     forceLoad(): boolean {
       return Boolean(!this.previewLoaded && this.source && this.source.url.length > 0);
@@ -77,6 +85,8 @@ export default defineComponent({
     /**
      * @description
      * The placeholder of the title input
+     *
+     * @returns The title validation error string
      */
     titleError(): string {
       const source = (this.source ?? {}) as Partial<TSource>;
@@ -88,6 +98,8 @@ export default defineComponent({
     /**
      * @description
      * The placeholder of the URL input
+     *
+     * @returns The URL validation error string
      */
     urlError(): string {
       const source = (this.source ?? {}) as Partial<TSource>;
@@ -150,6 +162,8 @@ export default defineComponent({
     /**
      * @description
      * Initializes the source form
+     *
+     * @returns A promise that resolves when the form is initialized
      */
     async initForm(): Promise<void> {
       if (this.params) {
@@ -167,6 +181,7 @@ export default defineComponent({
      * Formats value as time stamp
      *
      * @param value The value to format
+     * @returns The formatted time string
      */
     valueFormater(value: number): string {
       return TimeHelper.secondsToTime(value);
@@ -175,6 +190,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if the form is valid
+     *
+     * @returns Whether the form is valid
      */
     isFormValid(): boolean {
       return this.isInputValid("title") && this.isInputValid("url") && (this.previewLoaded && !this.forceLoad);
@@ -185,6 +202,7 @@ export default defineComponent({
      * Checks if an input is valid
      *
      * @param input The name of the input
+     * @returns Whether the input is valid
      */
     isInputValid(input: keyof TSource): boolean {
       const source = (this.source ?? {}) as Partial<TSource>;
@@ -197,6 +215,7 @@ export default defineComponent({
      * Checks if the validion error can be shown for a specific input
      *
      * @param input The name if the input to show the error for
+     * @returns Whether the validation error should be shown
      */
     canShowError(input: keyof TSource): boolean {
       if (input === "url") {
@@ -210,6 +229,8 @@ export default defineComponent({
     /**
      * @description
      * Resets the form
+     *
+     * @returns A promise that resolves when the form is cleared
      */
     async onClear(): Promise<void> {
       this.submitted = false;
@@ -219,6 +240,8 @@ export default defineComponent({
     /**
      * @description
      * Returns the source
+     *
+     * @returns A promise that resolves when validation completes
      */
     async onValidate(): Promise<void> {
       this.submitted = true;

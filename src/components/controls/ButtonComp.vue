@@ -26,6 +26,8 @@ export default defineComponent({
     /**
      * @description
      * The type class of the button
+     *
+     * @returns The type CSS class string
      */
     typeClass(): string {
       const type = this.type ?? "plain";
@@ -36,6 +38,8 @@ export default defineComponent({
     /**
      * @description
      * The theme class of the button
+     *
+     * @returns The theme CSS class string
      */
     themeClass(): string {
       const theme = this.theme === Theme.Light ? "light" : "dark";

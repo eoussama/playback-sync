@@ -20,12 +20,20 @@ export default defineComponent({
   },
   emits: ["remove", "edit", "pin", "unpin", "toggleMute", "disableDrag", "enableDrag"],
 
+  setup() {
+    const resizerRef = ref(null);
+
+    return { resizerRef };
+  },
+
   computed: {
     ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * The ID of the source's element on the DOM
+     *
+     * @returns The source element ID string
      */
     sourceId(): string {
       return `source-${this.source?.id}`;
@@ -34,6 +42,8 @@ export default defineComponent({
     /**
      * @description
      * The ID of the source's player on the DOM
+     *
+     * @returns The player element ID string
      */
     playerId(): string {
       return `player-${this.source?.id}`;
@@ -42,6 +52,8 @@ export default defineComponent({
     /**
      * @description
      * The cropped source URL
+     *
+     * @returns The cropped source URL string
      */
     sourceUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
@@ -50,6 +62,8 @@ export default defineComponent({
     /**
      * @description
      * The icon to show on the button
+     *
+     * @returns The volume icon name string
      */
     volumeIcon(): string {
       const volume = this.source?.metadata?.volume ?? 1;
@@ -61,6 +75,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -69,6 +85,8 @@ export default defineComponent({
     /**
      * @description
      * The button type
+     *
+     * @returns The button type string
      */
     buttonType(): string {
       return this.isDark ? "plain" : "secondary";
@@ -154,11 +172,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const resizerRef = ref(null);
-
-    return { resizerRef };
-  },
 });
 </script>
 

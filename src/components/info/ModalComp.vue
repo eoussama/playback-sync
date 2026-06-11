@@ -26,6 +26,8 @@ export default defineComponent({
     /**
      * @description
      * Alignment enumerator
+     *
+     * @returns The ModalAlignment enum
      */
     ModalAlignment(): typeof ModalAlignment {
       return ModalAlignment;
@@ -34,6 +36,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -42,6 +46,8 @@ export default defineComponent({
     /**
      * @description
      * Close button type
+     *
+     * @returns The button type string
      */
     closeType(): string {
       return this.isDark ? "plain" : "secondary";
@@ -56,6 +62,7 @@ export default defineComponent({
      *
      * @param alignment The alignment to check
      * @param mode The aligment to check against
+     * @returns Whether the alignments match
      */
     isAlignment(alignment: ModalAlignment, mode: ModalAlignment): boolean {
       return alignment === mode;

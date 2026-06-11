@@ -16,6 +16,8 @@ export default defineComponent({
     /**
      * @description
      * The icon to show on the button
+     *
+     * @returns The icon name string
      */
     icon(): string {
       if (this.repeat) {

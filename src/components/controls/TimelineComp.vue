@@ -17,6 +17,8 @@ export default defineComponent({
     /**
      * @description
      * Returns readable duration value
+     *
+     * @returns The formatted duration string
      */
     displayDuration() {
       return TimeHelper.secondsToTime(this.duration);
@@ -25,6 +27,8 @@ export default defineComponent({
     /**
      * @description
      * Returns readable time value
+     *
+     * @returns The formatted time string
      */
     displayTime() {
       return TimeHelper.secondsToTime(this.value);

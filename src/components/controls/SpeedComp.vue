@@ -11,12 +11,15 @@ export default defineComponent({
   props: {
     value: Number,
   },
+  emits: ["speedChanged"],
 
   computed: {
 
     /**
      * @description
      * Playback rate options
+     *
+     * @returns The array of playback rate options
      */
     playbackRateOptions(): Array<TOption> {
       return speed.map(rate => ({ value: rate, label: `x${rate}` }));
@@ -26,9 +29,10 @@ export default defineComponent({
   methods: {
 
     /**
-     * @param e
      * @description
      * Emits the speed change
+     *
+     * @param e The change event
      */
     onPlaybackRateChanged(e: Event) {
       const target = e.target as HTMLSelectElement;

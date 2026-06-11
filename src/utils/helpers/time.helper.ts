@@ -12,6 +12,7 @@ export class TimeHelper {
    * Formats seconds to time
    *
    * @param seconds The number of seconds to format
+   * @returns The formatted time string
    */
   static secondsToTime(seconds: TUnsafe<number>): string {
     const value = Math.max(seconds ?? 0, 0);

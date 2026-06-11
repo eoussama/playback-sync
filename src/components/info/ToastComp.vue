@@ -20,12 +20,20 @@ export default defineComponent({
     params: Object as PropType<TToast>,
   },
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
   computed: {
     ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -34,6 +42,8 @@ export default defineComponent({
     /**
      * @description
      * Close button type
+     *
+     * @returns The button type string
      */
     closeType(): string {
       return this.isDark ? "plain" : "secondary";
@@ -63,11 +73,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const elementRef = ref(null);
-
-    return { elementRef };
-  },
 });
 </script>
 

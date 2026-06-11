@@ -20,6 +20,8 @@ export class SourceHelper {
   /**
    * @description
    * Initializes a new source
+   *
+   * @returns A promise that resolves with the initialized source
    */
   static async init(): Promise<TSource> {
     const metadata: TMetadata = {
@@ -42,6 +44,7 @@ export class SourceHelper {
    * Resets an existing source
    *
    * @param id The ID of the source to reset
+   * @returns A promise that resolves with the reset source
    */
   static async reset(id: string): Promise<TSource> {
     const source = await this.init();
@@ -52,9 +55,11 @@ export class SourceHelper {
   /**
    * @description
    * Creates a new source
-   * @param metadata
-   * @param title
+   *
+   * @param title The title of the source
    * @param url The URL of the source
+   * @param metadata The metadata of the source
+   * @returns A promise that resolves with the created source
    */
   static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
@@ -72,15 +77,11 @@ export class SourceHelper {
     };
   }
 
-  /** k
+  /**
    * @description
-   * refreshes the source's player
+   * Refreshes the source's player
    *
    * @param id The ID of the source to refresh
-   */
-  /**
-   *
-   * @param id
    */
   static refresh(id: string): void {
     const player = this.getPlayer(id);
@@ -95,6 +96,7 @@ export class SourceHelper {
    * Plays the source
    *
    * @param id The ID of the source
+   * @returns A promise that resolves when the source starts playing
    */
   static async play(id: string): Promise<void> {
     await this.sync();
@@ -126,6 +128,7 @@ export class SourceHelper {
    * Restarts the source
    *
    * @param id The ID of the source
+   * @returns A promise that resolves when the source restarts
    */
   static async restart(id: string): Promise<void> {
     await this.sync();
@@ -218,6 +221,7 @@ export class SourceHelper {
    * Pins a source
    *
    * @param id The ID of the source to pin
+   * @returns A promise that resolves when the source is pinned
    */
   static async pin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
@@ -233,6 +237,7 @@ export class SourceHelper {
    * Unpins a source
    *
    * @param id The ID of the source to unpin
+   * @returns A promise that resolves when the source is unpinned
    */
   static async unpin(id: string): Promise<void> {
     const elementId = `#source-${id}`;
@@ -247,6 +252,7 @@ export class SourceHelper {
    * Gets the player element on the DOM
    *
    * @param id The ID of the DOM element
+   * @returns The video player element
    */
   static getPlayer(id: string): HTMLVideoElement {
     return document.getElementById(`player-${id}`) as HTMLVideoElement;
@@ -257,6 +263,7 @@ export class SourceHelper {
    * Hooks in to a player element
    *
    * @param id The ID of the player
+   * @returns A promise that resolves when the hook is set up
    */
   static async hook(id: string): Promise<void> {
     return new Promise((resolve) => {
@@ -324,6 +331,7 @@ export class SourceHelper {
    * Loads metadata for video
    *
    * @param url The URL to load
+   * @returns A promise that resolves with the loaded metadata
    */
   private static load(url: string): Promise<TMetadata> {
     return new Promise((resolve) => {
@@ -355,6 +363,7 @@ export class SourceHelper {
    * Checks if a player is fully loaded with no buffering
    *
    * @param player The player element to check
+   * @returns A promise that resolves with the loaded state
    */
   private static isLoaded(player: HTMLVideoElement): Promise<boolean> {
     return new Promise((resolve) => {
@@ -379,6 +388,8 @@ export class SourceHelper {
   /**
    * @description
    * Makes sure all sources are loaded
+   *
+   * @returns A promise that resolves when all sources are loaded
    */
   private static async sync(): Promise<void> {
     const store = useSourcesStore();

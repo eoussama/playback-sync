@@ -14,6 +14,7 @@ export class DragHelper {
    *
    * @param id The ID of the element to drag
    * @param bound The parent bound element
+   * @returns A promise that resolves when the element is made draggable
    */
   static async create(id: string, bound: HTMLElement): Promise<void> {
     const options = { bounds: bound };
@@ -27,6 +28,7 @@ export class DragHelper {
    * Removes dragging functionality from a DOM element
    *
    * @param id The ID of the element to remove the drag from
+   * @returns A promise that resolves when dragging is removed
    */
   static async destroy(id: string): Promise<void> {
     const draggable = Draggable.get(id);

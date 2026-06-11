@@ -26,6 +26,7 @@ export const useSourcesStore = defineStore("sources", {
      * Returns the longest source
      *
      * @param state The current state
+     * @returns The longest source object
      */
     longestSource: (state) => {
       const sortedByLength = state.sources.slice(0).sort((a, b) => b.metadata.duration - a.metadata.duration);
@@ -132,6 +133,7 @@ export const useSourcesStore = defineStore("sources", {
      * Returns a source object by ID
      *
      * @param id The ID of the source to get
+     * @returns The source object
      */
     getSource(id: string): TSource {
       const index = this.sources.findIndex(e => e.id === id);
@@ -162,9 +164,10 @@ export const useSourcesStore = defineStore("sources", {
     },
 
     /**
-     * @param id
      * @description
      * Removes an existing source
+     *
+     * @param id The ID of the source to remove
      */
     removeSource(id: string): void {
       const index = this.sources.findIndex(s => s.id === id);

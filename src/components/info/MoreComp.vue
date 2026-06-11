@@ -21,6 +21,12 @@ export default defineComponent({
     },
   },
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
   data: () => ({
     toggled: false,
   }),
@@ -31,6 +37,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -68,11 +76,6 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const elementRef = ref(null);
-
-    return { elementRef };
-  },
 });
 </script>
 

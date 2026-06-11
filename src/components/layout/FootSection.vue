@@ -15,6 +15,8 @@ export default defineComponent({
     /**
      * @description
      * Returns the app's version
+     *
+     * @returns The app version string
      */
     version(): string {
       return __CONFIG__.version;
@@ -23,6 +25,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;

@@ -26,6 +26,8 @@ export default defineComponent({
     /**
      * @description
      * The grid columns template
+     *
+     * @returns The CSS grid template columns string
      */
     gridTemplateColumns(): string {
       return `repeat(${this.tilling}, 1fr)`;
@@ -34,6 +36,8 @@ export default defineComponent({
     /**
      * @description
      * Pinned sources
+     *
+     * @returns The array of pinned sources
      */
     pinnedSources(): Array<TSource> {
       return this.sources.filter(source => source.pinned);
@@ -42,6 +46,8 @@ export default defineComponent({
     /**
      * @description
      * Unpinned sources
+     *
+     * @returns The array of unpinned sources
      */
     unpinnedSources(): Array<TSource> {
       return this.sources.filter(source => !source.pinned);
@@ -50,6 +56,8 @@ export default defineComponent({
     /**
      * @description
      * If not sources are available
+     *
+     * @returns Whether no sources are available
      */
     empty(): boolean {
       return this.sources.length === 0;
@@ -58,6 +66,8 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
       return this.theme === Theme.Dark;
@@ -215,9 +225,10 @@ export default defineComponent({
     },
 
     /**
-     * @param e
      * @description
      * Toggles fullscreen mode
+     *
+     * @param e The mouse event object
      */
     onToggleFullscreen(e: MouseEvent): void {
       const target = e.target as HTMLElement;

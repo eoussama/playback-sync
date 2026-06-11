@@ -19,6 +19,7 @@ export class ToastHelper {
    * Shows a toast
    *
    * @param props The properties of the toast
+   * @returns A promise that resolves with the toast result
    */
   static show(props: Partial<TToast>): Promise<boolean> {
     return new Promise((resolve) => {
@@ -47,6 +48,7 @@ export class ToastHelper {
    * Checks if component is a toast
    *
    * @param component The component to check
+   * @returns Whether the component is a toast
    */
   private static isToast(component: TComponent): boolean {
     const path: string = (component as unknown as { __file: string }).__file;

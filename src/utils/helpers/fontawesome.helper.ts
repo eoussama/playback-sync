@@ -73,6 +73,7 @@ export function initIcons(): void {
  *
  * @param volume The volume value
  * @param muted The mute state value
+ * @returns The volume icon name
  */
 export function getVolumeIcon(volume: number, muted: boolean): string {
   if (muted || volume === 0) {

@@ -14,6 +14,7 @@ export class ConfirmHelper {
    * Opens a confirmation dialog
    *
    * @param props The properties of the confirmation dialog
+   * @returns A promise that resolves with the user's confirmation choice
    */
   static open(props: Partial<TConfirm>): Promise<boolean> {
     return new Promise((resolve) => {

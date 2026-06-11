@@ -14,6 +14,7 @@ export class ValidationHelper {
    *
    * @param input The input name
    * @param value The value to validate
+   * @returns The validation error or false if valid
    */
   static isInvalid(input: keyof TSource, value: unknown): false | Validation {
     switch (input) {
@@ -38,6 +39,7 @@ export class ValidationHelper {
    * Returns a proper message for an error
    *
    * @param error The error to get the message for
+   * @returns The error message string
    */
   static getErrorMessage(error: false | Validation): string {
     switch (error) {
@@ -72,6 +74,7 @@ export class ValidationHelper {
    * Validates titles
    *
    * @param title The title to validate
+   * @returns The validation result
    */
   private static validateTitle(title: unknown): false | Validation {
     return (title as string)?.length > 0 ? false : Validation.TitleEmpty;
@@ -82,6 +85,7 @@ export class ValidationHelper {
    * Validates URLs
    *
    * @param url The URL to validate
+   * @returns The validation result
    */
   private static validateURL(url: unknown): false | Validation {
     return (url as string)?.length > 0 ? false : Validation.URLEmpty;

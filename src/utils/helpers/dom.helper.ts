@@ -13,6 +13,7 @@ export class DOMHelper {
    *
    * @param selector The selector to check for
    * @param parents The parent elements to check inside
+   * @returns The matching elements
    */
   static get<T extends Array<HTMLElement>>(selector: string, parents: Array<HTMLElement>): T {
     const containers = parents.filter(e => e.nodeType === NodeType.ElementNode);
@@ -28,6 +29,7 @@ export class DOMHelper {
    *
    * @param selector The selector of the elemnt to watch for
    * @param container The container to watch the children of
+   * @returns A promise that resolves with the matched elements
    */
   static async watch<T extends Array<HTMLElement>>(selector: string, container?: HTMLElement): Promise<T> {
     return new Promise((resolve) => {
