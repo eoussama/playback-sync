@@ -63,13 +63,14 @@ export class SourceHelper {
    */
   static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
-    const sourceMetadata = await this.load(url);
+    const { isAudio, ...sourceMetadata } = await this.load(url);
 
     return {
       id,
       url,
       title,
       pinned: false,
+      isAudio,
       metadata: {
         ...sourceMetadata,
         ...metadata,
@@ -365,12 +366,12 @@ export class SourceHelper {
 
   /**
    * @description
-   * Loads metadata for video
+   * Loads metadata for a media source and detects whether it is audio-only
    *
    * @param url The URL to load
-   * @returns A promise that resolves with the loaded metadata
+   * @returns A promise that resolves with the loaded metadata and isAudio flag
    */
-  private static load(url: string): Promise<TMetadata> {
+  private static load(url: string): Promise<TMetadata & { isAudio: boolean }> {
     return new Promise((resolve) => {
       const store = useSourcesStore();
       const video = document.createElement("video");
@@ -388,6 +389,7 @@ export class SourceHelper {
           duration: video.duration,
           buffering: video.readyState < ReadyState.HaveEnoughData,
           currentTime: store.longestSource.metadata?.currentTime ?? 0,
+          isAudio: !video.error && video.videoWidth === 0 && video.videoHeight === 0 && !Number.isNaN(video.duration),
         });
 
         video.remove();
