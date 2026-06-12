@@ -4,14 +4,35 @@ on:
     branches:
       - main
 jobs:
-  build_vue:
+  build_and_deploy:
     runs-on: ubuntu-latest
     name: App Build
     steps:
-    - uses: actions/checkout@v2
-    - id: Build-Vue
-      uses: xRealNeon/VuePagesAction@1.0.1
-      with:
-        username: EOussama
-        reponame: playback-sync
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Create 404 alias
+        run: ln -s index.html dist/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          git-config-name: CI
+          git-config-email: CI@example.com
+          commit-message: deploy
