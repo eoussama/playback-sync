@@ -31,6 +31,7 @@ export class ToastHelper {
         overlay: false,
         dismissive: false,
         alignment: ModalAlignment.Top,
+        interrupting: false,
       };
 
       for (const toast of toasts) {

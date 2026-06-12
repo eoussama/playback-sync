@@ -25,13 +25,14 @@ export class ModalHelper {
    * @param props The properties to pass to the modal
    * @returns The created modal object
    */
-  private static create<T extends TComponent, U = unknown>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props: U): TModal<T, U> {
+  private static create<T extends TComponent, U = unknown>(title: string, params: TNullable<Partial<TModalParams>>, component: InstanceType<T>, props: U): TModal<T, U> {
     const id = v4();
-    const modalParams = params ?? {
-      dialog: true,
-      overlay: true,
-      dismissive: true,
-      alignment: ModalAlignment.Center,
+    const modalParams = {
+      dialog: params?.dialog ?? true,
+      overlay: params?.overlay ?? true,
+      dismissive: params?.dismissive ?? true,
+      interrupting: params?.interrupting ?? true,
+      alignment: params?.alignment ?? ModalAlignment.Center,
     };
 
     return { id, title, component, props, params: modalParams };
@@ -47,7 +48,7 @@ export class ModalHelper {
    * @param props Optional props to pass to the component
    * @returns A promise that resolves with the modal result
    */
-  static open<T extends TComponent, U = { id: string; payload: unknown }, V = unknown>(title: string, params: TNullable<TModalParams>, component: InstanceType<T>, props?: V): Promise<U> {
+  static open<T extends TComponent, U = { id: string; payload: unknown }, V = unknown>(title: string, params: TNullable<Partial<TModalParams>>, component: InstanceType<T>, props?: V): Promise<U> {
     return new Promise((resolve) => {
       const store = useModalStore();
       const modal = this.create(title, params, component, props);

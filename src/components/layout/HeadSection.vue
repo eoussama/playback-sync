@@ -119,7 +119,7 @@ export default defineComponent({
      * Opens the shortcuts modal
      */
     onShortcuts(): void {
-      ModalHelper.open("Shortcuts", null, ShortcutsComp);
+      ModalHelper.open("Shortcuts", { interrupting: false }, ShortcutsComp);
     },
 
     /**
