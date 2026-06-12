@@ -3,4 +3,5 @@ export enum Validation {
   TitleEmpty,
   URLEmpty,
   URLInvalid,
+  FileEmpty,
 }
