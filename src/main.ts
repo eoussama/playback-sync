@@ -10,6 +10,7 @@ import { initIcons } from "./utils/helpers/fontawesome.helper";
 import { initGSAP } from "./utils/helpers/gsap.helper";
 import { initShortcuts } from "./utils/helpers/shortcut.helper";
 import "./style/main.scss";
+import "plyr/dist/plyr.css";
 
 
 
