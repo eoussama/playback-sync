@@ -24,16 +24,16 @@ export class SourceHelper {
    * @returns A promise that resolves with the initialized source
    */
   static async init(): Promise<TSource> {
-    const metadata: TMetadata = {
+    const metadata: Partial<TMetadata> = {
       duration: 0,
       currentTime: 0,
       speed: 1,
       end: 0,
       start: 0,
-      volume: 1,
-      muted: false,
       playing: false,
       buffering: false,
+      // volume and muted are intentionally omitted so they inherit from
+      // the global store values resolved inside load()
     };
 
     return this.create("", "", metadata);
@@ -200,13 +200,9 @@ export class SourceHelper {
       const end = source.metadata.end || player.duration;
       const absoluteTime = start + time;
 
-      // If the requested position is at or past this source's end it has
-      // already played its full range — leave it frozen and don't trigger
-      // any buffering/play events that would cause a stutter loop.
-      if (absoluteTime >= end) {
-        return;
-      }
-
+      // Clamp to the source's valid range. Sources whose range has already
+      // been exceeded snap to their end position so the scrubber accurately
+      // reflects where each source sits on the global timeline.
       player.currentTime = MathHelper.clamp(absoluteTime, start, end - 0.1);
     }
   }

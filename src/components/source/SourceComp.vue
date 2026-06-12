@@ -113,6 +113,23 @@ export default defineComponent({
     buttonType(): string {
       return this.isDark ? "plain" : "secondary";
     },
+
+    /**
+     * @description
+     * Whether the source has played through to its end
+     *
+     * @returns Whether the source has finished playing its range
+     */
+    isEnded(): boolean {
+      if (!this.source) {
+        return false;
+      };
+
+      const { playing, currentTime, end, duration } = this.source.metadata;
+      const effectiveEnd = end || duration;
+
+      return !playing && currentTime > 0 && effectiveEnd > 0 && currentTime >= effectiveEnd - 0.15;
+    },
   },
 
   methods: {
@@ -206,6 +223,7 @@ export default defineComponent({
     :class="{
       'source--dark': isDark,
       'source--pinned': source.pinned,
+      'source--ended': isEnded,
     }"
     @mousemove="onMouseMove"
   >
@@ -225,6 +243,17 @@ export default defineComponent({
         >
           {{ source.title }}
         </a>
+
+        <div
+          v-if="isEnded"
+          class="source__ended-badge"
+        >
+          <font-awesome-icon
+            icon="circle-check"
+            class="source__ended-badge-icon"
+          />
+          <span class="source__ended-badge-label">Ended</span>
+        </div>
       </div>
 
       <div class="source__controls">
@@ -555,6 +584,48 @@ export default defineComponent({
     }
   }
 
+  &__ended-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    margin-left: 8px;
+    padding: 2px 7px;
+    border-radius: 10px;
+
+    font-size: 11px;
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+
+    color: var(--color-primary);
+    background-color: rgba(var(--color-secondary-rgb), 0.2);
+    border: 1px solid rgba(var(--color-secondary-rgb), 0.35);
+
+    animation: endedBadgeFadeIn 0.3s ease forwards;
+
+    @keyframes endedBadgeFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    &-icon {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    &-label {
+      opacity: 0.7;
+    }
+  }
+
   &__controls {
     display: flex;
     align-items: center;
@@ -632,6 +703,16 @@ export default defineComponent({
           background-color: rgba(var(--color-secondary-rgb), 0.4);
         }
       }
+    }
+  }
+
+  &--ended {
+    #{$root}__head {
+      opacity: 0.75;
+    }
+
+    #{$root}__body {
+      opacity: 0.6;
     }
   }
 
