@@ -31,4 +31,10 @@ export type TModalParams = {
    * The alignment of the modal
    */
   alignment: ModalAlignment;
+
+  /**
+   * @description
+   * If the modal opening should pause sources playback
+   */
+  interrupting: boolean;
 };

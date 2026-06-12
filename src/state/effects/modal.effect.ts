@@ -11,11 +11,16 @@ export function hookModalEffect() {
   const modalStore = useModalStore();
   const sourcesStore = useSourcesStore();
 
-  modalStore.$onAction(({ name, after }) => {
+  modalStore.$onAction(({ name, args, after }) => {
     after(() => {
       switch (name) {
         case "addModal": {
-          sourcesStore.setPlaying(false);
+          const [modal] = args;
+
+          if (modal.params?.interrupting) {
+            sourcesStore.setPlaying(false);
+          }
+
           break;
         }
       }
