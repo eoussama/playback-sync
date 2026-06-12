@@ -42,24 +42,37 @@ export default defineComponent({
 
     /**
      * @description
-     * The universal duration,
-     * generally the duration of the longest source
+     * The universal duration, based on the cropped range (end − start)
+     * of the longest source
      *
-     * @returns The maximum duration in seconds
+     * @returns The maximum cropped duration in seconds
      */
     duration(): number {
-      return Math.max(...this.sources.map(e => e.metadata.duration));
+      if (!this.sources.length) {
+        return 0;
+      }
+
+      return Math.max(...this.sources.map(e => (e.metadata.end || e.metadata.duration) - e.metadata.start));
     },
 
     /**
      * @description
      * Returns the current time of the longest loaded source
-     * to use a a reference for universal time
+     * relative to its start offset, for use as a universal timeline position
      *
-     * @returns The current timeline value in seconds
+     * @returns The current timeline value in seconds (relative to start)
      */
     timelineValue(): number {
-      return this.longestSource?.metadata?.currentTime ?? 0;
+      const source = this.longestSource;
+
+      if (!source) {
+        return 0;
+      }
+
+      const currentTime = source.metadata?.currentTime ?? 0;
+      const start = source.metadata?.start ?? 0;
+
+      return Math.max(0, currentTime - start);
     },
 
     /**

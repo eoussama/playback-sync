@@ -101,9 +101,14 @@ export class SourceHelper {
   static async play(id: string): Promise<void> {
     await this.sync();
     const player = this.getPlayer(id);
+    const store = useSourcesStore();
+    const source = store.getSource(id);
 
-    if (player) {
-      if (player.currentTime < player.duration) {
+    if (player && source) {
+      const end = source.metadata.end || player.duration;
+
+      // Don't restart a source that has already reached its cropped end
+      if (player.currentTime < end - 0.05) {
         player.play();
       }
     }
@@ -133,9 +138,11 @@ export class SourceHelper {
   static async restart(id: string): Promise<void> {
     await this.sync();
     const player = this.getPlayer(id);
+    const store = useSourcesStore();
+    const source = store.getSource(id);
 
-    if (player) {
-      player.currentTime = 0;
+    if (player && source) {
+      player.currentTime = source.metadata.start;
       player.play();
     }
   }
@@ -160,13 +167,18 @@ export class SourceHelper {
    * Seeks a specific time on the timeline
    *
    * @param id The ID of the source
-   * @param time The number of seconds to seek to
+   * @param time The number of seconds to seek (delta)
    */
   static seek(id: string, time: number): void {
     const player = this.getPlayer(id);
+    const store = useSourcesStore();
+    const source = store.getSource(id);
 
-    if (player) {
-      player.currentTime += time;
+    if (player && source) {
+      const start = source.metadata.start;
+      const end = (source.metadata.end || player.duration) - 0.1;
+
+      player.currentTime = MathHelper.clamp(player.currentTime + time, start, end);
     }
   }
 
@@ -175,13 +187,26 @@ export class SourceHelper {
    * Seeks to a specific time on the timeline
    *
    * @param id The ID of the source
-   * @param time The time to seek to
+   * @param time The relative time to seek to (offset from source start)
    */
   static setTime(id: string, time: number): void {
     const player = this.getPlayer(id);
+    const store = useSourcesStore();
+    const source = store.getSource(id);
 
-    if (player) {
-      player.currentTime = Math.min(time, player.duration - 0.1);
+    if (player && source) {
+      const start = source.metadata.start;
+      const end = source.metadata.end || player.duration;
+      const absoluteTime = start + time;
+
+      // If the requested position is at or past this source's end it has
+      // already played its full range — leave it frozen and don't trigger
+      // any buffering/play events that would cause a stutter loop.
+      if (absoluteTime >= end) {
+        return;
+      }
+
+      player.currentTime = MathHelper.clamp(absoluteTime, start, end - 0.1);
     }
   }
 
@@ -280,10 +305,13 @@ export class SourceHelper {
           player.volume = source.metadata.volume;
           player.playbackRate = source.metadata.speed;
 
+          const start = source.metadata.start;
+          const end = source.metadata.end || MathHelper.sanitize(player.duration) || 0;
           const currTime = source.metadata.currentTime;
-          const maxTime = MathHelper.sanitize(player.duration) ?? 0 - 0.1;
 
-          player.currentTime = maxTime > 0 ? Math.min(currTime, maxTime) : currTime;
+          player.currentTime = end > 0
+            ? MathHelper.clamp(currTime, start, end - 0.1)
+            : Math.max(currTime, start);
 
           if (source.metadata.playing) {
             player.play();
@@ -302,7 +330,16 @@ export class SourceHelper {
           };
 
           player.ontimeupdate = () => {
-            store.updateSourceMetadata(id, { currentTime: player.currentTime });
+            const src = store.getSource(id);
+            const end = src?.metadata?.end || player.duration;
+
+            if (player.currentTime >= end) {
+              player.pause();
+              player.currentTime = end - 0.01;
+            }
+            else {
+              store.updateSourceMetadata(id, { currentTime: player.currentTime });
+            }
           };
 
           player.onvolumechange = () => {
