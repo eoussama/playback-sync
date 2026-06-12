@@ -10,5 +10,5 @@ export enum NodeType {
   DocumentNode = 9,
   DocumentTypeNode = 10,
   DocumentFragmentNode = 11,
-  NotationNode = 12
+  NotationNode = 12,
 }

@@ -1,63 +1,96 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import type { TSource } from "@/utils/types/composition/source.type";
+import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import ShortcutsComp from "@/components/info/ShortcutsComp.vue";
+import SourceDetail from "@/components/source/SourceDetail.vue";
 
-import SourceDetail from '@/components/source/SourceDetail.vue';
-import ShortcutsComp from '@/components/info/ShortcutsComp.vue';
+import { useAppStore } from "@/state/stores/app.store";
+import { useSourcesStore } from "@/state/stores/sources.store";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { PageType } from '@/utils/enums/pageType.enum';
+import { PageType } from "@/utils/enums/pageType.enum";
+import { Theme } from "@/utils/enums/theme.enum";
 
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen', 'hover', 'theme']),
+    ...mapState(useAppStore, ["fullscreen", "hover", "theme"]),
 
     /**
      * @description
      * The contextual fullscreen icon
+     *
+     * @returns The fullscreen icon name string
      */
     fullscreenIcon(): string {
-      return this.fullscreen ? 'compress' : 'expand';
+      return this.fullscreen ? "compress" : "expand";
     },
 
     /**
      * @description
-     * Returns the approprite theme icon
+     * Returns the appropriate theme icon
+     *
+     * @returns The theme icon name string
      */
     themeIcon(): string {
-      return this.isDark ? 'sun' : 'moon';
+      if (this.theme === Theme.Auto) {
+        return "circle-half-stroke";
+      }
+
+      if (this.theme === Theme.Dark) {
+        return "sun";
+      }
+
+      return "moon";
     },
 
     /**
      * @description
-     * >Returns the appropriate tooltip text for the app's theme
-     */
-    themeTooltip(): string {
-      return this.isDark ? 'Turn Light Mode On' : 'Turn Dark Mode On';
-    },
-
-    /**
-     * @description
-     * Checks if dark theme is on
+     * Checks if dark theme is active (either explicitly or via system preference in Auto mode)
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
-    }
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
+
+    /**
+     * @description
+     * Returns the appropriate tooltip text for the app's theme
+     *
+     * @returns The theme tooltip text string
+     */
+    themeTooltip(): string {
+      if (this.theme === Theme.Auto) {
+        return "Turn Light Mode On";
+      }
+
+      if (this.theme === Theme.Light) {
+        return "Turn Dark Mode On";
+      }
+
+      return "Turn Auto Mode On";
+    },
+
+  },
+
+  created() {
+    this.resetSources();
   },
 
   methods: {
     ...mapActions(useAppStore, [
-      'toggleTheme',
-      'updateHeadHover',
-      'toggleFullscreen',
+      "toggleTheme",
+      "updateHeadHover",
+      "toggleFullscreen",
     ]),
-    ...mapActions(useSourcesStore, ['addSource', 'resetSources']),
+    ...mapActions(useSourcesStore, ["addSource", "resetSources"]),
 
     /**
      * @description
@@ -65,16 +98,16 @@ export default defineComponent({
      */
     onAdd(): void {
       ModalHelper
-        .open('Add Source', null, SourceDetail, { type: PageType.Creation })
-        .then(modal => {
+        .open("Add Source", null, SourceDetail, { type: PageType.Creation })
+        .then((modal) => {
           if (modal.payload) {
-            this.addSource(modal.payload);
+            this.addSource(modal.payload as TSource);
           }
         });
     },
 
     /**
-     * @descripion
+     * @description
      * Toggles fullscreen mode
      */
     onFullscreen(): void {
@@ -82,15 +115,15 @@ export default defineComponent({
     },
 
     /**
-     * @descripion
+     * @description
      * Opens the shortcuts modal
      */
     onShortcuts(): void {
-      ModalHelper.open('Shortcuts', null, ShortcutsComp);
+      ModalHelper.open("Shortcuts", { interrupting: false }, ShortcutsComp);
     },
 
     /**
-     * @descripion
+     * @description
      * Toggles the app's theme
      */
     onTheme(): void {
@@ -111,12 +144,9 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.updateHeadHover(false);
-    }
+    },
   },
 
-  created() {
-    this.resetSources();
-  }
 });
 </script>
 
@@ -134,9 +164,9 @@ export default defineComponent({
     <div class="head__left">
       <TooltipComp text="Add a new source">
         <ButtonComp
+          id="button-add-modal"
           icon="plus"
           type="primary"
-          id="button-add-modal"
           @click="onAdd"
         />
       </TooltipComp>
@@ -149,18 +179,18 @@ export default defineComponent({
     <div class="head__right">
       <TooltipComp text="Shortcuts">
         <ButtonComp
+          id="button-shortcuts"
           type="primary"
           icon="question"
-          id="button-shortcuts"
           @click="onShortcuts"
         />
       </TooltipComp>
 
       <TooltipComp :text="themeTooltip">
         <ButtonComp
+          id="button-theme"
           type="primary"
           :icon="themeIcon"
-          id="button-theme"
           @click="onTheme"
         />
       </TooltipComp>

@@ -1,28 +1,44 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import type { Theme } from "@/utils/enums/theme.enum";
+import { mapState } from "pinia";
 
-import { Theme } from '@/utils/enums/theme.enum';
+import { defineComponent, ref } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { DOMHelper } from '@/utils/helpers/dom.helper';
+import { useAppStore } from "@/state/stores/app.store";
+
+import { DOMHelper } from "@/utils/helpers/dom.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
 
   props: {
-    modalId: String
+    modalId: String,
+  },
+
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
-    }
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
+  },
+
+  mounted(): void {
+    this.setFocus();
   },
 
   methods: {
@@ -33,21 +49,13 @@ export default defineComponent({
      */
     setFocus(): void {
       const { elementRef } = this.$refs;
-      const parent = (elementRef as HTMLElement).closest('.modal__element');
+      const parent = (elementRef as HTMLElement).closest(".modal__element");
 
-      DOMHelper.focus('button', parent as HTMLElement);
-    }
+      DOMHelper.focus("button", parent as HTMLElement);
+    },
   },
 
-  mounted(): void {
-    this.setFocus();
-  },
-
-  setup() {
-    const elementRef = ref(null);
-    return { elementRef };
-  }
-})
+});
 </script>
 
 <template>
@@ -134,7 +142,7 @@ export default defineComponent({
       border-bottom: 2px solid hsl(var(--color-secondary-hsl), 80%);
     }
   }
-  
+
   &--dark {
     .shortcut kbd {
       background-color: hsl(var(--color-secondary-hsl), 20%);

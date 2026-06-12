@@ -1,4 +1,4 @@
-import type { TMetadata } from './metadata.type';
+import type { TMetadata } from "./metadata.type";
 
 
 
@@ -34,7 +34,13 @@ export type TSource = {
 
   /**
    * @description
+   * Whether the source is audio-only (no video track)
+   */
+  isAudio?: boolean;
+
+  /**
+   * @description
    * Source metadata
    */
   metadata: TMetadata;
-}
+};

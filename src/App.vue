@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import BodySection from "./components/layout/BodySection.vue";
+import FootSection from "./components/layout/FootSection.vue";
 
-import { useAppStore } from './state/stores/app.store';
-import { useModalStore } from './state/stores/modal.store';
-
-import HeadSection from './components/layout/HeadSection.vue';
-import BodySection from './components/layout/BodySection.vue';
-import FootSection from './components/layout/FootSection.vue';
+import HeadSection from "./components/layout/HeadSection.vue";
+import { useAppStore } from "./state/stores/app.store";
+import { useModalStore } from "./state/stores/modal.store";
 
 
 
@@ -26,9 +25,9 @@ const modalStore = useModalStore();
 
     <div class="root__modals">
       <ModalComp
-        :modal="modal"
-        :key="modal.id"
         v-for="modal in modalStore.modals"
+        :key="modal.id"
+        :modal="modal"
       />
     </div>
   </div>

@@ -1,55 +1,68 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import type { Theme } from "@/utils/enums/theme.enum";
+import { mapState } from "pinia";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { defineComponent, ref } from "vue";
+
+import { useAppStore } from "@/state/stores/app.store";
+
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
-  emits: ['startChanged', 'endChanged'],
-
-  data: () => ({
-    endValue: 0,
-    startValue: 0
-  }),
 
   props: {
     disabled: Boolean,
     valueFormater: {
       type: Function,
-      default: (value: number) => value.toString()
+      default: (value: number) => value.toString(),
     },
     end: {
       default: 0,
-      type: Number
+      type: Number,
     },
     start: {
       default: 0,
-      type: Number
+      type: Number,
     },
     step: {
       default: 1,
-      type: Number
+      type: Number,
     },
     min: {
       default: 0,
-      type: Number
+      type: Number,
     },
     max: {
       default: 100,
-      type: Number
-    }
+      type: Number,
+    },
+  },
+  emits: ["startChanged", "endChanged"],
+
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
   },
 
+  data: () => ({
+    endValue: 0,
+    startValue: 0,
+  }),
+
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
+      return ThemeHelper.isDark(this.theme as Theme);
     },
   },
 
@@ -68,7 +81,12 @@ export default defineComponent({
 
     end(): void {
       this.endValue = this.end;
-    }
+    },
+  },
+
+  mounted(): void {
+    this.endValue = this.end;
+    this.startValue = this.start;
   },
 
   methods: {
@@ -79,18 +97,18 @@ export default defineComponent({
      */
     resizeThumb(): void {
       const elementRef = this.$refs.elementRef as HTMLDivElement;
-      const elementTrack = elementRef.querySelector('.range__track') as HTMLDivElement;
-      const elementThumb = elementRef.querySelector('.range__thumb') as HTMLDivElement;
-      const elementStart = elementRef.querySelector('.range__start') as HTMLInputElement;
-      const elementEnd = elementRef.querySelector('.range__end') as HTMLInputElement;
-      const elementStartLabel = elementRef.querySelector('.range__value--start') as HTMLDivElement;
-      const elementEndLabel = elementRef.querySelector('.range__value--end') as HTMLDivElement;
+      const elementTrack = elementRef.querySelector(".range__track") as HTMLDivElement;
+      const elementThumb = elementRef.querySelector(".range__thumb") as HTMLDivElement;
+      const elementStart = elementRef.querySelector(".range__start") as HTMLInputElement;
+      const elementEnd = elementRef.querySelector(".range__end") as HTMLInputElement;
+      const elementStartLabel = elementRef.querySelector(".range__value--start") as HTMLDivElement;
+      const elementEndLabel = elementRef.querySelector(".range__value--end") as HTMLDivElement;
 
       const trackRect = elementTrack.getClientRects().item(0);
       const trackWidth = trackRect?.width ?? 0;
 
-      const start = parseFloat(elementStart.value ?? 0);
-      const end = parseFloat(elementEnd.value ?? 0);
+      const start = Number.parseFloat(elementStart.value ?? 0);
+      const end = Number.parseFloat(elementEnd.value ?? 0);
 
       const thumbStart = trackWidth * (start / this.max);
       const thumbEnd = (trackWidth * (end / this.max)) - thumbStart;
@@ -113,7 +131,7 @@ export default defineComponent({
      */
     onStartInput(e: Event): void {
       const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value ?? 0)
+      const value = Number.parseFloat(target.value ?? 0);
 
       this.startValue = Math.min(value, this.endValue - this.step);
       target.value = this.startValue.toString();
@@ -127,7 +145,7 @@ export default defineComponent({
      */
     onEndInput(e: Event): void {
       const target = e.target as HTMLInputElement;
-      const value = parseFloat(target.value ?? 0)
+      const value = Number.parseFloat(target.value ?? 0);
 
       this.endValue = Math.max(value, this.startValue + this.step);
       target.value = this.endValue.toString();
@@ -138,7 +156,7 @@ export default defineComponent({
      * Emits start value on change
      */
     onStartChanged(): void {
-      this.$emit('startChanged', this.startValue);
+      this.$emit("startChanged", this.startValue);
     },
 
     /**
@@ -146,29 +164,20 @@ export default defineComponent({
      * Emits end value on change
      */
     onEndChanged(): void {
-      this.$emit('endChanged', this.endValue);
-    }
+      this.$emit("endChanged", this.endValue);
+    },
   },
 
-  mounted(): void {
-    this.endValue = this.end;
-    this.startValue = this.start;
-  },
-
-  setup() {
-    const elementRef = ref(null);
-    return { elementRef };
-  }
 });
 </script>
 
 <template>
   <div
-    class="range"
     ref="elementRef"
+    class="range"
     :class="{
       'range--dark': isDark,
-      'range--disabled': disabled
+      'range--disabled': disabled,
     }"
   >
     <div class="range__label range__label--start">
@@ -190,8 +199,12 @@ export default defineComponent({
 
       <div class="range__track">
         <div class="range__thumb">
-          <div class="range__value range__value--start">{{ valueFormater(startValue) }}</div>
-          <div class="range__value range__value--end">{{ valueFormater(endValue) }}</div>
+          <div class="range__value range__value--start">
+            {{ valueFormater(startValue) }}
+          </div>
+          <div class="range__value range__value--end">
+            {{ valueFormater(endValue) }}
+          </div>
         </div>
       </div>
 

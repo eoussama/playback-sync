@@ -1,21 +1,21 @@
-import { defineStore } from 'pinia';
+import type { TAppStore } from "@/utils/types/store/appStore.type";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TAppStore } from '@/utils/types/store/appStore.type';
+import { defineStore } from "pinia";
+import { Theme } from "@/utils/enums/theme.enum";
 
 
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore("app", {
   state: (): TAppStore => ({
     seekStep: 10,
     volumeStep: 0.1,
     fullscreen: false,
-    theme: Theme.Light,
+    theme: Theme.Auto,
     hover: {
       head: false,
       foot: false,
-      controls: false
-    }
+      controls: false,
+    },
   }),
 
   actions: {
@@ -80,20 +80,20 @@ export const useAppStore = defineStore('app', {
 
     /**
      * @description
-     * Toggles the app's theme
+     * Toggles the app's theme (cycles Auto → Light → Dark → Auto)
      */
     toggleTheme(): void {
-      const theme = this.theme === Theme.Light
-        ? Theme.Dark
-        : Theme.Light;
+      const themes = [Theme.Auto, Theme.Light, Theme.Dark];
+      const currentIndex = themes.indexOf(this.theme);
+      const nextTheme = themes[(currentIndex + 1) % themes.length];
 
-      this.updateTheme(theme);
+      this.updateTheme(nextTheme);
     },
 
     /**
      * @description
      * Form validation notification
      */
-    onValidate(): void { }
-  }
+    onValidate(): void { },
+  },
 });

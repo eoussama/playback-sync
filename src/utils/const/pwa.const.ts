@@ -1,34 +1,37 @@
-import icons from './icons.const';
-import pkg from './../../../package.json';
+import pkg from "./../../../package.json";
+import icons from "./icons.const";
 
 
 
 export default {
-  injectRegister: 'auto',
-  registerType: 'autoUpdate',
+  injectRegister: "auto",
+  registerType: "autoUpdate",
+  devOptions: {
+    enabled: true,
+  },
   manifest: {
-    name: 'Playback Sync',
-    theme_color: '#383f51',
-    background_color: '#dddbf1',
-    description: (pkg as any).description,
+    name: "Playback Sync",
+    theme_color: "#383f51",
+    background_color: "#dddbf1",
+    description: pkg.description,
     screenshots: [
       {
-        sizes: '412x915',
-        type: 'image/jpeg',
-        form_factor: 'narrow',
-        src: '/img/screenshots/narrow.jpeg',
+        sizes: "412x915",
+        type: "image/jpeg",
+        form_factor: "narrow",
+        src: "/img/screenshots/narrow.jpeg",
       },
       {
-        sizes: '2428x1250',
-        type: 'image/jpeg',
-        form_factor: 'wide',
-        src: '/img/screenshots/wide.jpeg',
-      }
+        sizes: "2428x1250",
+        type: "image/jpeg",
+        form_factor: "wide",
+        src: "/img/screenshots/wide.jpeg",
+      },
     ],
     icons: [
       ...icons.ios,
       ...icons.android,
-      ...icons.desktop
-    ]
-  }
+      ...icons.desktop,
+    ],
+  },
 };

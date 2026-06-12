@@ -1,34 +1,42 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { Theme } from "@/utils/enums/theme.enum";
 
-import { useAppStore } from '@/state/stores/app.store';
+import type { TOption } from "@/utils/types/composition/option.type";
+import { mapState } from "pinia";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import type { TOption } from '@/utils/types/composition/option.type';
+import { defineComponent } from "vue";
+
+import { useAppStore } from "@/state/stores/app.store";
+
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
-  emits: ['update:modelValue', 'changed'],
 
   props: {
     placeholder: String,
     modelValue: [String, Number],
     options: {
       default: () => [],
-      type: Array as PropType<Array<TOption>>
-    }
+      type: Array as PropType<Array<TOption>>,
+    },
   },
+  emits: ["update:modelValue", "changed"],
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
-    }
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
   },
 
   methods: {
@@ -41,12 +49,12 @@ export default defineComponent({
      */
     onChanged(e: Event): void {
       const target = e.target as HTMLSelectElement;
-      const value = target.value ?? '';
+      const value = target.value ?? "";
 
-      this.$emit('changed', value);
-      this.$emit('update:modelValue', value);
-    }
-  }
+      this.$emit("changed", value);
+      this.$emit("update:modelValue", value);
+    },
+  },
 });
 </script>
 
@@ -63,18 +71,18 @@ export default defineComponent({
       @change="onChanged"
     >
       <option
-        value=""
         v-if="placeholder"
+        value=""
         class="select__option select__option--default"
       >
         {{ placeholder }}
       </option>
 
       <option
+        v-for="(option, index) in options"
         :key="index"
         :value="option.value"
         class="select__option"
-        v-for="(option, index) in options"
       >
         {{ option.label }}
       </option>

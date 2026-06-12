@@ -1,5 +1,5 @@
-import { useModalStore } from '../stores/modal.store';
-import { useSourcesStore } from '../stores/sources.store';
+import { useModalStore } from "../stores/modal.store";
+import { useSourcesStore } from "../stores/sources.store";
 
 
 
@@ -11,11 +11,16 @@ export function hookModalEffect() {
   const modalStore = useModalStore();
   const sourcesStore = useSourcesStore();
 
-  modalStore.$onAction(({ name, after }) => {
+  modalStore.$onAction(({ name, args, after }) => {
     after(() => {
       switch (name) {
-        case 'addModal': {
-          sourcesStore.setPlaying(false);
+        case "addModal": {
+          const [modal] = args;
+
+          if (modal.params?.interrupting) {
+            sourcesStore.setPlaying(false);
+          }
+
           break;
         }
       }

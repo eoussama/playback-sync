@@ -31,19 +31,19 @@ export type TMetadata = {
   /**
    * @description
    * The time where the source is at now
-  */
+   */
   currentTime: number;
 
   /**
    * @description
    * The speed of the source
-  */
+   */
   speed: number;
 
   /**
    * @description
    * The volme of the source
-  */
+   */
   volume: number;
 
   /**
@@ -57,4 +57,4 @@ export type TMetadata = {
    * If the source is playing
    */
   playing: boolean;
-}
+};

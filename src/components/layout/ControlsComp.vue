@@ -1,25 +1,123 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState, mapActions } from 'pinia';
+import type { Theme } from "@/utils/enums/theme.enum";
+import { mapActions, mapState } from "pinia";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { useSourcesStore } from '@/state/stores/sources.store';
+import { defineComponent } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { getVolumeIcon } from '@/utils/helpers/fontawesome.helper';
+import { useSourcesStore } from "@/state/stores/sources.store";
+
+import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
 
+  computed: {
+    ...mapState(useAppStore, [
+      "hover",
+      "theme",
+      "seekStep",
+      "fullscreen",
+    ]),
+    ...mapState(useSourcesStore, [
+      "sources",
+      "volume",
+      "speed",
+      "playing",
+      "muted",
+      "longestSource",
+    ]),
+
+    /**
+     * @description
+     * The icon to show on the button
+     *
+     * @returns The icon name string
+     */
+    icon(): string {
+      return getVolumeIcon(this.volume, this.muted);
+    },
+
+    /**
+     * @description
+     * The universal duration, based on the cropped range (end − start)
+     * of the longest source
+     *
+     * @returns The maximum cropped duration in seconds
+     */
+    duration(): number {
+      if (!this.sources.length) {
+        return 0;
+      }
+
+      return Math.max(...this.sources.map(e => (e.metadata.end || e.metadata.duration) - e.metadata.start));
+    },
+
+    /**
+     * @description
+     * Returns the current time of the longest loaded source
+     * relative to its start offset, for use as a universal timeline position
+     *
+     * @returns The current timeline value in seconds (relative to start)
+     */
+    timelineValue(): number {
+      const source = this.longestSource;
+
+      if (!source) {
+        return 0;
+      }
+
+      const currentTime = source.metadata?.currentTime ?? 0;
+      const start = source.metadata?.start ?? 0;
+
+      return Math.max(0, currentTime - start);
+    },
+
+    /**
+     * @description
+     * Whether or not the sources are finished playing
+     *
+     * @returns Whether the sources have ended
+     */
+    ended(): boolean {
+      return this.timelineValue === this.duration;
+    },
+
+    /**
+     * @description
+     * If the controls are disabled, mainly due
+     * to the absense of any loaded sources.
+     *
+     * @returns Whether the controls are disabled
+     */
+    disabled(): boolean {
+      return this.sources.length === 0;
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
+     */
+    isDark(): boolean {
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
+
+  },
+
   methods: {
-    ...mapActions(useAppStore, ['updateControlsHover']),
+    ...mapActions(useAppStore, ["updateControlsHover"]),
     ...mapActions(useSourcesStore, [
-      'setPlaying',
-      'setMuted',
-      'setVolume',
-      'setSpeed',
-      'onSeek',
-      'onRestart',
-      'onTimelineSet'
+      "setPlaying",
+      "setMuted",
+      "setVolume",
+      "setSpeed",
+      "onSeek",
+      "onRestart",
+      "onTimelineSet",
     ]),
 
     /**
@@ -58,7 +156,7 @@ export default defineComponent({
      * @description
      * Changes the volume
      *
-     * @param e The volume value
+     * @param volume The volume value
      */
     onVolume(volume: number): void {
       this.setVolume(volume);
@@ -85,6 +183,8 @@ export default defineComponent({
     /**
      * @description
      * Updates the sources timelines
+     *
+     * @param time The time value to set
      */
     onTimelineChanged(time: number) {
       this.onTimelineSet(time);
@@ -104,76 +204,9 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.updateControlsHover(false);
-    }
+    },
   },
 
-  computed: {
-    ...mapState(useAppStore, [
-      'hover',
-      'theme',
-      'seekStep',
-      'fullscreen'
-    ]),
-    ...mapState(useSourcesStore, [
-      'sources',
-      'volume',
-      'speed',
-      'playing',
-      'muted',
-      'longestSource'
-    ]),
-
-    /**
-     * @description
-     * The icon to show on the button
-     */
-    icon(): string {
-      return getVolumeIcon(this.volume, this.muted);
-    },
-
-    /**
-     * @description
-     * The universal duration,
-     * generally the duration of the longest source
-     */
-    duration(): number {
-      return Math.max(...this.sources.map(e => e.metadata.duration));
-    },
-
-    /**
-     * @description
-     * Returns the current time of the longest loaded source
-     * to use a a reference for universal time
-     */
-    timelineValue(): number {
-      return this.longestSource?.metadata?.currentTime ?? 0;
-    },
-
-    /**
-     * @description
-     * Whether or not the sources are finished playing
-     */
-    ended(): boolean {
-      return this.timelineValue === this.duration
-    },
-
-    /**
-     * @description
-     * If the controls are disabled, mainly due
-     * to the absense of any loaded sources.
-     */
-    disabled(): boolean {
-      return this.sources.length === 0;
-    },
-
-    /**
-     * @description
-     * Checks if dark theme is on
-     */
-    isDark(): boolean {
-      return this.theme === Theme.Dark;
-    }
-  }
 });
 </script>
 
@@ -183,7 +216,7 @@ export default defineComponent({
     :class="{
       'controls-wrapper--dark': isDark,
       'controls-wrapper--show': hover.controls,
-      'controls-wrapper--fullscreen': fullscreen
+      'controls-wrapper--fullscreen': fullscreen,
     }"
   >
     <div
@@ -204,7 +237,7 @@ export default defineComponent({
         <div class="controls__speed">
           <SpeedComp
             :value="speed"
-            @speedChanged="onSpeed"
+            @speed-changed="onSpeed"
           />
         </div>
 
@@ -237,8 +270,8 @@ export default defineComponent({
           <VolumeComp
             :muted="muted"
             :value="volume"
-            @volumeUpdated="onVolume"
-            @muteToggled="onMuteToggled"
+            @volume-updated="onVolume"
+            @mute-toggled="onMuteToggled"
           />
         </div>
 
@@ -250,8 +283,8 @@ export default defineComponent({
             <VolumeComp
               :muted="muted"
               :value="volume"
-              @volumeUpdated="onVolume"
-              @muteToggled="onMuteToggled"
+              @volume-updated="onVolume"
+              @mute-toggled="onMuteToggled"
             />
           </MoreComp>
         </div>

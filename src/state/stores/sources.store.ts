@@ -1,14 +1,14 @@
-import { defineStore } from 'pinia';
-import { TillingValue } from '@/utils/enums/tillingValue.enum';
+import type { TMetadata } from "@/utils/types/composition/metadata.type";
+import type { TSource } from "@/utils/types/composition/source.type";
 
-import type { TSource } from '@/utils/types/composition/source.type';
-import type { TMetadata } from '@/utils/types/composition/metadata.type';
-import type { TSourcesStore } from '@/utils/types/store/sourceStore.type';
-import { MathHelper } from '@/utils/helpers/math.helper';
+import type { TSourcesStore } from "@/utils/types/store/sourceStore.type";
+import { defineStore } from "pinia";
+import { TillingValue } from "@/utils/enums/tillingValue.enum";
+import { MathHelper } from "@/utils/helpers/math.helper";
 
 
 
-export const useSourcesStore = defineStore('sources', {
+export const useSourcesStore = defineStore("sources", {
   state: (): TSourcesStore => ({
     speed: 1,
     volume: 1,
@@ -23,14 +23,19 @@ export const useSourcesStore = defineStore('sources', {
 
     /**
      * @description
-     * Returns the longest source
+     * Returns the source with the longest cropped range (end − start)
      *
      * @param state The current state
+     * @returns The longest source object
      */
-    longestSource: state => {
-      const sortedByLength = state.sources.slice(0).sort((a, b) => b.metadata.duration - a.metadata.duration);
+    longestSource: (state) => {
+      const cropped = (s: typeof state.sources[0]) =>
+        (s.metadata.end || s.metadata.duration) - s.metadata.start;
+
+      const sortedByLength = state.sources.slice(0).sort((a, b) => cropped(b) - cropped(a));
+
       return sortedByLength[0] ?? 0;
-    }
+    },
   },
 
   actions: {
@@ -100,17 +105,17 @@ export const useSourcesStore = defineStore('sources', {
      * Notifies the sources that the timeline needs to be seeked
      * to a specific point relative to its current position.
      *
-     * @param time The time to seek
+     * @param _time The time to seek
      */
-    onSeek(time: number): void { }, // eslint-disable-line
+    onSeek(_time: number): void { },
 
     /**
      * @description
      * Updates sources timeline's current time
      *
-     * @param time The time to seek to
+     * @param _time The time to seek to
      */
-    onTimelineSet(time: number): void { }, // eslint-disable-line
+    onTimelineSet(_time: number): void { },
 
     /**
      * @description
@@ -131,9 +136,11 @@ export const useSourcesStore = defineStore('sources', {
      * Returns a source object by ID
      *
      * @param id The ID of the source to get
+     * @returns The source object
      */
     getSource(id: string): TSource {
       const index = this.sources.findIndex(e => e.id === id);
+
       return this.sources[index];
     },
 
@@ -155,15 +162,19 @@ export const useSourcesStore = defineStore('sources', {
      */
     updateSource(source: TSource): void {
       const index = this.sources.findIndex(e => e.id === source.id);
+
       this.sources[index] = { ...source };
     },
 
     /**
      * @description
      * Removes an existing source
+     *
+     * @param id The ID of the source to remove
      */
     removeSource(id: string): void {
       const index = this.sources.findIndex(s => s.id === id);
+
       this.sources.splice(index, 1);
     },
 
@@ -195,8 +206,8 @@ export const useSourcesStore = defineStore('sources', {
 
       this.sources[index] = {
         ...this.sources[index],
-        pinned: state
-      }
+        pinned: state,
+      };
     },
 
     /**
@@ -214,10 +225,10 @@ export const useSourcesStore = defineStore('sources', {
           ...this.sources[index],
           metadata: {
             ...this.sources[index].metadata,
-            ...metadata
-          }
-        }
+            ...metadata,
+          },
+        };
       };
-    }
-  }
+    },
+  },
 });

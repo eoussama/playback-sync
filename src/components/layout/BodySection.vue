@@ -1,13 +1,15 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState } from 'pinia';
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 
-import { useAppStore } from '@/state/stores/app.store';
+import { useAppStore } from "@/state/stores/app.store";
+
+
 
 export default defineComponent({
 
   computed: {
-    ...mapState(useAppStore, ['fullscreen']),
+    ...mapState(useAppStore, ["fullscreen"]),
   },
 });
 </script>

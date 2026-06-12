@@ -1,7 +1,9 @@
-import { useSourcesStore } from '../stores/sources.store';
+import { wait } from "@eoussama/core";
 
-import { ToastHelper } from '@/utils/helpers/toast.helper';
-import { SourceHelper } from '@/utils/helpers/source.helper';
+import { SourceHelper } from "@/utils/helpers/source.helper";
+
+import { ToastHelper } from "@/utils/helpers/toast.helper";
+import { useSourcesStore } from "../stores/sources.store";
 
 
 
@@ -15,24 +17,26 @@ export function hookSourcesEffect() {
   store.$onAction(({ name, store, args, after }) => {
     after(async () => {
       switch (name) {
-        case 'addSource': {
+        case "addSource": {
           const [{ id }] = args;
+
           SourceHelper.hook(id);
-          ToastHelper.show({ message: 'Source has been added' });
+          ToastHelper.show({ message: "Source has been added" });
 
           break;
         }
 
-        case 'removeSource': {
-          ToastHelper.show({ message: 'Source has been removed' });
+        case "removeSource": {
+          ToastHelper.show({ message: "Source has been removed" });
           break;
         }
 
-        case 'setPlaying': {
+        case "setPlaying": {
           for (const source of store.sources) {
             if (store.playing) {
               SourceHelper.play(source.id);
-            } else {
+            }
+            else {
               SourceHelper.pause(source.id);
             }
           }
@@ -40,11 +44,12 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'setBufferPause': {
+        case "setBufferPause": {
           for (const source of store.sources) {
             if (store.bufferPause) {
               SourceHelper.pause(source.id);
-            } else {
+            }
+            else {
               SourceHelper.play(source.id);
             }
           }
@@ -52,7 +57,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'setMuted': {
+        case "setMuted": {
           for (const source of store.sources) {
             SourceHelper.setVolume(source.id, store.volume);
             SourceHelper.mute(source.id, store.muted);
@@ -61,18 +66,15 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'setVolume': {
-          store.muted = false;
-
+        case "setVolume": {
           for (const source of store.sources) {
-            SourceHelper.mute(source.id, false);
             SourceHelper.setVolume(source.id, store.volume);
           }
 
           break;
         }
 
-        case 'setSpeed': {
+        case "setSpeed": {
           for (const source of store.sources) {
             SourceHelper.setSpeed(source.id, store.speed);
           }
@@ -80,7 +82,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'onSeek': {
+        case "onSeek": {
           for (const source of store.sources) {
             SourceHelper.seek(source.id, ...args);
           }
@@ -88,7 +90,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'onRestart': {
+        case "onRestart": {
           for (const source of store.sources) {
             SourceHelper.restart(source.id);
           }
@@ -96,7 +98,7 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'onTimelineSet': {
+        case "onTimelineSet": {
           for (const source of store.sources) {
             SourceHelper.setTime(source.id, ...args);
           }
@@ -104,21 +106,23 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'updateSource': {
+        case "updateSource": {
           const [source] = args;
+
           SourceHelper.refresh(source.id);
 
           break;
         }
 
-        case 'switchSources': {
+        case "switchSources": {
           const [id1, id2] = args;
-          setTimeout(() => [id1, id2].forEach(SourceHelper.hook));
+
+          wait(0).then(() => [id1, id2].forEach(SourceHelper.hook));
 
           break;
         }
 
-        case 'toggleSourcePin': {
+        case "toggleSourcePin": {
           const [id, pinned] = args;
 
           if (store.playing) {
@@ -127,7 +131,8 @@ export function hookSourcesEffect() {
 
           if (pinned) {
             await SourceHelper.pin(id);
-          } else {
+          }
+          else {
             await SourceHelper.unpin(id);
           }
 
@@ -138,26 +143,27 @@ export function hookSourcesEffect() {
           break;
         }
 
-        case 'updateSourceMetadata': {
+        case "updateSourceMetadata": {
           const [id, metadata] = args;
 
-          if ('playing' in metadata) {
+          if ("playing" in metadata) {
             if (store.sources.every(e => e.metadata.playing === metadata.playing)) {
               store.playing = metadata.playing ?? store.playing;
             }
           }
 
-          if ('muted' in metadata) {
+          if ("muted" in metadata) {
             SourceHelper.mute(id, Boolean(metadata.muted));
 
             if (metadata.muted && store.sources.every(e => e.metadata.muted === metadata.muted)) {
               store.muted = true;
-            } else if (!metadata.muted && store.sources.some(e => e.metadata.muted === metadata.muted)) {
+            }
+            else if (!metadata.muted && store.sources.some(e => e.metadata.muted === metadata.muted)) {
               store.muted = false;
             }
           }
 
-          if ('buffering' in metadata) {
+          if ("buffering" in metadata) {
             if (store.playing) {
               store.setBufferPause(store.sources.some(e => e.metadata.buffering));
             }

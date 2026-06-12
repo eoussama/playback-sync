@@ -1,28 +1,35 @@
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { mapState } from 'pinia';
+import type { PropType } from "vue";
+import type { Theme } from "@/utils/enums/theme.enum";
 
-import { useAppStore } from '@/state/stores/app.store';
-import { ModalHelper } from '@/utils/helpers/modal.helper';
+import type { TComponent } from "@/utils/types/composition/component.type";
+import type { TModal } from "@/utils/types/composition/modal.type";
+import { mapState } from "pinia";
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { ModalAlignment } from '@/utils/enums/modalAlignment.enum';
+import { defineComponent } from "vue";
+import { useAppStore } from "@/state/stores/app.store";
 
-import type { TModal } from '@/utils/types/composition/modal.type';
-import type { TComponent } from '@/utils/types/composition/component.type';
+import { ModalAlignment } from "@/utils/enums/modalAlignment.enum";
+
+import { ModalHelper } from "@/utils/helpers/modal.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
 
   props: {
-    modal: Object as PropType<TModal<TComponent>>
+    modal: Object as PropType<TModal<TComponent>>,
   },
 
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Alignment enumerator
+     *
+     * @returns The ModalAlignment enum
      */
     ModalAlignment(): typeof ModalAlignment {
       return ModalAlignment;
@@ -31,18 +38,22 @@ export default defineComponent({
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
+      return ThemeHelper.isDark(this.theme as Theme);
     },
 
     /**
      * @description
      * Close button type
+     *
+     * @returns The button type string
      */
     closeType(): string {
-      return this.isDark ? 'plain' : 'secondary';
-    }
+      return this.isDark ? "plain" : "secondary";
+    },
   },
 
   methods: {
@@ -53,6 +64,7 @@ export default defineComponent({
      *
      * @param alignment The alignment to check
      * @param mode The aligment to check against
+     * @returns Whether the alignments match
      */
     isAlignment(alignment: ModalAlignment, mode: ModalAlignment): boolean {
       return alignment === mode;
@@ -66,28 +78,30 @@ export default defineComponent({
       if (this.modal) {
         ModalHelper.close(this.modal.id);
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
 <template>
   <div
     v-if="modal"
-    class="modal"
     :id="`modal-${modal.id}`"
+    class="modal"
     :class="{
       'modal--dark': isDark,
       'modal--dialog': modal.params.dialog,
       'modal--overlay': modal.params.overlay,
       'modal--top': isAlignment(modal.params.alignment, ModalAlignment.Top),
       'modal--center': isAlignment(modal.params.alignment, ModalAlignment.Center),
-      'modal--bottom': isAlignment(modal.params.alignment, ModalAlignment.Bottom)
+      'modal--bottom': isAlignment(modal.params.alignment, ModalAlignment.Bottom),
     }"
   >
     <div class="modal__element">
       <div class="modal__head">
-        <div class="modal__title">{{ modal.title }}</div>
+        <div class="modal__title">
+          {{ modal.title }}
+        </div>
 
         <div class="modal__close">
           <ButtonComp
@@ -100,9 +114,9 @@ export default defineComponent({
 
       <div class="modal__body">
         <component
-          :modalId="modal.id"
+          :is="modal.component"
+          :modal-id="modal.id"
           :params="modal.props"
-          :is="{...modal.component}"
         />
       </div>
     </div>

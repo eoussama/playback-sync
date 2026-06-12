@@ -1,16 +1,5 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
-  "include": [
-    "package.json",
-    "vite.config.*",
-    "vitest.config.*",
-    "cypress.config.*",
-    "nightwatch.conf.*",
-    "playwright.config.*"
-  ],
-  "files": [
-    "src/utils/const/pwa.const.ts"
-  ],
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
@@ -18,5 +7,17 @@
     "types": [
       "node"
     ]
-  }
+  },
+  "files": [
+    "src/utils/const/icons.const.ts",
+    "src/utils/const/pwa.const.ts"
+  ],
+  "include": [
+    "package.json",
+    "vite.config.*",
+    "vitest.config.*",
+    "cypress.config.*",
+    "nightwatch.conf.*",
+    "playwright.config.*"
+  ]
 }

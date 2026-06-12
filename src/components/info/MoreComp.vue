@@ -1,38 +1,61 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapState } from 'pinia';
+import type { Theme } from "@/utils/enums/theme.enum";
+import { mapState } from "pinia";
 
 
-import { Theme } from '@/utils/enums/theme.enum';
-import { useAppStore } from '@/state/stores/app.store';
+import { defineComponent, ref } from "vue";
+
+import { useAppStore } from "@/state/stores/app.store";
+
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
+
+
 
 export default defineComponent({
-
-  data: () => ({
-    toggled: false
-  }),
 
   props: {
     type: {
       type: String,
-      default: 'plain'
+      default: "plain",
     },
     icon: {
       type: String,
-      default: 'ellipsis-vertical'
-    }
+      default: "ellipsis-vertical",
+    },
   },
 
+  setup() {
+    const elementRef = ref(null);
+
+    return { elementRef };
+  },
+
+  data: () => ({
+    toggled: false,
+  }),
+
   computed: {
-    ...mapState(useAppStore, ['theme']),
+    ...mapState(useAppStore, ["theme"]),
 
     /**
      * @description
      * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
-    }
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
+  },
+
+  mounted(): void {
+    document.addEventListener("click", (e) => {
+      const { elementRef } = this.$refs;
+
+      if (!(elementRef as HTMLDivElement)?.contains(e.target as HTMLElement)) {
+        this.close();
+      }
+    });
   },
 
   methods: {
@@ -53,30 +76,16 @@ export default defineComponent({
      */
     onToggle(): void {
       this.toggled = !this.toggled;
-    }
+    },
   },
 
-  mounted(): void {
-    document.addEventListener('click', e => {
-      const { elementRef } = this.$refs;
-
-      if (!(elementRef as HTMLDivElement)?.contains(e.target as HTMLElement)) {
-        this.close();
-      }
-    });
-  },
-
-  setup() {
-    const elementRef = ref(null);
-    return { elementRef };
-  }
-})
+});
 </script>
 
 <template>
   <div
-    class="more"
     ref="elementRef"
+    class="more"
     :class="{ 'more--dark': isDark }"
   >
     <div class="more__trigger">
@@ -91,7 +100,7 @@ export default defineComponent({
       v-if="toggled"
       class="more__elements"
     >
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

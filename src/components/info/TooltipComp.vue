@@ -1,17 +1,23 @@
 <script lang="ts">
-import { MathHelper } from '@/utils/helpers/math.helper';
-import { v4 } from 'uuid';
-import { defineComponent } from 'vue';
+import { v4 } from "uuid";
+import { defineComponent } from "vue";
+import { MathHelper } from "@/utils/helpers/math.helper";
+
+
 
 export default defineComponent({
 
+  props: {
+    text: String,
+  },
+
   data: () => ({
-    id: '',
-    hovered: false
+    id: "",
+    hovered: false,
   }),
 
-  props: {
-    text: String
+  mounted(): void {
+    this.id = `tooltip-${v4()}`;
   },
 
   methods: {
@@ -67,12 +73,8 @@ export default defineComponent({
      */
     onMouseLeave(): void {
       this.hovered = false;
-    }
+    },
   },
-
-  mounted(): void {
-    this.id = `tooltip-${v4()}`;
-  }
 });
 </script>
 
@@ -89,7 +91,7 @@ export default defineComponent({
     </div>
 
     <div class="tooltip__element">
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -106,7 +108,7 @@ export default defineComponent({
 
   &__text {
     z-index: 1;
-    
+
     display: none;
     pointer-events: none;
     box-sizing: border-box;
