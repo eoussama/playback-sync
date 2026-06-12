@@ -28,6 +28,13 @@
     "uuid": "^11.1.1",
     "vue": "^3.3.4"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
+  },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
     "@types/node": "^18.17.17",
