@@ -3,4 +3,6 @@ overrides:
   serialize-javascript: ">=7.0.3"
 
 onlyBuiltDependencies:
+  - "@parcel/watcher"
   - esbuild
+  - vue-demi
