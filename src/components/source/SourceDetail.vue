@@ -9,14 +9,12 @@ import { useAppStore } from "@/state/stores/app.store";
 import { PageType } from "@/utils/enums/pageType.enum";
 
 import { ReadyState } from "@/utils/enums/readyState.enum";
-import { SourceType } from "@/utils/enums/sourceType.enum";
 import { Validation } from "@/utils/enums/validation.enum";
 import { DOMHelper } from "@/utils/helpers/dom.helper";
 import { ModalHelper } from "@/utils/helpers/modal.helper";
 import { SourceHelper } from "@/utils/helpers/source.helper";
 
 import { TimeHelper } from "@/utils/helpers/time.helper";
-import { UrlHelper } from "@/utils/helpers/url.helper";
 import { ValidationHelper } from "@/utils/helpers/validation.helper";
 
 
@@ -66,7 +64,7 @@ export default defineComponent({
 
     /**
      * @description
-     * The view source link (native video only)
+     * The view source link
      *
      * @returns The preview URL string
      */
@@ -76,72 +74,19 @@ export default defineComponent({
 
     /**
      * @description
-     * The detected source type based on the URL
-     *
-     * @returns The SourceType enum value
-     */
-    sourceType(): SourceType {
-      return UrlHelper.getType(this.source?.url ?? "");
-    },
-
-    /**
-     * @description
-     * Whether the source is a native video file
-     *
-     * @returns Whether the source is native
-     */
-    isNativeSource(): boolean {
-      return this.sourceType === SourceType.Native;
-    },
-
-    /**
-     * @description
-     * The embed video ID extracted from the URL
-     *
-     * @returns The embed ID string or empty string
-     */
-    embedId(): string {
-      return UrlHelper.getEmbedId(this.source?.url ?? "") ?? "";
-    },
-
-    /**
-     * @description
-     * The embed preview iframe URL
-     *
-     * @returns The embed preview URL string
-     */
-    previewEmbedUrl(): string {
-      if (this.sourceType === SourceType.YouTube) {
-        return `https://www.youtube-nocookie.com/embed/${this.embedId}`;
-      }
-
-      if (this.sourceType === SourceType.Vimeo) {
-        return `https://player.vimeo.com/video/${this.embedId}`;
-      }
-
-      return "";
-    },
-
-    /**
-     * @description
-     * Checks if the loader should be forced into activation.
-     * Only applicable to native video sources.
+     * Checks if the loader should be forced into activation
      *
      * @returns Whether the loader should be forced active
      */
     forceLoad(): boolean {
-      if (!this.isNativeSource) {
-        return false;
-      }
-
       return Boolean(!this.previewLoaded && this.source && this.source.url.length > 0);
     },
 
     /**
      * @description
-     * The title validation error string
+     * The placeholder of the title input
      *
-     * @returns The title validation error message
+     * @returns The title validation error string
      */
     titleError(): string {
       const source = (this.source ?? {}) as Partial<TSource>;
@@ -152,27 +97,19 @@ export default defineComponent({
 
     /**
      * @description
-     * The URL validation error string
+     * The placeholder of the URL input
      *
-     * @returns The URL validation error message
+     * @returns The URL validation error string
      */
     urlError(): string {
       const source = (this.source ?? {}) as Partial<TSource>;
       const error = ValidationHelper.isInvalid("url", source.url);
 
-      if (error !== false) {
-        return ValidationHelper.getErrorMessage(error);
-      }
-
-      if (!this.isNativeSource) {
-        return this.previewLoaded
-          ? ""
-          : ValidationHelper.getErrorMessage(Validation.URLInvalid);
-      }
-
-      return !this.previewLoaded
-        ? ValidationHelper.getErrorMessage(Validation.URLInvalid)
-        : "";
+      return error !== false
+        ? ValidationHelper.getErrorMessage(error)
+        : !this.previewLoaded
+            ? ValidationHelper.getErrorMessage(Validation.URLInvalid)
+            : "";
     },
   },
 
@@ -186,23 +123,6 @@ export default defineComponent({
     },
 
     "source.url": function (): void {
-      if (!this.source) {
-        return;
-      }
-
-      const sourceType = UrlHelper.getType(this.source.url);
-
-      // For embedded URLs: validate by extracting the embed ID
-      if (sourceType !== SourceType.Native) {
-        const embedId = UrlHelper.getEmbedId(this.source.url);
-
-        this.previewLoaded = Boolean(embedId);
-        this.initialized = true;
-
-        return;
-      }
-
-      // Native video: use the video element to load metadata
       const player = document.getElementById(this.previewPlayerId) as HTMLVideoElement;
 
       if (player) {
@@ -260,7 +180,7 @@ export default defineComponent({
      * @description
      * Formats value as time stamp
      *
-     * @param value The numeric value to format
+     * @param value The value to format
      * @returns The formatted time string
      */
     valueFormater(value: number): string {
@@ -281,7 +201,7 @@ export default defineComponent({
      * @description
      * Checks if an input is valid
      *
-     * @param input The name of the input field to validate
+     * @param input The name of the input
      * @returns Whether the input is valid
      */
     isInputValid(input: keyof TSource): boolean {
@@ -292,9 +212,9 @@ export default defineComponent({
 
     /**
      * @description
-     * Checks if the validation error can be shown for a specific input
+     * Checks if the validion error can be shown for a specific input
      *
-     * @param input The name of the input to check the error for
+     * @param input The name if the input to show the error for
      * @returns Whether the validation error should be shown
      */
     canShowError(input: keyof TSource): boolean {
@@ -337,7 +257,7 @@ export default defineComponent({
      * @description
      * Handles start update
      *
-     * @param start The start value in seconds
+     * @param start The start value
      */
     onStartChanged(start: number): void {
       if (this.source) {
@@ -349,7 +269,7 @@ export default defineComponent({
      * @description
      * Handles end update
      *
-     * @param end The end value in seconds
+     * @param end The end value
      */
     onEndChanged(end: number): void {
       if (this.source) {
@@ -404,9 +324,7 @@ export default defineComponent({
         v-show="source.url.length > 0"
         class="source__preview"
       >
-        <!-- Native video preview -->
         <SourceLoader
-          v-if="isNativeSource"
           :force-load="forceLoad"
           @load="onLoad"
         >
@@ -421,24 +339,9 @@ export default defineComponent({
             >
           </video>
         </SourceLoader>
-
-        <!-- Embedded preview (YouTube / Vimeo) via iframe -->
-        <div
-          v-else-if="previewEmbedUrl"
-          class="source__embed-preview"
-        >
-          <iframe
-            :src="previewEmbedUrl"
-            allowfullscreen
-            class="source__player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          />
-        </div>
       </div>
 
-      <!-- Crop range — only shown for native video sources -->
       <div
-        v-if="isNativeSource"
         v-show="source.url.length > 0"
         class="source__crop"
       >
@@ -501,20 +404,6 @@ export default defineComponent({
 
         width: 100%;
         height: 100%;
-      }
-    }
-
-    #{$root}__embed-preview {
-      width: 100%;
-      margin: 0 auto 15px auto;
-      aspect-ratio: 16 / 9;
-
-      #{$root}__player {
-        display: block;
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 4px;
       }
     }
   }

@@ -24,7 +24,6 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "gsap": "^3.12.2",
     "pinia": "^2.1.6",
-    "plyr": "^3.8.4",
     "register-service-worker": "^1.7.2",
     "uuid": "^11.1.1",
     "vue": "^3.3.4"

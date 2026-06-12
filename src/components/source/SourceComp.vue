@@ -5,17 +5,13 @@ import type { Theme } from "@/utils/enums/theme.enum";
 import type { TSource } from "@/utils/types/composition/source.type";
 import { mapState } from "pinia";
 
-import { defineComponent, nextTick, ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { useAppStore } from "@/state/stores/app.store";
 
-import { SourceType } from "@/utils/enums/sourceType.enum";
 import { ConfirmHelper } from "@/utils/helpers/confirm.helper";
 import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
-import { PlayerHelper } from "@/utils/helpers/player.helper";
 import { ThemeHelper } from "@/utils/helpers/theme.helper";
-
-import { UrlHelper } from "@/utils/helpers/url.helper";
 
 
 
@@ -57,58 +53,12 @@ export default defineComponent({
 
     /**
      * @description
-     * The cropped source URL (native video only)
+     * The cropped source URL
      *
      * @returns The cropped source URL string
      */
     sourceUrl(): string {
       return `${this.source?.url}#t=${this.source?.metadata?.start},${this.source?.metadata?.end}`;
-    },
-
-    /**
-     * @description
-     * The detected source type based on the URL
-     *
-     * @returns The SourceType enum value
-     */
-    sourceType(): SourceType {
-      return UrlHelper.getType(this.source?.url ?? "");
-    },
-
-    /**
-     * @description
-     * Whether the source is a native video file
-     *
-     * @returns Whether the source is native
-     */
-    isNativeSource(): boolean {
-      return this.sourceType === SourceType.Native;
-    },
-
-    /**
-     * @description
-     * The embed provider string for Plyr (youtube / vimeo)
-     *
-     * @returns The provider string
-     */
-    embedProvider(): string {
-      switch (this.sourceType) {
-        case SourceType.YouTube: return "youtube";
-
-        case SourceType.Vimeo: return "vimeo";
-
-        default: return "";
-      }
-    },
-
-    /**
-     * @description
-     * The embed video ID extracted from the URL
-     *
-     * @returns The embed ID string or empty string
-     */
-    embedId(): string {
-      return UrlHelper.getEmbedId(this.source?.url ?? "") ?? "";
     },
 
     /**
@@ -145,31 +95,7 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    nextTick(() => {
-      this.initPlayer();
-    });
-  },
-
-  beforeUnmount() {
-    if (this.source?.id) {
-      PlayerHelper.destroy(this.source.id);
-    }
-  },
-
   methods: {
-
-    /**
-     * @description
-     * Initializes the Plyr player for this source
-     */
-    initPlayer(): void {
-      if (!this.source?.id) {
-        return;
-      }
-
-      PlayerHelper.create(this.source.id, this.playerId, this.sourceType);
-    },
 
     /**
      * @description
@@ -384,11 +310,7 @@ export default defineComponent({
         </div>
       </div>
 
-      <!-- Native video player wrapped with loading indicator -->
-      <SourceLoader
-        v-if="isNativeSource"
-        :buffering="source.metadata.buffering"
-      >
+      <SourceLoader :buffering="source.metadata.buffering">
         <video
           :id="playerId"
           preload="auto"
@@ -400,18 +322,6 @@ export default defineComponent({
           >
         </video>
       </SourceLoader>
-
-      <!-- Embedded player (YouTube / Vimeo) via Plyr -->
-      <div
-        v-else
-        class="source__embed"
-      >
-        <div
-          :id="playerId"
-          :data-plyr-provider="embedProvider"
-          :data-plyr-embed-id="embedId"
-        />
-      </div>
     </div>
 
     <div
@@ -496,34 +406,6 @@ export default defineComponent({
 
     #{$root}__player {
       width: 100%;
-    }
-
-    #{$root}__embed {
-      width: 100%;
-      height: 100%;
-      min-height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      // Ensure Plyr's iframe fills the container
-      :deep(.plyr) {
-        width: 100%;
-        height: 100%;
-      }
-
-      :deep(.plyr__video-embed) {
-        width: 100%;
-        height: 100%;
-        padding-bottom: 0;
-      }
-
-      :deep(iframe) {
-        width: 100%;
-        height: 100%;
-        min-height: 200px;
-        border: none;
-      }
     }
 
     #{$root}__controls {
@@ -617,6 +499,10 @@ export default defineComponent({
         padding: 5px;
         border-radius: 5px;
         background-color: rgba(var(--color-primary-rgb), 0.4);
+
+        #{$root}--dark {
+          background-color: rgba(var(--color-secondary-rgb), 0.4);
+        }
       }
     }
   }
