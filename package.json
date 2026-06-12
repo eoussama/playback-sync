@@ -8,6 +8,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "lint": "pnpm dx lint",
     "lint:fix": "pnpm dx lint --fix",
+    "check": "pnpm lint && pnpm build",
     "build-only": "vite build",
     "dev": "vite",
     "format": "prettier --write src/",

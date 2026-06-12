@@ -1,12 +1,14 @@
 <script lang="ts">
 import type { PropType } from "vue";
-import type { TButtonType } from "@/utils/types/composition/buttonType.type";
+import type { Theme } from "@/utils/enums/theme.enum";
 
+import type { TButtonType } from "@/utils/types/composition/buttonType.type";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
+
 import { useAppStore } from "@/state/stores/app.store";
 
-import { Theme } from "@/utils/enums/theme.enum";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
 
 
 
@@ -37,14 +39,22 @@ export default defineComponent({
 
     /**
      * @description
+     * Checks if dark theme is on
+     *
+     * @returns Whether the dark theme is active
+     */
+    isDark(): boolean {
+      return ThemeHelper.isDark(this.theme as Theme);
+    },
+
+    /**
+     * @description
      * The theme class of the button
      *
      * @returns The theme CSS class string
      */
     themeClass(): string {
-      const theme = this.theme === Theme.Light ? "light" : "dark";
-
-      return `button--${theme}`;
+      return this.isDark ? "button--dark" : "button--light";
     },
   },
 });

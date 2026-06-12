@@ -1,15 +1,17 @@
 <script lang="ts">
 import type { PropType } from "vue";
-import type { TSource } from "@/utils/types/composition/source.type";
+import type { Theme } from "@/utils/enums/theme.enum";
 
+import type { TSource } from "@/utils/types/composition/source.type";
 import { mapState } from "pinia";
+
 import { defineComponent, ref } from "vue";
 
 import { useAppStore } from "@/state/stores/app.store";
-import { Theme } from "@/utils/enums/theme.enum";
 
 import { ConfirmHelper } from "@/utils/helpers/confirm.helper";
 import { getVolumeIcon } from "@/utils/helpers/fontawesome.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
 
 
 
@@ -79,7 +81,7 @@ export default defineComponent({
      * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
+      return ThemeHelper.isDark(this.theme as Theme);
     },
 
     /**

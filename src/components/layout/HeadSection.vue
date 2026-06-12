@@ -13,6 +13,7 @@ import { PageType } from "@/utils/enums/pageType.enum";
 import { Theme } from "@/utils/enums/theme.enum";
 
 import { ModalHelper } from "@/utils/helpers/modal.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
 
 
 
@@ -33,12 +34,30 @@ export default defineComponent({
 
     /**
      * @description
-     * Returns the approprite theme icon
+     * Returns the appropriate theme icon
      *
      * @returns The theme icon name string
      */
     themeIcon(): string {
-      return this.isDark ? "sun" : "moon";
+      if (this.theme === Theme.Auto) {
+        return "circle-half-stroke";
+      }
+
+      if (this.theme === Theme.Dark) {
+        return "sun";
+      }
+
+      return "moon";
+    },
+
+    /**
+     * @description
+     * Checks if dark theme is active (either explicitly or via system preference in Auto mode)
+     *
+     * @returns Whether the dark theme is active
+     */
+    isDark(): boolean {
+      return ThemeHelper.isDark(this.theme as Theme);
     },
 
     /**
@@ -48,18 +67,17 @@ export default defineComponent({
      * @returns The theme tooltip text string
      */
     themeTooltip(): string {
-      return this.isDark ? "Turn Light Mode On" : "Turn Dark Mode On";
+      if (this.theme === Theme.Auto) {
+        return "Turn Light Mode On";
+      }
+
+      if (this.theme === Theme.Light) {
+        return "Turn Dark Mode On";
+      }
+
+      return "Turn Auto Mode On";
     },
 
-    /**
-     * @description
-     * Checks if dark theme is on
-     *
-     * @returns Whether the dark theme is active
-     */
-    isDark(): boolean {
-      return this.theme === Theme.Dark;
-    },
   },
 
   created() {

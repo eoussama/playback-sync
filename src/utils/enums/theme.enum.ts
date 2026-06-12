@@ -2,9 +2,15 @@ export enum Theme {
 
   /**
    * @default
+   * Auto mode (follows system preference)
+   */
+  Auto = 0,
+
+  /**
+   * @description
    * Light mode
    */
-  Light = 0,
+  Light,
 
   /**
    * @description

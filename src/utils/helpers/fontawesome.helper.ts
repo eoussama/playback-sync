@@ -4,6 +4,7 @@ import {
   faBackward,
   faCheck,
   faChevronDown,
+  faCircleHalfStroke,
   faCircleNotch,
   faCompress,
   faEllipsisVertical,
@@ -63,6 +64,7 @@ export function initIcons(): void {
     faXmark,
     faCheck,
     faPen,
+    faCircleHalfStroke,
     faTriangleExclamation,
   );
 }

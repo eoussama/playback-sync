@@ -1,15 +1,17 @@
 <script lang="ts">
 import type { PropType } from "vue";
-import type { TToast } from "@/utils/types/composition/toast.type";
+import type { Theme } from "@/utils/enums/theme.enum";
 
+import type { TToast } from "@/utils/types/composition/toast.type";
 import { mapState } from "pinia";
 import { defineComponent, ref } from "vue";
+
 import { useAppStore } from "@/state/stores/app.store";
 
-import { Theme } from "@/utils/enums/theme.enum";
 import { DOMHelper } from "@/utils/helpers/dom.helper";
-
 import { ModalHelper } from "@/utils/helpers/modal.helper";
+
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
 
 
 
@@ -37,7 +39,7 @@ export default defineComponent({
      * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
+      return ThemeHelper.isDark(this.theme as Theme);
     },
 
     /**
