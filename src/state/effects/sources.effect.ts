@@ -67,10 +67,7 @@ export function hookSourcesEffect() {
         }
 
         case "setVolume": {
-          store.muted = false;
-
           for (const source of store.sources) {
-            SourceHelper.mute(source.id, false);
             SourceHelper.setVolume(source.id, store.volume);
           }
 

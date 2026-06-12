@@ -9,6 +9,7 @@
     ]
   },
   "files": [
+    "src/utils/const/icons.const.ts",
     "src/utils/const/pwa.const.ts"
   ],
   "include": [

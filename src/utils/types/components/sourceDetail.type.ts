@@ -1,5 +1,6 @@
 import type { TNullable } from "@eoussama/core";
 import type { TSource } from "../composition/source.type";
+import type { InputMode } from "@/utils/enums/inputMode.enum";
 
 
 
@@ -38,4 +39,16 @@ export type TSourceDetailType = {
    * If the preview is loaded
    */
   previewLoaded: boolean;
+
+  /**
+   * @description
+   * The active input mode — URL link or local file
+   */
+  inputMode: InputMode;
+
+  /**
+   * @description
+   * The locally selected file (file mode only)
+   */
+  localFile: TNullable<File>;
 };

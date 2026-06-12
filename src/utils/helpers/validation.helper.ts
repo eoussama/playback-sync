@@ -63,6 +63,11 @@ export class ValidationHelper {
         break;
       }
 
+      case Validation.FileEmpty: {
+        return "A file is required";
+        break;
+      }
+
       default: {
         return "";
       }
