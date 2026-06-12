@@ -1,19 +1,21 @@
 <script lang="ts">
+import type { Theme } from "@/utils/enums/theme.enum";
+
 import type { TSource } from "@/utils/types/composition/source.type";
 
 import { mapActions, mapState } from "pinia";
-
 import { defineComponent } from "vue";
+
 import SourceDetail from "@/components/source/SourceDetail.vue";
 
 import { useAppStore } from "@/state/stores/app.store";
-
 import { useSourcesStore } from "@/state/stores/sources.store";
+
 import { PageType } from "@/utils/enums/pageType.enum";
 
-import { Theme } from "@/utils/enums/theme.enum";
 import { DragHelper } from "@/utils/helpers/drag.helper";
 import { ModalHelper } from "@/utils/helpers/modal.helper";
+import { ThemeHelper } from "@/utils/helpers/theme.helper";
 
 
 
@@ -70,8 +72,9 @@ export default defineComponent({
      * @returns Whether the dark theme is active
      */
     isDark(): boolean {
-      return this.theme === Theme.Dark;
+      return ThemeHelper.isDark(this.theme as Theme);
     },
+
   },
 
   methods: {
