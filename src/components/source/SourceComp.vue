@@ -43,6 +43,26 @@ export default defineComponent({
 
     /**
      * @description
+     * Whether the source is audio-only
+     *
+     * @returns Whether the source has no video track
+     */
+    isAudio(): boolean {
+      return this.source?.isAudio ?? false;
+    },
+
+    /**
+     * @description
+     * The icon to show for the source type
+     *
+     * @returns The source type icon name string
+     */
+    sourceTypeIcon(): string {
+      return this.isAudio ? "music" : "video";
+    },
+
+    /**
+     * @description
      * The ID of the source's player on the DOM
      *
      * @returns The player element ID string
@@ -92,6 +112,23 @@ export default defineComponent({
      */
     buttonType(): string {
       return this.isDark ? "plain" : "secondary";
+    },
+
+    /**
+     * @description
+     * Whether the source has played through to its end
+     *
+     * @returns Whether the source has finished playing its range
+     */
+    isEnded(): boolean {
+      if (!this.source) {
+        return false;
+      };
+
+      const { playing, currentTime, end, duration } = this.source.metadata;
+      const effectiveEnd = end || duration;
+
+      return !playing && currentTime > 0 && effectiveEnd > 0 && currentTime >= effectiveEnd - 0.15;
     },
   },
 
@@ -186,13 +223,17 @@ export default defineComponent({
     :class="{
       'source--dark': isDark,
       'source--pinned': source.pinned,
+      'source--ended': isEnded,
     }"
     @mousemove="onMouseMove"
   >
     <div class="source__head">
       <div class="source__title">
-        <div class="source__icon">
-          <font-awesome-icon icon="video" />
+        <div
+          class="source__icon"
+          :class="{ 'source__icon--audio': isAudio }"
+        >
+          <font-awesome-icon :icon="sourceTypeIcon" />
         </div>
 
         <a
@@ -202,6 +243,17 @@ export default defineComponent({
         >
           {{ source.title }}
         </a>
+
+        <div
+          v-if="isEnded"
+          class="source__ended-badge"
+        >
+          <font-awesome-icon
+            icon="circle-check"
+            class="source__ended-badge-icon"
+          />
+          <span class="source__ended-badge-label">Ended</span>
+        </div>
       </div>
 
       <div class="source__controls">
@@ -275,7 +327,10 @@ export default defineComponent({
       </div>
     </div>
 
-    <div class="source__body">
+    <div
+      class="source__body"
+      :class="{ 'source__body--audio': isAudio }"
+    >
       <div class="source__controls">
         <div class="source__control">
           <ButtonComp
@@ -310,11 +365,33 @@ export default defineComponent({
         </div>
       </div>
 
-      <SourceLoader :buffering="source.metadata.buffering">
+      <SourceLoader
+        :buffering="source.metadata.buffering"
+        :is-audio="isAudio"
+      >
+        <div
+          v-if="isAudio"
+          class="source__audio-visual"
+        >
+          <div class="source__audio-icon">
+            <font-awesome-icon icon="music" />
+          </div>
+
+          <div class="source__audio-bars">
+            <span
+              v-for="i in 5"
+              :key="i"
+              class="source__audio-bar"
+              :class="{ 'source__audio-bar--playing': source.metadata.playing }"
+            />
+          </div>
+        </div>
+
         <video
           :id="playerId"
           preload="auto"
           class="source__player"
+          :class="{ 'source__player--hidden': isAudio }"
         >
           <source
             type="video/mp4"
@@ -406,6 +483,14 @@ export default defineComponent({
 
     #{$root}__player {
       width: 100%;
+
+      &--hidden {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
     }
 
     #{$root}__controls {
@@ -424,6 +509,120 @@ export default defineComponent({
 
       transition-duration: 0.2s;
       transition-property: opacity;
+    }
+
+    &--audio {
+      min-height: 100px;
+    }
+  }
+
+  &__audio-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    width: 100%;
+    height: 100%;
+    padding: 20px 0;
+
+    #{$root}__audio-icon {
+      font-size: 32px;
+      opacity: 0.35;
+      color: var(--color-primary);
+    }
+
+    #{$root}__audio-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+
+      height: 28px;
+    }
+  }
+
+  &__audio-bar {
+    display: inline-block;
+    width: 4px;
+    border-radius: 2px;
+    background-color: var(--color-primary);
+    opacity: 0.4;
+    height: 6px;
+
+    transform-origin: bottom center;
+    transition: height 0.2s ease;
+
+    @for $i from 1 through 5 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{($i - 1) * 0.12}s;
+      }
+    }
+
+    &--playing {
+      opacity: 0.7;
+
+      @keyframes audioBar {
+        0%, 100% { height: 6px; }
+        50% { height: 24px; }
+      }
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          animation: audioBar #{0.6 + ($i * 0.1)}s ease-in-out infinite;
+          animation-delay: #{($i - 1) * 0.12}s;
+        }
+      }
+    }
+  }
+
+  &__icon {
+    &--audio {
+      color: var(--color-accent, var(--color-primary));
+      opacity: 0.8;
+    }
+  }
+
+  &__ended-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    margin-left: 8px;
+    padding: 2px 7px;
+    border-radius: 10px;
+
+    font-size: 11px;
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+
+    color: var(--color-primary);
+    background-color: rgba(var(--color-secondary-rgb), 0.2);
+    border: 1px solid rgba(var(--color-secondary-rgb), 0.35);
+
+    animation: endedBadgeFadeIn 0.3s ease forwards;
+
+    @keyframes endedBadgeFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    &-icon {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    &-label {
+      opacity: 0.7;
     }
   }
 
@@ -504,6 +703,16 @@ export default defineComponent({
           background-color: rgba(var(--color-secondary-rgb), 0.4);
         }
       }
+    }
+  }
+
+  &--ended {
+    #{$root}__head {
+      opacity: 0.75;
+    }
+
+    #{$root}__body {
+      opacity: 0.6;
     }
   }
 

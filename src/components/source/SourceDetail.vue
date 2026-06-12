@@ -139,6 +139,46 @@ export default defineComponent({
     localFileName(): string {
       return this.localFile?.name ?? "";
     },
+
+    /**
+     * @description
+     * Whether the previewed source has been identified as audio-only
+     *
+     * @returns Whether the source is audio-only
+     */
+    isAudioSource(): boolean {
+      return this.source?.isAudio ?? false;
+    },
+
+    /**
+     * @description
+     * The label for the source type badge
+     *
+     * @returns The source type label string
+     */
+    sourceTypeBadgeLabel(): string {
+      return this.isAudioSource ? "Audio" : "Video";
+    },
+
+    /**
+     * @description
+     * The icon for the source type badge
+     *
+     * @returns The source type badge icon name
+     */
+    sourceTypeBadgeIcon(): string {
+      return this.isAudioSource ? "music" : "video";
+    },
+
+    /**
+     * @description
+     * Whether the source type badge should be shown
+     *
+     * @returns Whether the type badge is visible
+     */
+    showTypeBadge(): boolean {
+      return this.previewLoaded && Boolean(this.source?.url);
+    },
   },
 
   watch: {
@@ -162,6 +202,14 @@ export default defineComponent({
             }
 
             this.source.metadata.duration = player.duration;
+          }
+
+          // Detect audio-only sources: no video dimensions means audio-only
+          if (this.source && this.inputMode !== InputMode.File) {
+            this.source.isAudio = !player.error
+              && player.videoWidth === 0
+              && player.videoHeight === 0
+              && !Number.isNaN(player.duration);
           }
 
           this.initialized = true;
@@ -315,6 +363,7 @@ export default defineComponent({
 
       this.localFile = file;
       this.source.url = URL.createObjectURL(file);
+      this.source.isAudio = file.type.startsWith("audio/");
 
       if (!this.source.title) {
         this.source.title = file.name.replace(/\.[^/.]+$/, "");
@@ -479,7 +528,7 @@ export default defineComponent({
           <input
             ref="fileInput"
             type="file"
-            accept="video/*"
+            accept="video/*, audio/*"
             class="source__file-input"
             @change="onFileSelected"
           >
@@ -490,7 +539,7 @@ export default defineComponent({
               class="source__file-icon"
             />
             <span class="source__file-text">
-              {{ localFile ? localFileName : "Click to select a video file" }}
+              {{ localFile ? localFileName : "Click to select a video or audio file" }}
             </span>
           </div>
         </div>
@@ -513,8 +562,21 @@ export default defineComponent({
       >
         <SourceLoader
           :force-load="forceLoad"
+          :is-audio="isAudioSource"
           @load="onLoad"
         >
+          <div
+            v-if="showTypeBadge"
+            class="source__type-badge"
+            :class="{ 'source__type-badge--audio': isAudioSource }"
+          >
+            <font-awesome-icon
+              :icon="sourceTypeBadgeIcon"
+              class="source__type-badge-icon"
+            />
+            <span class="source__type-badge-label">{{ sourceTypeBadgeLabel }}</span>
+          </div>
+
           <video
             :id="previewPlayerId"
             :controls="!loading"
@@ -582,6 +644,7 @@ export default defineComponent({
     }
 
     #{$root}__preview {
+      position: relative;
       width: 100%;
       height: 100%;
       margin: 0 auto 15px auto;
@@ -591,6 +654,54 @@ export default defineComponent({
 
         width: 100%;
         height: 100%;
+      }
+
+      #{$root}__type-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 2;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 3px 8px;
+        border-radius: 12px;
+
+        font-size: 11px;
+        font-weight: var(--font-weight-regular);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+
+        background-color: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        backdrop-filter: blur(4px);
+
+        animation-name: badgeFadeIn;
+        animation-duration: 0.25s;
+        animation-fill-mode: forwards;
+
+        &--audio {
+          background-color: rgba(var(--color-accent-rgb, 99, 102, 241), 0.75);
+        }
+
+        #{$root}__type-badge-icon {
+          font-size: 10px;
+          opacity: 0.9;
+        }
+
+        @keyframes badgeFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
       }
     }
   }

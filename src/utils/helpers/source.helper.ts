@@ -24,16 +24,16 @@ export class SourceHelper {
    * @returns A promise that resolves with the initialized source
    */
   static async init(): Promise<TSource> {
-    const metadata: TMetadata = {
+    const metadata: Partial<TMetadata> = {
       duration: 0,
       currentTime: 0,
       speed: 1,
       end: 0,
       start: 0,
-      volume: 1,
-      muted: false,
       playing: false,
       buffering: false,
+      // volume and muted are intentionally omitted so they inherit from
+      // the global store values resolved inside load()
     };
 
     return this.create("", "", metadata);
@@ -63,13 +63,14 @@ export class SourceHelper {
    */
   static async create(title: string, url: string, metadata?: Partial<TMetadata>): Promise<TSource> {
     const id = v4();
-    const sourceMetadata = await this.load(url);
+    const { isAudio, ...sourceMetadata } = await this.load(url);
 
     return {
       id,
       url,
       title,
       pinned: false,
+      isAudio,
       metadata: {
         ...sourceMetadata,
         ...metadata,
@@ -199,13 +200,9 @@ export class SourceHelper {
       const end = source.metadata.end || player.duration;
       const absoluteTime = start + time;
 
-      // If the requested position is at or past this source's end it has
-      // already played its full range — leave it frozen and don't trigger
-      // any buffering/play events that would cause a stutter loop.
-      if (absoluteTime >= end) {
-        return;
-      }
-
+      // Clamp to the source's valid range. Sources whose range has already
+      // been exceeded snap to their end position so the scrubber accurately
+      // reflects where each source sits on the global timeline.
       player.currentTime = MathHelper.clamp(absoluteTime, start, end - 0.1);
     }
   }
@@ -365,12 +362,12 @@ export class SourceHelper {
 
   /**
    * @description
-   * Loads metadata for video
+   * Loads metadata for a media source and detects whether it is audio-only
    *
    * @param url The URL to load
-   * @returns A promise that resolves with the loaded metadata
+   * @returns A promise that resolves with the loaded metadata and isAudio flag
    */
-  private static load(url: string): Promise<TMetadata> {
+  private static load(url: string): Promise<TMetadata & { isAudio: boolean }> {
     return new Promise((resolve) => {
       const store = useSourcesStore();
       const video = document.createElement("video");
@@ -388,6 +385,7 @@ export class SourceHelper {
           duration: video.duration,
           buffering: video.readyState < ReadyState.HaveEnoughData,
           currentTime: store.longestSource.metadata?.currentTime ?? 0,
+          isAudio: !video.error && video.videoWidth === 0 && video.videoHeight === 0 && !Number.isNaN(video.duration),
         });
 
         video.remove();
