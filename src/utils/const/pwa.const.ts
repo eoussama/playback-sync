@@ -6,6 +6,9 @@ import icons from "./icons.const";
 export default {
   injectRegister: "auto",
   registerType: "autoUpdate",
+  devOptions: {
+    enabled: true,
+  },
   manifest: {
     name: "Playback Sync",
     theme_color: "#383f51",
