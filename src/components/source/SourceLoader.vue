@@ -13,6 +13,7 @@ export default defineComponent({
   props: {
     buffering: Boolean,
     forceLoad: Boolean,
+    isAudio: Boolean,
   },
   emits: ["load"],
 
@@ -93,7 +94,7 @@ export default defineComponent({
         </div>
 
         <div class="loader__message">
-          Syncing Video
+          {{ isAudio ? 'Syncing Audio' : 'Syncing Video' }}
         </div>
       </div>
 
@@ -109,7 +110,7 @@ export default defineComponent({
         </div>
 
         <div class="loader__message">
-          Loading Video
+          {{ isAudio ? 'Loading Audio' : 'Loading Video' }}
         </div>
       </div>
     </div>
