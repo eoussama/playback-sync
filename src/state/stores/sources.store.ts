@@ -23,13 +23,16 @@ export const useSourcesStore = defineStore("sources", {
 
     /**
      * @description
-     * Returns the longest source
+     * Returns the source with the longest cropped range (end − start)
      *
      * @param state The current state
      * @returns The longest source object
      */
     longestSource: (state) => {
-      const sortedByLength = state.sources.slice(0).sort((a, b) => b.metadata.duration - a.metadata.duration);
+      const cropped = (s: typeof state.sources[0]) =>
+        (s.metadata.end || s.metadata.duration) - s.metadata.start;
+
+      const sortedByLength = state.sources.slice(0).sort((a, b) => cropped(b) - cropped(a));
 
       return sortedByLength[0] ?? 0;
     },
